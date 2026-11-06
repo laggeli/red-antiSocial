@@ -1,0 +1,146 @@
+
+.perfil-claro {
+  min-height: 100vh;
+  padding: 30px;
+  background-color: #f5f3f8;
+  color: #292333;
+  font-family: Arial, sans-serif;
+}
+
+.perfil-claro .encabezadoPerfil {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.perfil-claro h1,
+.perfil-claro .seccionPublicaciones h2 {
+  color: #62458a;
+}
+
+.perfil-claro .botonCerrarSesion {
+  background-color: #62458a;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.perfil-claro .datosUsuario {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #00000010;
+}
+
+.perfil-claro .avatarPerfil {
+  width: 75px;
+  height: 75px;
+  min-width: 75px;
+  border-radius: 50%;
+  background-color: #d9c9ee;
+  color: #62458a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.perfil-claro .informacionUsuario h2 {
+  margin: 0 0 8px;
+}
+
+.perfil-claro .informacionUsuario p {
+  margin: 5px 0;
+  color: #777080;
+}
+
+.perfil-claro .resumenPerfil {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.perfil-claro .resumenPerfil strong {
+  font-size: 24px;
+  color: #62458a;
+}
+
+.perfil-claro .seccionPublicaciones {
+  margin-top: 30px;
+}
+
+.perfil-claro .tarjetaPublicacion {
+  background-color: white;
+  padding: 20px;
+  margin: 15px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #00000010;
+}
+
+.perfil-claro .descripcionPublicacion {
+  font-size: 16px;
+}
+
+.perfil-claro .tarjetaPublicacion small {
+  color: #888;
+}
+
+.perfil-claro .imagenesPublicacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.perfil-claro .imagenesPublicacion img {
+  width: 180px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.perfil-claro .etiquetasPublicacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.perfil-claro .etiquetasPublicacion span {
+  color: #62458a;
+  background-color: #eee6f7;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+.perfil-claro .piePublicacion {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.perfil-claro .piePublicacion a {
+  color: #62458a;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.perfil-claro .piePublicacion a:hover {
+  text-decoration: underline;
+}
+
+.perfil-claro .mensajePerfil {
+  color: #777080;
+}

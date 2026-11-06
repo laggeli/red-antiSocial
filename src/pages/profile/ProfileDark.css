@@ -1,0 +1,144 @@
+
+.perfil-oscuro {
+  min-height: 100vh;
+  padding: 30px;
+  background-color: #1c1b22;
+  color: #eeeeF5;
+  font-family: Arial, sans-serif;
+}
+
+.perfil-oscuro .encabezadoPerfil {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.perfil-oscuro h1,
+.perfil-oscuro .seccionPublicaciones h2 {
+  color: #c6a5ed;
+}
+
+.perfil-oscuro .botonCerrarSesion {
+  background-color: #8055a8;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.perfil-oscuro .datosUsuario {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background-color: #292731;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+.perfil-oscuro .avatarPerfil {
+  width: 75px;
+  height: 75px;
+  min-width: 75px;
+  border-radius: 50%;
+  background-color: #49365f;
+  color: #e0c8ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.perfil-oscuro .informacionUsuario h2 {
+  margin: 0 0 8px;
+}
+
+.perfil-oscuro .informacionUsuario p {
+  margin: 5px 0;
+  color: #b5b0c0;
+}
+
+.perfil-oscuro .resumenPerfil {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.perfil-oscuro .resumenPerfil strong {
+  font-size: 24px;
+  color: #c6a5ed;
+}
+
+.perfil-oscuro .seccionPublicaciones {
+  margin-top: 30px;
+}
+
+.perfil-oscuro .tarjetaPublicacion {
+  background-color: #292731;
+  padding: 20px;
+  margin: 15px 0;
+  border-radius: 12px;
+}
+
+.perfil-oscuro .descripcionPublicacion {
+  font-size: 16px;
+}
+
+.perfil-oscuro .tarjetaPublicacion small {
+  color: #aaa4b5;
+}
+
+.perfil-oscuro .imagenesPublicacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.perfil-oscuro .imagenesPublicacion img {
+  width: 180px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.perfil-oscuro .etiquetasPublicacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.perfil-oscuro .etiquetasPublicacion span {
+  color: #e0c8ff;
+  background-color: #49365f;
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+.perfil-oscuro .piePublicacion {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid #45414f;
+}
+
+.perfil-oscuro .piePublicacion a {
+  color: #c6a5ed;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.perfil-oscuro .piePublicacion a:hover {
+  text-decoration: underline;
+}
+
+.perfil-oscuro .mensajePerfil {
+  color: #b5b0c0;
+}
