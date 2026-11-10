@@ -1,32 +1,36 @@
 export interface User {
-  _id: string;
+  id: number;
   nickName: string;
-  nombre: string;
   email: string;
 }
 
+export interface Tag {
+  id: number;
+  name: string;
+}
+
 export interface Image {
-  _id?: string;
+  id: number;
   url: string;
 }
 
-export interface Tag {
-  _id: string;
-  nombre: string;
+export interface Comment {
+  id: number;
+  content: string;
+  createdAt: string;
+  UserId: number;
+  PostId: number;
 }
 
 export interface Post {
-  _id: string;
-  descripcion: string;
-  publicadoEn: string;
+  id: number;
+  description: string;
+  createdAt: string;
+  UserId: number;
+  Tags?: Tag[];
+}
 
-  // el backend completa esta referencia con populate()
-  userId: {
-    _id: string;
-    nickName: string;
-    nombre: string;
-  };
-
+export interface PostProfile extends Post {
+  cantidadComentarios: number;
   imagenes: Image[];
-  tagIds: Tag[];
 }
