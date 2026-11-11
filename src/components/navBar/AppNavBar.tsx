@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import styles from './AppNavBar.module.css';
 
 interface AppNavBarProps {
-  onLogout?: () => void;
+  onLogout: () => void;
 }
 
 export const AppNavBar = ({ onLogout }: AppNavBarProps) => {

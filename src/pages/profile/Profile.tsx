@@ -11,13 +11,13 @@ const API_URL = "http://localhost:3001";
 
 interface PerfilProps {
   nickName: string;
-  onLogout: () => void;
+  // onLogout: () => void;
   modoOscuro?: boolean;
 }
 
 function Profile({
   nickName,
-  onLogout,
+  // onLogout,
   modoOscuro = false
 }: PerfilProps) {
 
@@ -95,7 +95,7 @@ function Profile({
 
       <header className="encabezadoPerfil">
         <h1>Mi perfil</h1>
-        <button className="botonCerrarSesion" onClick={onLogout}> Cerrar sesión </button>
+        {/* <button className="botonCerrarSesion" onClick={onLogout}> Cerrar sesión </button> */}
       </header>
 
       <DataUser usuario={usuario} cantidadPublicaciones={publicaciones.length} />
