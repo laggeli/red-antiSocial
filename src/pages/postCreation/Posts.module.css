@@ -154,6 +154,10 @@
   border-color: #5b3a82;
 }
 
+.urlInput::placeholder {
+  text-overflow: ellipsis;
+}
+
 .btnAgregarUrl {
   background-color: #5b3a82;
   color: #ffffff;
@@ -267,6 +271,10 @@
   color: #222222;
 }
 
+.tagInput::placeholder {
+  text-overflow: ellipsis;
+}
+
 /* Separación de Tags disponibles */
 .tagsSugeridos {
   display: flex;
@@ -359,4 +367,27 @@
 .btnCancelar,
 .btnPublicar {
   font-family: inherit;
+}
+
+@media (max-width: 480px) {
+  .urlInputRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .urlInputRow button {
+    width: 100%;
+  }
+
+  .urlInput::placeholder {
+    font-size: 0.72rem;
+  }
+
+  .tagInput {
+    font-size: 0.85rem;
+  }
+
+  .tagInput::placeholder {
+    font-size: 0.65rem;
+  }
 }

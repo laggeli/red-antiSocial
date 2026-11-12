@@ -1,8 +1,9 @@
 import { useState, useRef } from "react";
 import type { KeyboardEvent } from "react";
+import { Button } from '../../components/botonGenerico/Button'; 
 import styles from "./Posts.module.css";
 import cameraIcon from "../../img/camara.png";
-import errorImageIcon from "../../img/imagen-error.jpg";
+import errorImageIcon from "../../img/image-notFound.jpg";
 
 const MAX_IMAGENES = 5;
 
@@ -111,6 +112,7 @@ export const PostImages = ({
                 ref={urlInputRef}
                 type="text"
                 className={styles.urlInput}
+                title="https://ejemplo.com/imagen.jpg"
                 placeholder="https://ejemplo.com/imagen.jpg"
                 value={inputUrlImagen}
                 onChange={(e) => {
@@ -119,13 +121,9 @@ export const PostImages = ({
                 }}
                 onKeyDown={handleKeyDownUrl}
               />
-              <button
-                type="button"
-                className={styles.btnAgregarUrl}
-                onClick={agregarUrlImagen}
-              >
+              <Button variant="secundario" onClick={agregarUrlImagen}>
                 + Agregar
-              </button>
+              </Button>
             </div>
           )}
         </div>

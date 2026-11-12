@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./NotFound.module.css";
-import logoUnahur from "../../img/logo-unahur.png"; 
+import logoUnahur from "../../img/icono.png"; 
 
 function NotFound() {
   useEffect(() => {
