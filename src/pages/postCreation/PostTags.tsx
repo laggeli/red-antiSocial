@@ -128,7 +128,8 @@ export const PostTags = ({
           id="etiquetas"
           type="text"
           className={styles.tagInput}
-          placeholder="Para buscar una etiqueta, escriba el nombre y haga Enter..."
+          title="Escribí el nombre de la etiqueta buscada y presiona Enter..."
+          placeholder="Escribí el nombre de la etiqueta buscada y presiona Enter..."
           value={inputEtiqueta}
           onChange={(e) => {
             setInputEtiqueta(e.target.value);

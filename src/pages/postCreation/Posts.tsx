@@ -6,6 +6,7 @@ import type { User } from "../../types/PerfilTypes";
 import { PostImages } from "./PostImages";
 import { PostTags } from "./PostTags";
 import type { TagItem } from "./PostTags";
+import { Button } from '../../components/botonGenerico/Button'; 
 
 const API_URL = "http://localhost:3001";
 
@@ -114,7 +115,7 @@ export const Posts = ({ nickName }: PostsProps) => {
               className={
                 `${styles.textarea} ${errorDescripcion ? styles.textareaError : ""}`
               }
-              placeholder={`¿Qué quieres compartir hoy, @${nickName}?`}
+              placeholder={`¿Qué te gustaría compartir hoy, @${nickName}?`}
               value={descripcion}
               onChange={(e) => {
                 setDescripcion(e.target.value);
@@ -144,21 +145,20 @@ export const Posts = ({ nickName }: PostsProps) => {
 
           {/* Botones */}
           <div className={styles.acciones}>
-            <button
-              type="button"
-              className={styles.btnCancelar}
+            <Button
+              variant="cancelar"
               onClick={() => navigate(-1)}
               disabled={enviando}
             >
               Cancelar
-            </button>
-            <button
+            </Button>
+            <Button
               type="submit"
-              className={styles.btnPublicar}
+              variant="primario"
               disabled={enviando}
             >
               {enviando ? "Publicando..." : "Publicar"}
-            </button>
+            </Button>
           </div>
         </form>
       </section>
