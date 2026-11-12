@@ -26,7 +26,10 @@ function App() {
             />
           } 
         />
-        <Route path="/create-post" element={<Posts />} />
+        <Route 
+          path="/create-post" 
+          element={<Posts nickName="luna" />} //momentaneamente
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

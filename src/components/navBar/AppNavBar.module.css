@@ -33,6 +33,7 @@
 }
 
 .btnCreatePost {
+  text-decoration: none;
   background-color: #5b3a82;
   color: #ffffff;
   border: none;
