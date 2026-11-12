@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import styles from './AppNavBar.module.css';
 
 interface AppNavBarProps {
@@ -6,8 +6,6 @@ interface AppNavBarProps {
 }
 
 export const AppNavBar = ({ onLogout }: AppNavBarProps) => {
-  const navigate = useNavigate();
-
   return (
     <nav className={styles.navbar}>
       <div className={styles.leftNav}>
@@ -32,12 +30,12 @@ export const AppNavBar = ({ onLogout }: AppNavBarProps) => {
           Mi perfil
         </NavLink>
 
-        <button 
+        <NavLink 
+          to="/create-post"
           className={styles.btnCreatePost}
-          onClick={() => navigate('/create-post')}
         >
           + Crear post
-        </button>
+        </NavLink>
       </div>
 
       <div className={styles.rightNav}>

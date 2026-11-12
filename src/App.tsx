@@ -1,17 +1,34 @@
+import { Routes, Route } from "react-router-dom";
 import { AppNavBar } from "./components/navBar/AppNavBar";
+import Home from "./pages/Home";
 import Profile from "./pages/profile/Profile";
+import Posts from "./pages/postCreation/Posts";
+import NotFound from "./pages/notFound/NotFound";
 
 function App() {
+  const onLogout = () => {
+    console.log("Cerrar sesión");
+  };
+
   return (
     <>
       <AppNavBar 
-        onLogout={() => console.log("Cerrar sesión")}
+        onLogout={onLogout}
       />
-      <Profile // provisorio, solo para chusmear el perfil especifico (sacado de la db del repo backend-api)
-        nickName="luna"
-        // onLogout={() => console.log("Cerrar sesión")}
-        modoOscuro={false}
-      />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route 
+          path="/profile" 
+          element={
+            <Profile // provisorio, solo para chusmear el perfil especifico (sacado de la db del repo backend-api)
+              nickName="luna"               
+              modoOscuro={false} 
+            />
+          } 
+        />
+        <Route path="/create-post" element={<Posts />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
   );
 }
