@@ -34,7 +34,7 @@ export const AppNavBar = ({ onLogout }: AppNavBarProps) => {
           to="/create-post"
           className={styles.btnCreatePost}
         >
-          + Crear post
+          + Crear publicación
         </NavLink>
       </div>
 
