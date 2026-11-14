@@ -157,7 +157,7 @@ La información se obtiene mediante consultas a la API, utilizando el identifica
 
 ## ✧ Sobre el Grupo
 - Fajardo, Eugenia 
-- González Ortiz, Celeste
+- González Ortiz, Celeste Alejandra
 - Fogel, Facundo
 - Laginestra Elisa
 
