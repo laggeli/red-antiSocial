@@ -43,33 +43,52 @@
 .loginForm {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  margin-bottom: 1.1rem;
 }
 
-.formGroup label {
+.formLabel {
   font-size: 0.9rem;
   font-weight: 600;
   color: #292333;
 }
 
-.formGroup input {
+.formControl {
+  width: 100%;
   padding: 10px 14px;
   border-radius: 8px;
   border: 1px solid #e2dcf2;
   font-size: 0.95rem;
   outline: none;
+  box-sizing: border-box;
   transition: border-color 0.2s ease;
 }
 
-.formGroup input:focus {
+.formControl:focus {
   border-color: #5b3a82;
   box-shadow: 0 0 0 3px rgba(91, 58, 130, 0.1);
+}
+
+.isInvalid {
+  border-color: #dc3545 !important;
+  background-color: #fff8f8;
+}
+
+.isInvalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15) !important;
+}
+
+.invalidFeedback {
+  color: #dc3545;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
 }
 
 .btnSubmit {
@@ -83,6 +102,7 @@
   cursor: pointer;
   transition: background-color 0.2s ease;
   margin-top: 0.5rem;
+  width: 100%;
 }
 
 .btnSubmit:hover {

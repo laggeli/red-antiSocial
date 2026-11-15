@@ -1,61 +1,87 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import styles from './Login.module.css';
 
 export default function Login() {
-  const [nickName, setNickName] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({
+    nickName: '',
+    password: '',
+  });
+
+  const [Errores, setErrores] = useState({});
+  const [generalError, setGeneralError] = useState('');
   const [loading, setLoading] = useState(false);
+
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    if (Errores[name]) {
+      setErrores({
+        ...Errores,
+        [name]: '',
+      });
+    }
+  };
+
+  const Validar = (dato) => {
+    const newErrores = {};
+
+    if (!dato.nickName.trim()) {
+      newErrores.nickName = 'El nombre de usuario es obligatorio';
+    }
+
+    if (!dato.password.trim()) {
+      newErrores.password = 'La contraseña es obligatoria';
+    } else if (dato.password !== '123456') {
+      newErrores.password = 'La contraseña es incorrecta (debe ser 123456)';
+    }
+
+    return newErrores;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setGeneralError('');
 
-    // Validación de campos obligatorios
-    if (!nickName.trim() || !password.trim()) {
-      setError('Por favor, completa todos los campos.');
-      return;
-    }
+    const validacionDeErrores = Validar(formData);
+    setErrores(validacionDeErrores);
 
-    // Validación local de la contraseña fija "123456"
-    if (password !== '123456') {
-      setError('Contraseña incorrecta. (Recuerda que la contraseña fija es 123456)');
-      return;
-    }
+    if (Object.keys(validacionDeErrores).length === 0) {
+      setLoading(true);
 
-    setLoading(true);
+      try {
+        const response = await fetch('http://localhost:3000/users');
 
-    try {
-      // Consulta GET /users para verificar si el usuario existe
-      const response = await fetch('http://localhost:3000/users'); // Ajusta la URL de la API según corresponda
-      if (!response.ok) {
-        throw new Error('Error al conectar con el servidor.');
-      }
+        if (!response.ok) {
+          throw new Error('Error al conectar con el servidor');
+        }
 
-      const users = await response.json();
+        const users = await response.json();
+        const foundUser = users.find(
+          (u) => u.nickName?.toLowerCase() === formData.nickName.trim().toLowerCase()
+        );
 
-      // Buscamos si existe un usuario cuyo nickName o username coincida
-      const foundUser = users.find(
-        (u) => (u.nickName || u.username)?.toLowerCase() === nickName.trim().toLowerCase()
-      );
+        if (!foundUser) {
+          setGeneralError('El usuario ingresado no existe');
+          setLoading(false);
+          return;
+        }
 
-      if (!foundUser) {
-        setError('El usuario ingresado no existe.');
+        login(foundUser);
+        navigate('/');
+      } catch (err) {
+        setGeneralError(err.message || 'Error al intentar iniciar sesión');
+      } finally {
         setLoading(false);
-        return;
       }
-
-      // Guardar en contexto global + localStorage y redirigir
-      login(foundUser);
-      navigate('/'); // Redirige al Feed o Home
-    } catch (err) {
-      setError('Ocurrió un error al intentar iniciar sesión. Inténtalo nuevamente.');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -68,17 +94,24 @@ export default function Login() {
         </div>
 
         <form onSubmit={handleSubmit} className={styles.loginForm}>
-          {error && <div className={styles.errorAlert}>{error}</div>}
+          {generalError && (
+            <div className={styles.errorAlert}>
+              {generalError}
+            </div>
+          )}
 
           <div className={styles.formGroup}>
-            <label htmlFor="nickName">Nombre de usuario (Nick)</label>
+            <label htmlFor="nickName">Nombre de usuario</label>
             <input
               type="text"
               id="nickName"
-              value={nickName}
-              onChange={(e) => setNickName(e.target.value)}
-              placeholder="Ingresa tu usuario"
+              name="nickName"
+              value={formData.nickName}
+              onChange={handleChange}
+              placeholder="Tu nickName"
+              disabled={loading}
             />
+            {Errores.nickName && <span className={styles.fieldError}>{Errores.nickName}</span>}
           </div>
 
           <div className={styles.formGroup}>
@@ -86,10 +119,13 @@ export default function Login() {
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               placeholder="••••••"
+              disabled={loading}
             />
+            {Errores.password && <span className={styles.fieldError}>{Errores.password}</span>}
           </div>
 
           <button type="submit" className={styles.btnSubmit} disabled={loading}>
@@ -97,10 +133,8 @@ export default function Login() {
           </button>
         </form>
 
-        <div className={styles.registerFooter}>
-          <p>
-            ¿No tienes una cuenta? <Link to="/register">Regístrate aquí</Link>
-          </p>
+        <div className={styles.loginFooter}>
+          <p>¿No tienes una cuenta? <Link to="/registro">Regístrate aquí</Link></p>
         </div>
       </div>
     </div>
