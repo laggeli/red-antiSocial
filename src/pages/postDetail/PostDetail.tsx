@@ -1,9 +1,8 @@
-// src/pages/postDetail/PostDetail.tsx
 import { useState, useEffect } from "react";
-import type { SyntheticEvent } from "react";
 import { useParams, Link } from "react-router-dom";
 import type { PostDetailModel, PostImage, Comment } from "../../types/PostDetailTypes";
 import type { User } from "../../types/PerfilTypes";
+import { CommentForm } from "../../components/comments/CommentForm";
 import styles from "./PostDetail.module.css";
 
 const API_URL = "http://localhost:3001";
@@ -70,12 +69,10 @@ export default function PostDetail({ nickName }: PostDetailProps) {
   const [post, setPost] = useState<PostDetailModel | null>(null);
   const [images, setImages] = useState<PostImage[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
-  const [newCommentText, setNewCommentText] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(true);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [commentError, setCommentError] = useState<string | null>(null);
 
   // hook para cargar toda la data del post al montar o cambiar el id de la url
   useEffect(() => {
@@ -105,34 +102,22 @@ export default function PostDetail({ nickName }: PostDetailProps) {
     loadPostDetails();
   }, [id]);
 
-  // manejo controlado del formulario para enviar nuevos comentarios
-  const handleCommentSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setCommentError(null);
-
-    // validacion local de que el campo no este vacio
-    if (!newCommentText.trim()) {
-      setCommentError("El comentario no puede estar vacío.");
-      return;
-    }
-
+  // funcion que le pasamos al componente hijo para manejar el envio del comentario
+  const handleEnviarComentario = async (texto: string) => {
     if (!id) return;
 
+    setSubmitting(true);
     try {
-      setSubmitting(true);
       const userId = await fetchCurrentUserId(nickName);
 
       const createdComment = await sendNewComment({
-        text: newCommentText.trim(),
+        text: texto,
         postId: Number(id),
         userId,
       });
 
       // actualizacion inmutable del estado local de comentarios
       setComments((prev) => [...prev, createdComment]);
-      setNewCommentText("");
-    } catch (err) {
-      setCommentError(err instanceof Error ? err.message : "Error al publicar el comentario.");
     } finally {
       setSubmitting(false);
     }
@@ -215,23 +200,8 @@ export default function PostDetail({ nickName }: PostDetailProps) {
           )}
         </div>
 
-        <h4>Agregar un comentario</h4>
-        {commentError && <p className={styles.mensajeError}>{commentError}</p>}
-
-        {/* formulario controlado obligatorio con noValidate */}
-        <form onSubmit={handleCommentSubmit} className={styles.formComentario} noValidate>
-          <textarea
-            rows={3}
-            className={styles.textareaComentario}
-            placeholder="Escribe tu comentario aquí..."
-            value={newCommentText}
-            onChange={(e) => setNewCommentText(e.target.value)}
-            disabled={submitting}
-          />
-          <button type="submit" className={styles.btnPublicar} disabled={submitting}>
-            {submitting ? "Enviando..." : "Publicar comentario"}
-          </button>
-        </form>
+        {/* renderizamos el formulario de comentarios modularizado */}
+        <CommentForm onEnviarComentario={handleEnviarComentario} submitting={submitting} />
       </section>
     </main>
   );

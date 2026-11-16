@@ -91,7 +91,7 @@ export default function Home() {
       </div>
 
       <div className={styles.seccionFeed}>
-        {/* controlamos si el array de posts esta vacio o tiene elementos (quitamos el h2 que sobraba) */}
+        {/* controlamos si el array de posts esta vacio o tiene elementos */}
         {posts.length === 0 ? (
           <p className={styles.mensajePerfil}>No hay publicaciones disponibles en este momento.</p>
         ) : (
