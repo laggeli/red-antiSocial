@@ -7,8 +7,7 @@ import { PostImages } from "./PostImages";
 import { PostTags } from "./PostTags";
 import type { TagItem } from "./PostTags";
 import { Button } from '../../components/botonGenerico/Button'; 
-
-const API_URL = "http://localhost:3001";
+import { API_URL } from '../../config/api';
 
 interface PostsProps {
   nickName: string;
