@@ -10,29 +10,6 @@
   align-items: stretch; 
 }
 
-.banner {
-  background: linear-gradient(135deg, #5b3a82 0%, #7148a1 100%);
-  color: #ffffff;
-  padding: 2rem 2.5rem;
-  border-radius: 16px;
-  width: 100%;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 12px rgba(91, 58, 130, 0.15);
-  box-sizing: border-box;
-}
-
-.banner h1 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.banner p {
-  margin: 0;
-  font-size: 1rem;
-  opacity: 0.9;
-}
-
 .seccionFeed {
   width: 100%;
   display: flex;
@@ -40,7 +17,7 @@
   gap: 1.5rem;
 }
 
-/* Tarjeta de Publicación */
+/* tarjeta de publicacion */
 .tarjetaPublicacion {
   background-color: #ffffff;
   padding: 24px;
@@ -91,7 +68,7 @@
   margin: 0;
 }
 
-/* Imágenes del post */
+/* imagenes del post */
 .imagenesPublicacion {
   display: flex;
   flex-wrap: wrap;
@@ -106,7 +83,7 @@
   border: 1px solid #e2dcf2;
 }
 
-/* Etiquetas estilo chip */
+/* etiquetas estilo chip */
 .etiquetasPublicacion {
   display: flex;
   flex-wrap: wrap;
@@ -122,7 +99,7 @@
   font-weight: 600;
 }
 
-/* Pie de la tarjeta: comentarios y botón */
+/* pie de la tarjeta: comentarios y boton */
 .piePublicacion {
   display: flex;
   justify-content: space-between;

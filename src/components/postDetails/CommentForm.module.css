@@ -1,0 +1,52 @@
+.formComentario {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.textareaComentario {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #9d8ab8;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #222222;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.textareaComentario:focus {
+  border-color: #5b3a82;
+}
+
+.mensajeError {
+  color: #c53030;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.btnPublicar {
+  background-color: #5b3a82;
+  color: #ffffff;
+  border: none;
+  padding: 0.65rem 1.6rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: background-color 0.2s ease;
+}
+
+.btnPublicar:hover {
+  background-color: #482d68;
+}
+
+.btnPublicar:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
