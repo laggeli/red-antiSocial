@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 import type { PostDetailModel, PostImage, Comment } from "../../types/PostDetailTypes";
 import { BannerWelcome } from "../../components/banner/BannerWelcome";
 import styles from "./Home.module.css";
-
-const API_URL = "http://localhost:3001";
+import { API_URL } from '../../config/api';
 
 export default function Home() {
   const [posts, setPosts] = useState<PostDetailModel[]>([]);

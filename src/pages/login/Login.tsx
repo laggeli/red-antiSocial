@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import styles from './Login.module.css';
+import { API_URL } from '../../config/api';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -13,7 +14,7 @@ export default function Login() {
   const [generalError, setGeneralError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login } = useAuth();
+  const {login} = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -58,7 +59,7 @@ export default function Login() {
       setLoading(true);
 
       try {
-        const response = await fetch('http://localhost:3000/users');
+        const response = await fetch(`${API_URL}/users`);
 
         if (!response.ok) {
           throw new Error('Error al conectar con el servidor');

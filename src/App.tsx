@@ -4,40 +4,72 @@ import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 import Posts from "./pages/postCreation/Posts";
 import NotFound from "./pages/notFound/NotFound";
-import PostDetail from "./pages/postDetail/PostDetail"; 
+import PostDetail from "./pages/postDetail/PostDetail";
 
-function App() {
-  const onLogout = () => {
-    console.log("Cerrar sesión");
-  };
+// Importaciones del módulo de autenticación (verificar minúsculas en las rutas de carpetas)
+import Login from "./pages/login/Login";
+import Registro from "./pages/registro/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+
+function MainLayout() {
+  const { user, logout } = useAuth();
 
   return (
     <>
-      <AppNavBar 
-        onLogout={onLogout}
-      />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route 
-          path="/profile" 
-          element={
-            <Profile // provisorio, solo para chusmear el perfil especifico (sacado de la db del repo backend-api)
-              nickName="luna"               
-              modoOscuro={false} 
-            />
-          } 
-        />
-        <Route 
-          path="/create-post" 
-          element={<Posts nickName="luna" />} //momentaneamente
-        />
-        {/* Agregado del Módulo del Integrante 2: Detalle de publicación */}
-        <Route path="/post/:id" element={<PostDetail />} />
+      {/* La barra de navegación se renderiza únicamente cuando el usuario inició sesión */}
+      {user && <AppNavBar onLogout={logout} />}
 
+      <Routes>
+        {/* Rutas Públicas */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Registro />} />
+
+        {/* Rutas Protegidas (Redirigen a /login si no hay usuario autenticado) */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile nickName={user?.nickName || "luna"} modoOscuro={false} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/create-post"
+          element={
+            <ProtectedRoute>
+              <Posts nickName={user?.nickName || "luna"} />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/post/:id"
+          element={
+            <ProtectedRoute>
+              <PostDetail />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Ruta comodín para manejo de errores 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <AuthProvider>
+      <MainLayout />
+    </AuthProvider>
+  );
+}

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import styles from './Registro.module.css';
+import styles from './Register.module.css';
+import { API_URL } from '../../config/api';
 
 export default function Registro() {
   const [formData, setFormData] = useState({
@@ -91,7 +92,7 @@ export default function Registro() {
       setLoading(true);
 
       try {
-        const response = await fetch('http://localhost:3000/users', {
+        const response = await fetch(`${API_URL}/users`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
