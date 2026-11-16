@@ -1,8 +1,10 @@
+// src/pages/postDetail/PostDetail.tsx
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import type { PostDetailModel, PostImage, Comment } from "../../types/PostDetailTypes";
 import type { User } from "../../types/PerfilTypes";
-import { CommentForm } from "../../components/comments/CommentForm";
+import { CommentForm } from "../../components/postDetails/CommentForm";
+import { ImageModal } from "../../components/postDetails/ImageModal";
 import styles from "./PostDetail.module.css";
 
 const API_URL = "http://localhost:3001";
@@ -69,6 +71,9 @@ export default function PostDetail({ nickName }: PostDetailProps) {
   const [post, setPost] = useState<PostDetailModel | null>(null);
   const [images, setImages] = useState<PostImage[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
+  
+  // estado para controlar la imagen seleccionada que se vera en el modal
+  const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -161,11 +166,18 @@ export default function PostDetail({ nickName }: PostDetailProps) {
 
         <p className={styles.descripcionCompleta}>{post.description}</p>
 
-        {/* galeria de imagenes adjuntas */}
+        {/* galeria de imagenes adjuntas con evento onClick para abrirlas en grande */}
         {images.length > 0 && (
           <div className={styles.imagenesDetalle}>
             {images.map((img) => (
-              <img key={img.id} src={img.url} alt="Imagen adjunta al post" />
+              <img
+                key={img.id}
+                src={img.url}
+                alt="Imagen adjunta al post"
+                onClick={() => setImagenSeleccionada(img.url)}
+                style={{ cursor: "pointer" }}
+                title="Haz clic para ampliar"
+              />
             ))}
           </div>
         )}
@@ -203,6 +215,12 @@ export default function PostDetail({ nickName }: PostDetailProps) {
         {/* renderizamos el formulario de comentarios modularizado */}
         <CommentForm onEnviarComentario={handleEnviarComentario} submitting={submitting} />
       </section>
+
+      {/* modal modularizado para mostrar la imagen ampliada */}
+      <ImageModal
+        imagenUrl={imagenSeleccionada}
+        onCerrar={() => setImagenSeleccionada(null)}
+      />
     </main>
   );
 }
