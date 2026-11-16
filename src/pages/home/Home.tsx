@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { PostDetailModel, PostImage, Comment } from "../../types/PostDetailTypes";
+import { BannerWelcome } from "../../components/banner/BannerWelcome";
 import styles from "./Home.module.css";
 
 const API_URL = "http://localhost:3001";
@@ -17,7 +18,7 @@ export default function Home() {
         setLoading(true);
         setError("");
 
-        //listado general de publicaciones con GET /posts
+        // listado general de publicaciones con GET /posts
         const respuestaPosts = await fetch(`${API_URL}/posts`);
         if (!respuestaPosts.ok) {
           throw new Error("Error al obtener las publicaciones");
@@ -28,7 +29,7 @@ export default function Home() {
         const postsEnriquecidos: PostDetailModel[] = [];
 
         for (const post of datosPosts) {
-          //imagenes del post
+          // imagenes del post
           let imagenes: PostImage[] = [];
           try {
             const resImg = await fetch(`${API_URL}/postimages/post/${post.id}`);
@@ -39,7 +40,7 @@ export default function Home() {
             imagenes = [];
           }
 
-          //los comentarios del post
+          // los comentarios del post
           let comentarios: Comment[] = [];
           try {
             const resCom = await fetch(`${API_URL}/comments/post/${post.id}`);
@@ -58,7 +59,7 @@ export default function Home() {
           });
         }
 
-        // atualizamos el estado con el nuevo array de forma inmutable
+        // actualizamos el estado con el nuevo array de forma inmutable
         setPosts(postsEnriquecidos);
       } catch (err) {
         console.error(err);
@@ -84,11 +85,8 @@ export default function Home() {
 
   return (
     <main className={styles.homeContainer}>
-      {/* banner institucional */}
-      <div className={styles.banner}>
-        <h1>UnaHur Anti-Social Net</h1>
-        <p>La red académica para compartir publicaciones, debates e ideas en la comunidad universitaria.</p>
-      </div>
+      {/* renderizamos el banner institucional modularizado */}
+      <BannerWelcome />
 
       <div className={styles.seccionFeed}>
         {/* controlamos si el array de posts esta vacio o tiene elementos */}
