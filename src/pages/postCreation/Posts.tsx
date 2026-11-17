@@ -1,18 +1,16 @@
-import { useState, useRef } from "react";
-import type { FormEvent } from "react";
+import { useState } from "react";
+import type { SubmitEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import styles from "./Posts.module.css";
-import { PostImages } from "./PostImages";
-import { PostTags } from "./PostTags";
-import type { TagItem } from "./PostTags";
-import { Button } from "../../components/botonGenerico/Button";
+import styles from "../../components/postCreation/Posts.module.css";
+import type { TagItem } from "../../components/postCreation/PostTags";
+import { PostForm } from "../../components/postCreation/PostForm";
 import { API_URL } from "../../config/api";
 
 export const Posts = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const descripcionRef = useRef<HTMLTextAreaElement | null>(null);
+
   const [descripcion, setDescripcion] = useState("");
   const [imagenesUrls, setImagenesUrls] = useState<string[]>([]);
   const [urlsInvalidas, setUrlsInvalidas] = useState<string[]>([]);
@@ -22,12 +20,11 @@ export const Posts = () => {
   const [enviando, setEnviando] = useState(false);
   const [archivos, setArchivos] = useState<File[]>([]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!descripcion.trim()) {
       setErrorDescripcion("La descripción es obligatoria.");
-      descripcionRef.current?.focus();
       return;
     }
 
@@ -88,34 +85,25 @@ export const Posts = () => {
 
   return (
     <main className={styles.container}>
-      <section className={styles.card}>
-        <h1 className={styles.titulo}>Crear nueva publicación</h1>
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.campoGrupo}>
-            <label htmlFor="descripcion" className={styles.label}>Descripción</label>
-            <textarea
-              ref={descripcionRef}
-              id="descripcion"
-              className={`${styles.textarea} ${errorDescripcion ? styles.textareaError : ""}`}
-              placeholder={`¿Qué te gustaría compartir hoy, @${user?.nickName || ""}?`}
-              value={descripcion}
-              onChange={(e) => { setDescripcion(e.target.value); setErrorDescripcion(""); }}
-              rows={4}
-            />
-            {errorDescripcion && <span className={styles.leyendaError}>{errorDescripcion}</span>}
-          </div>
-
-          <PostImages imagenesUrls={imagenesUrls} onChangeImagenes={setImagenesUrls}
-          archivos={archivos} onChangeArchivos={setArchivos} onUrlsInvalidasChange={setUrlsInvalidas} />
-          
-          <PostTags tagsSeleccionados={tagsSeleccionados} onChangeTags={setTagsSeleccionados} />
-          {error && <p className={styles.mensajeError}>{error}</p>}
-          <div className={styles.acciones}>
-            <Button variant="cancelar" onClick={() => navigate(-1)} disabled={enviando}>Cancelar</Button>
-            <Button type="submit" variant="primario" disabled={enviando}>{enviando ? "Publicando..." : "Publicar"}</Button>
-          </div>
-        </form>
-      </section>
+      <PostForm
+        descripcion={descripcion}
+        setDescripcion={setDescripcion}
+        imagenesUrls={imagenesUrls}
+        setImagenesUrls={setImagenesUrls}
+        urlsInvalidas={urlsInvalidas}
+        setUrlsInvalidas={setUrlsInvalidas}
+        tagsSeleccionados={tagsSeleccionados}
+        setTagsSeleccionados={setTagsSeleccionados}
+        archivos={archivos}
+        setArchivos={setArchivos}
+        errorDescripcion={errorDescripcion}
+        setErrorDescripcion={setErrorDescripcion}
+        error={error}
+        enviando={enviando}
+        userNickName={user?.nickName}
+        onSubmit={handleSubmit}
+        onCancel={() => navigate(-1)}
+      />
     </main>
   );
 };
