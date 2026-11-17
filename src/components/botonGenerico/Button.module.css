@@ -97,3 +97,15 @@
     max-width: 16.25rem;
   }
 }
+
+:global(#appShell[data-theme="dark"]) .btnSecundario {
+  background-color: #383044;
+  color: #e0c8ff;
+  border-color: #59466f;
+}
+
+:global(#appShell[data-theme="dark"]) .btnSecundario:hover:not(:disabled) {
+  background-color: #8055a8;
+  color: white;
+  border-color: #8055a8;
+}

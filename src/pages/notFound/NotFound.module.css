@@ -156,3 +156,20 @@ animation: girarSuave 7s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 .btnVioleta:active {
   transform: translateY(0);
 }
+
+:global(#appShell[data-theme="dark"]) .container {
+  background: radial-gradient(circle at 50% 40%, #30283b 0%, #1c1b22 70%);
+}
+
+:global(#appShell[data-theme="dark"]) .card {
+  background-color: #292731;
+  border-color: #45414f;
+}
+
+:global(#appShell[data-theme="dark"]) .titulo {
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .descripcion {
+  color: #b5b0c0;
+}

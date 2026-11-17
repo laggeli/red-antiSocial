@@ -45,10 +45,6 @@ function DataUser({
         <h2>{usuario.nombre || usuario.nickName}</h2>
         <p className="nicknamePerfil">@{usuario.nickName}</p>
 
-        {!esMiPerfil && teSigue && (
-          <span className="etiquetaTeSigue">Te sigue</span>
-        )}
-
         {esMiPerfil ? (
           <button
             type="button"
@@ -79,15 +75,18 @@ function DataUser({
           <span>Publicaciones</span>
         </div>
 
-        <div>
+        <div className="datoSeguidores">
           <strong>{cantidadSeguidores}</strong>
           <span>Seguidores</span>
+
+          {!esMiPerfil && teSigue && ( <span className="etiquetaTeSigue">Te sigue</span> )}
         </div>
 
         <div>
           <strong>{cantidadSeguidos}</strong>
           <span>Seguidos</span>
         </div>
+
       </div>
     </section>
   );

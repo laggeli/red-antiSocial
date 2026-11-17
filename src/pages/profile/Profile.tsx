@@ -9,6 +9,7 @@ import EditProfile from "../../components/editProfile/EditProfile";
 import { API_URL } from "../../config/api";
 import "./ProfileLight.css";
 import "./ProfileDark.css";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function Profile() {
   const { nickName: nickNameRuta } = useParams<{ nickName: string }>();
@@ -26,6 +27,8 @@ export default function Profile() {
   const [cargandoSeguimiento, setCargandoSeguimiento] = useState(false);
   const [editando, setEditando] = useState(false);
   const [error, setError] = useState("");
+
+  const { theme } = useTheme();
 
   const nickNameObjetivo = nickNameRuta || user?.nickName;
 
@@ -197,7 +200,7 @@ export default function Profile() {
   }
 
   return (
-    <main className="perfil perfil-claro">
+    <main className={`perfil ${theme === "dark" ? "perfil-oscuro" : "perfil-claro"}`}>
       <header className="encabezadoPerfil">
         <h1>{esMiPerfil ? "Mi perfil" : `Perfil de @${usuario.nickName}`}</h1>
       </header>

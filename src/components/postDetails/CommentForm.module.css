@@ -66,3 +66,17 @@
   font-size: 0.9rem;
   font-weight: 500;
 }
+
+:global(#appShell[data-theme="dark"]) .tituloComentario {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .textareaComentario {
+  background-color: #211e29;
+  border-color: #59466f;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .textareaComentario::placeholder {
+  color: #aaa2b5;
+}

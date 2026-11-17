@@ -64,7 +64,7 @@
   margin-left: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 5px;
 }
 
@@ -150,3 +150,56 @@
 .perfil-oscuro .mensajePerfil {
   color: #b5b0c0;
 }
+
+.perfil-oscuro .resumenPerfil {
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+}
+
+.perfil-oscuro .resumenPerfil div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.perfil-oscuro .resumenPerfil span {
+  color: #b5b0c0;
+  font-size: 14px;
+}
+
+.perfil-oscuro .botonSeguir,
+.perfil-oscuro .botonEditarPerfil {
+  margin-top: 16px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #8055a8 0%, #a477d0 100%);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.perfil-oscuro .botonSeguir.siguiendo {
+  background: linear-gradient(135deg, #8055a8 0%, #a477d0 100%);
+  color: white;
+}
+
+.perfil-oscuro .botonSeguir:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.perfil-oscuro .etiquetaTeSigue {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 4px 9px;
+  border-radius: 12px;
+  background: #49365f;
+  color: #e0c8ff;
+  font-size: 12px;
+}
+
