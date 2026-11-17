@@ -48,7 +48,7 @@ npm install
 Iniciar el servidor:
 
 ```bash
-docker compose up-d
+docker compose up -d
 npm run dev
 ```
 
