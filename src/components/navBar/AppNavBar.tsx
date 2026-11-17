@@ -1,7 +1,8 @@
-import { NavLink } from 'react-router-dom';
-import styles from './AppNavBar.module.css';
+
+import { NavLink } from "react-router-dom";
+import styles from "./AppNavBar.module.css";
 import logoImg from "../../img/iconoUnahurRed.jpg";
-import { Button } from "../botonGenerico/Button"; 
+import { Button } from "../botonGenerico/Button";
 import { useTheme } from "../../context/ThemeContext";
 
 interface UserData {
@@ -9,9 +10,9 @@ interface UserData {
   name?: string;
 }
 
-interface AppNavBarProps { 
-  user?: UserData; 
-  onLogout: () => void; 
+interface AppNavBarProps {
+  user?: UserData;
+  onLogout: () => void;
 }
 
 export const AppNavBar = ({ user, onLogout }: AppNavBarProps) => {
@@ -22,35 +23,78 @@ export const AppNavBar = ({ user, onLogout }: AppNavBarProps) => {
       <div className={styles.leftNav}>
         <NavLink to="/" className={styles.logoLink}>
           <div className={styles.logoBadge}>
-            <img src={logoImg} alt="Logo UnaHur" className={styles.logoImg} />
+            <img
+              src={logoImg}
+              alt="Logo Red UnaHur"
+              className={styles.logoImg}
+            />
           </div>
+
           <div className={styles.logoBrand}>
             <span className={styles.logoTitle}>UnaHur</span>
             <span className={styles.logoSubtitle}>Anti-Social Net</span>
           </div>
         </NavLink>
+      </div>
 
-        <NavLink to="/" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`} >
+      <div className={styles.centerNav}>
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }) =>
+            `${styles.navItem} ${isActive ? styles.active : ""}`
+          }
+        >
           Inicio
         </NavLink>
 
-        <NavLink to="/explore" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`} >
+        <NavLink
+          to="/explore"
+          className={({ isActive }) =>
+            `${styles.navItem} ${isActive ? styles.active : ""}`
+          }
+        >
           Explorar
         </NavLink>
 
-        <NavLink to="/profile" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`} >
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            `${styles.navItem} ${isActive ? styles.active : ""}`
+          }
+        >
           Mi perfil
         </NavLink>
 
-        <Button to="/create-post" variant="primario" className={styles.btnCreatePost} >
+        <Button
+          to="/create-post"
+          variant="primario"
+          className={styles.btnCreatePost}
+        >
           + Crear publicación
         </Button>
       </div>
 
       <div className={styles.rightNav}>
-        <button type="button" className={styles.themeButton} onClick={toggleTheme}
-        aria-label={theme === "light" ? "Activar modo oscuro" : "Activar modo claro"}
-        title={theme === "light" ? "Modo oscuro" : "Modo claro"}>
+        <span className={styles.saludo}>
+          Bienvenido/a, @{user?.nickName || user?.name || "usuario"}
+        </span>
+
+        <Button variant="secundario" onClick={onLogout}>
+          Cerrar sesión
+        </Button>
+
+        <button
+          type="button"
+          className={styles.themeButton}
+          onClick={toggleTheme}
+          aria-label={
+            theme === "light"
+              ? "Activar modo oscuro"
+              : "Activar modo claro"
+          }
+          title={theme === "light" ? "Modo oscuro" : "Modo claro"}
+        >
           {theme === "light" ? (
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="12" cy="12" r="4" />
@@ -62,11 +106,6 @@ export const AppNavBar = ({ user, onLogout }: AppNavBarProps) => {
             </svg>
           )}
         </button>
-
-        <span className={styles.saludo}>
-          Bienvenido/a, @{user?.nickName || user?.name || "usuario"}
-        </span>
-        <Button variant="secundario" onClick={onLogout}> Cerrar sesión </Button>
       </div>
     </nav>
   );

@@ -1,3 +1,18 @@
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body,
 input,
 textarea,
@@ -5,13 +20,8 @@ button {
   font-family: Arial, sans-serif;
 }
 
-html,
-body,
-#root {
-  width: 100%;
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
+html {
+  min-height: 100vh;
 }
 
 body {
@@ -26,7 +36,10 @@ body {
 #appShell {
   width: 100%;
   min-height: 100vh;
-  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f3f8;
+  color: #292333;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
 
@@ -34,6 +47,11 @@ html[data-theme="light"],
 html[data-theme="light"] body {
   background-color: #f5f3f8;
   color: #292333;
+}
+
+html[data-theme="light"] #root,
+html[data-theme="light"] #appShell {
+  background-color: #f5f3f8;
 }
 
 html[data-theme="dark"],
