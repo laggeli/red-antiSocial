@@ -1,4 +1,4 @@
-import type { SubmitEvent } from "react";
+import type { SubmitEvent, KeyboardEvent, ChangeEvent, RefObject } from "react";
 
 // Estructura de una etiqueta (Tag)
 export interface TagItem {
@@ -32,6 +32,28 @@ export interface PostImagesProps {
   archivos: File[];
   onChangeArchivos: (nuevosArchivos: File[]) => void;
   onUrlsInvalidasChange?: (urlsInvalidas: string[]) => void;
+}
+
+export interface PostTagsProps {
+  tagsSeleccionados: TagItem[];
+  onChangeTags: (nuevosTags: TagItem[]) => void;
+}
+
+export interface PostTagInputProps {
+  tagsSeleccionados: TagItem[];
+  inputEtiqueta: string;
+  onInputChange: (value: string) => void;
+  onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onToggleTag: (tag: TagItem) => void;
+  hasError: boolean;
+  inputRef: RefObject<HTMLInputElement | null>;
+}
+
+export interface PostTagOptionsListProps {
+  tagsDisponibles: TagItem[];
+  tagsSeleccionados: TagItem[];
+  busqueda: string;
+  onToggleTag: (tag: TagItem) => void;
 }
 
 export interface CreatePostPayload {
