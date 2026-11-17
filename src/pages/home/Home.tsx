@@ -63,9 +63,20 @@ export default function Home() {
           return (
             <article key={post._id} className={styles.tarjetaPublicacion}>
               <div className={styles.cabeceraPost}>
-                <div className={styles.avatar}>{inicial}</div>
+                <div className={styles.avatar}>
+                  {autor?.fotoPerfil ? (
+                    <img
+                      src={obtenerUrlImagen(autor.fotoPerfil)}
+                      alt={`Foto de perfil de ${nickName}`}
+                    />
+                  ) : (
+                    inicial
+                  )}
+                </div>
                 <div className={styles.infoUsuario}>
-                  <span className={styles.nickName}>@{nickName.replace(/^@/, "")}</span>
+                  <span className={styles.nickName}>
+                    @{nickName.replace(/^@/, "")}
+                  </span>
                   {autor?.nombre && <span>{autor.nombre}</span>}
                 </div>
               </div>
@@ -84,7 +95,9 @@ export default function Home() {
               )}
               <div className={styles.piePublicacion}>
                 <span className={styles.contadorComentarios}>💬 {post.commentsCount} comentarios</span>
-                <Link to={`/post/${post._id}`} className={styles.btnVerMas}>Ver más</Link>
+                <Link to={`/post/${post._id}`} state={{ from: "/" }} className={styles.btnVerMas} >
+                  Ver más
+                </Link>
               </div>
             </article>
           );

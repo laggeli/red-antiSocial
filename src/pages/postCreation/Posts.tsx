@@ -20,14 +20,17 @@ export const Posts = () => {
   const [errorDescripcion, setErrorDescripcion] = useState("");
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [archivos, setArchivos] = useState<File[]>([]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!descripcion.trim()) {
       setErrorDescripcion("La descripción es obligatoria.");
       descripcionRef.current?.focus();
       return;
     }
+
     if (!user?._id) {
       setError("No se encontró el usuario de la sesión. Volvé a iniciar sesión.");
       return;
@@ -38,24 +41,46 @@ export const Posts = () => {
     setErrorDescripcion("");
 
     try {
-      const imagenesValidas = imagenesUrls.filter((url) => !urlsInvalidas.includes(url));
+      const formData = new FormData();
+
+      formData.append("descripcion", descripcion.trim());
+      formData.append("userId", user._id);
+
+      const imagenesValidas = imagenesUrls.filter(
+        (url) => !urlsInvalidas.includes(url)
+      );
+
+      imagenesValidas.forEach((url) => {
+        formData.append("imagenesUrls", url);
+      });
+
+      tagsSeleccionados.forEach((tag) => {
+        formData.append("tagIds", tag._id);
+      });
+
+      archivos.forEach((archivo) => {
+        formData.append("imagenes", archivo);
+      });
+
       const respuesta = await fetch(`${API_URL}/posts`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          descripcion: descripcion.trim(),
-          userId: user._id,
-          tagIds: tagsSeleccionados.map((tag) => tag._id),
-          imagenesUrls: imagenesValidas,
-        }),
+        body: formData,
       });
 
       const datos = await respuesta.json().catch(() => ({}));
-      if (!respuesta.ok) throw new Error(datos.error || datos.message || "No se pudo crear la publicación.");
+
+      if (!respuesta.ok) {
+        throw new Error(
+          datos.error || datos.message || "No se pudo crear la publicación."
+        );
+      }
+
       navigate("/profile");
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : "Ocurrió un error al publicar.");
+      setError(
+        err instanceof Error ? err.message : "Ocurrió un error al publicar."
+      );
     } finally {
       setEnviando(false);
     }
@@ -79,7 +104,10 @@ export const Posts = () => {
             />
             {errorDescripcion && <span className={styles.leyendaError}>{errorDescripcion}</span>}
           </div>
-          <PostImages imagenesUrls={imagenesUrls} onChangeImagenes={setImagenesUrls} onUrlsInvalidasChange={setUrlsInvalidas} />
+
+          <PostImages imagenesUrls={imagenesUrls} onChangeImagenes={setImagenesUrls}
+          archivos={archivos} onChangeArchivos={setArchivos} onUrlsInvalidasChange={setUrlsInvalidas} />
+          
           <PostTags tagsSeleccionados={tagsSeleccionados} onChangeTags={setTagsSeleccionados} />
           {error && <p className={styles.mensajeError}>{error}</p>}
           <div className={styles.acciones}>

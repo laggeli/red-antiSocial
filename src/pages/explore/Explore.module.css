@@ -1,0 +1,98 @@
+
+.explore {
+  min-height: 100vh;
+  padding: 35px 45px;
+  background-color: #f5f3f8;
+  color: #292333;
+  font-family: Arial, sans-serif;
+}
+
+.encabezado {
+  margin-bottom: 25px;
+}
+
+.encabezado h1 {
+  color: #62458a;
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.encabezado p {
+  font-size: 17px;
+  color: #777080;
+}
+
+.busqueda {
+  width: 100%;
+  max-width: 600px;
+  padding: 14px 18px;
+  border: 1px solid #d8c8eb;
+  border-radius: 10px;
+  font-size: 16px;
+  margin-bottom: 30px;
+  outline-color: #62458a;
+}
+
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.tarjeta {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px #00000010;
+}
+
+.imagen {
+  width: 100%;
+  height: 230px;
+  object-fit: cover;
+}
+
+.contenido {
+  padding: 20px;
+}
+
+.contenido p {
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.contenido span {
+  color: #777080;
+}
+
+.etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+.etiquetas small {
+  color: #62458a;
+  background: #eee6f7;
+  padding: 5px 10px;
+  border-radius: 15px;
+}
+
+.contenido a {
+  display: inline-block;
+  color: #62458a;
+  font-weight: bold;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.contenido a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  .explore {
+    padding: 25px 18px;
+  }
+}

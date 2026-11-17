@@ -50,3 +50,25 @@
   opacity: 0.65;
   cursor: not-allowed;
 }
+
+.formComentario {
+  margin-top: 18px;
+}
+
+.formComentario h4 {
+  margin-bottom: 22px;
+}
+
+.textareaComentario {
+  margin-top: 5px;
+}
+
+.tituloComentario {
+  margin: 0 0 22px;
+  font-size: 1.15rem;
+  color: #62458a;
+}
+
+:global(h4) {
+  margin-bottom: 20px;
+}

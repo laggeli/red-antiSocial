@@ -100,10 +100,10 @@
 }
 
 .perfil-oscuro .imagenesPublicacion img {
-  width: 180px;
-  height: 150px;
+  width: 230px;
+  height: 190px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
 }
 
 .perfil-oscuro .etiquetasPublicacion {
@@ -123,21 +123,29 @@
 
 .perfil-oscuro .piePublicacion {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-  padding-top: 12px;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 25px;
+  padding-top: 18px;
   border-top: 1px solid #45414f;
 }
 
 .perfil-oscuro .piePublicacion a {
-  color: #c6a5ed;
+  background-color: #8055a8;
+  color: white;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
 }
 
 .perfil-oscuro .piePublicacion a:hover {
-  text-decoration: underline;
+  background-color: #68418e;
 }
+
 
 .perfil-oscuro .mensajePerfil {
   color: #b5b0c0;

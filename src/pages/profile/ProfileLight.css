@@ -1,10 +1,10 @@
-
 .perfil-claro {
   min-height: 100vh;
-  padding: 30px;
+  font-size: 17px;
   background-color: #f5f3f8;
   color: #292333;
   font-family: Arial, sans-serif;
+  padding: 35px 45px;
 }
 
 .perfil-claro .encabezadoPerfil {
@@ -31,34 +31,40 @@
 .perfil-claro .datosUsuario {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 30px;
+  padding: 30px;
   background-color: white;
-  padding: 25px;
   border-radius: 12px;
   box-shadow: 0 2px 8px #00000010;
 }
 
 .perfil-claro .avatarPerfil {
-  width: 75px;
-  height: 75px;
-  min-width: 75px;
   border-radius: 50%;
   background-color: #d9c9ee;
   color: #62458a;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 30px;
   font-weight: bold;
+  width: 95px;
+  height: 95px;
+  min-width: 95px;
+  font-size: 36px;
 }
 
 .perfil-claro .informacionUsuario h2 {
-  margin: 0 0 8px;
+  font-size: 25px;
+  margin: 0 0 12px;
 }
 
 .perfil-claro .informacionUsuario p {
   margin: 5px 0;
   color: #777080;
+}
+
+.perfil-claro .informacionUsuario .nicknamePerfil {
+  font-size: 17px;
+  margin: 0;
 }
 
 .perfil-claro .resumenPerfil {
@@ -78,16 +84,21 @@
   margin-top: 30px;
 }
 
+.perfil-claro .seccionPublicaciones h2 {
+  font-size: 25px;
+}
+
 .perfil-claro .tarjetaPublicacion {
   background-color: white;
-  padding: 20px;
+  padding: 28px;
   margin: 15px 0;
   border-radius: 12px;
   box-shadow: 0 2px 8px #00000010;
 }
 
 .perfil-claro .descripcionPublicacion {
-  font-size: 16px;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 .perfil-claro .tarjetaPublicacion small {
@@ -102,10 +113,10 @@
 }
 
 .perfil-claro .imagenesPublicacion img {
-  width: 180px;
-  height: 150px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 10px;
+  width: 300px;
+  height: 240px;
 }
 
 .perfil-claro .etiquetasPublicacion {
@@ -123,24 +134,33 @@
   font-size: 13px;
 }
 
+
 .perfil-claro .piePublicacion {
   display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-  padding-top: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 25px;
+  padding-top: 18px;
   border-top: 1px solid #eee;
+  gap: 20px;
+  font-size: 16px;
 }
 
 .perfil-claro .piePublicacion a {
-  color: #62458a;
+  background-color: #62458a;
+  color: white;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
 }
 
 .perfil-claro .piePublicacion a:hover {
-  text-decoration: underline;
+  background-color: #482d68;
 }
 
 .perfil-claro .mensajePerfil {
   color: #777080;
 }
+

@@ -358,6 +358,32 @@
   cursor: not-allowed;
 }
 
+.btnSeleccionarArchivo {
+  background-color: #eee6f7;
+  color: #5b3a82;
+  border: 1px solid #dcd0eb;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btnSeleccionarArchivo:hover {
+  background-color: #e4d8f2;
+}
+
+.btnSeleccionarArchivo:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.textoAyudaImagenes {
+  color: #777080;
+  font-size: 0.8rem;
+}
+
 /* Herencia de font-family Arial, sans-serif */
 .textarea,
 .urlInput,
@@ -367,6 +393,95 @@
 .btnCancelar,
 .btnPublicar {
   font-family: inherit;
+}
+
+.accionesComentario {
+  display: flex;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.accionesComentario button,
+.edicionComentario button,
+.botonesEdicion button,
+.imagenEditable button {
+  border: none;
+  border-radius: 7px;
+  padding: 7px 12px;
+  background: #eee6f7;
+  color: #62458a;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.accionesComentario button:hover,
+.edicionComentario button:hover,
+.botonesEdicion button:hover {
+  background: #dfd0ef;
+}
+
+.edicionComentario {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edicionComentario textarea,
+.formularioEdicion textarea,
+.formularioEdicion input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #d8c8eb;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.edicionComentario div,
+.botonesEdicion {
+  display: flex;
+  gap: 10px;
+}
+
+.btnEditar {
+  border: 1px solid #d8c8eb;
+  border-radius: 8px;
+  padding: 9px 14px;
+  color: #62458a;
+  background: #eee6f7;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btnEditar:hover {
+  background: #dfd0ef;
+}
+
+.formularioEdicion {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 22px;
+  background: #faf8fc;
+  border: 1px solid #e5d9f1;
+  border-radius: 12px;
+}
+
+.formularioEdicion h3 {
+  margin: 0 0 8px;
+  color: #62458a;
+}
+
+.imagenEditable {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.errorComentario {
+  color: #c53030;
+  margin: 8px 0;
 }
 
 @media (max-width: 480px) {

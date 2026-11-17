@@ -1,54 +1,61 @@
-import { useState, useRef } from "react";
-import type { KeyboardEvent } from "react";
-import { Button } from '../../components/botonGenerico/Button'; 
+
+import { useState, useRef, useEffect } from "react";
+import type { KeyboardEvent, ChangeEvent } from "react";
+import { Button } from "../../components/botonGenerico/Button";
 import styles from "./Posts.module.css";
 import cameraIcon from "../../img/camara.png";
 import errorImageIcon from "../../img/image-notFound.jpg";
 
 const MAX_IMAGENES = 5;
+const MAX_TAMANO = 5 * 1024 * 1024; // 5 MB
 
 interface PostImagesProps {
   imagenesUrls: string[];
   onChangeImagenes: (nuevasUrls: string[]) => void;
+  archivos: File[];
+  onChangeArchivos: (nuevosArchivos: File[]) => void;
   onUrlsInvalidasChange?: (urlsInvalidas: string[]) => void;
 }
 
 export const PostImages = ({
   imagenesUrls,
   onChangeImagenes,
+  archivos,
+  onChangeArchivos,
   onUrlsInvalidasChange,
 }: PostImagesProps) => {
   const urlInputRef = useRef<HTMLInputElement | null>(null);
+  const archivoInputRef = useRef<HTMLInputElement | null>(null);
 
-  const [inputUrlImagen, setInputUrlImagen] = useState<string>("");
-  const [errorImagenes, setErrorImagenes] = useState<string>("");
+  const [inputUrlImagen, setInputUrlImagen] = useState("");
+  const [errorImagenes, setErrorImagenes] = useState("");
+  const [urlsRotas, setUrlsRotas] = useState<Record<string, boolean>>({});
+  const [previews, setPreviews] = useState<string[]>([]);
 
-  //Record, objeto tipo diccionario, lo uso para marcar con true las URLs que fallaron al cargarse, reemplazarlas por la imagen de error en pantalla y filtrarlas antes de enviar el formulario al backend.
-  const [urlsRotas, setUrlsRotas] = useState<Record<string, boolean>>({}); 
+  const cantidadImagenes = imagenesUrls.length + archivos.length;
+  const disponibles = MAX_IMAGENES - cantidadImagenes;
 
-  const enfocarInputUrl = () => {
-    urlInputRef.current?.focus();
-  };
+  useEffect(() => {
+    const urls = archivos.map((archivo) => URL.createObjectURL(archivo));
+    setPreviews(urls);
 
-  const notificarInvalidas = (mapaRotas: Record<string, boolean>) => {
-    onUrlsInvalidasChange?.(
-      Object.keys(mapaRotas).filter((url) => mapaRotas[url])
-    );
-  };
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [archivos]);
 
   const agregarUrlImagen = () => {
     const limpia = inputUrlImagen.trim();
+
     if (!limpia) return;
 
-    if (imagenesUrls.length >= MAX_IMAGENES) {
-      setErrorImagenes(`Solo puedes agregar un máximo de ${MAX_IMAGENES} imágenes.`);
-      enfocarInputUrl();
+    if (cantidadImagenes >= MAX_IMAGENES) {
+      setErrorImagenes("Solo puedes agregar un máximo de 5 imágenes.");
       return;
     }
 
     if (imagenesUrls.includes(limpia)) {
-      setErrorImagenes("Esa URL de imagen ya fue agregada. Ingresa una distinta.");
-      enfocarInputUrl();
+      setErrorImagenes("Esa imagen ya fue agregada.");
       return;
     }
 
@@ -64,101 +71,171 @@ export const PostImages = ({
     }
   };
 
-  const eliminarImagen = (indexEliminar: number) => {
-    const urlEliminada = imagenesUrls[indexEliminar];
-    const nuevas = imagenesUrls.filter((_, i) => i !== indexEliminar);
-    onChangeImagenes(nuevas);
+  const handleSeleccionArchivos = (e: ChangeEvent<HTMLInputElement>) => {
+    const seleccionados = Array.from(e.target.files || []);
+
+    if (seleccionados.length === 0) return;
+
+    const validos = seleccionados.filter((archivo) => {
+      if (!archivo.type.startsWith("image/")) {
+        setErrorImagenes("El archivo seleccionado no es una imagen.");
+        return false;
+      }
+
+      if (archivo.size > MAX_TAMANO) {
+        setErrorImagenes("Cada imagen puede pesar como máximo 5 MB.");
+        return false;
+      }
+
+      return true;
+    });
+
+    const nuevos = validos.slice(0, disponibles);
+
+    if (nuevos.length < validos.length) {
+      setErrorImagenes("Solo puedes agregar un máximo de 5 imágenes.");
+    } else if (nuevos.length > 0) {
+      setErrorImagenes("");
+    }
+
+    onChangeArchivos([...archivos, ...nuevos]);
+
+    // Permite volver a seleccionar el mismo archivo si se elimina.
+    e.target.value = "";
+  };
+
+  const eliminarUrl = (index: number) => {
+    const urlEliminada = imagenesUrls[index];
+
+    onChangeImagenes(imagenesUrls.filter((_, i) => i !== index));
 
     setUrlsRotas((prev) => {
       const copia = { ...prev };
       delete copia[urlEliminada];
       return copia;
     });
+
     setErrorImagenes("");
   };
 
-  const handleImageError = (url: string, index: number) => {
+  const eliminarArchivo = (index: number) => {
+    onChangeArchivos(archivos.filter((_, i) => i !== index));
+    setErrorImagenes("");
+  };
+
+  const handleImageError = (url: string) => {
     setUrlsRotas((prev) => {
       const actualizado = { ...prev, [url]: true };
-      notificarInvalidas(actualizado);
+
+      onUrlsInvalidasChange?.(
+        Object.keys(actualizado).filter((item) => actualizado[item])
+      );
+
       return actualizado;
     });
+
     setErrorImagenes(
-      `La imagen ${index + 1} no cargó. Verifica que sea un enlace directo a la imagen (clic derecho sobre la imagen elegida → 'Copiar dirección de imagen').`
+      "La imagen no pudo cargarse. Verificá que sea un enlace directo a una imagen."
     );
-    enfocarInputUrl();
   };
 
   return (
     <div className={styles.campoGrupo}>
-      <div
-        className={`${styles.dropzone} ${
-          errorImagenes ? styles.dropzoneError : ""
-        }`}
-      >
+      <div className={styles.dropzone}>
         <div className={styles.dropzonePrompt}>
           <img
             src={cameraIcon}
             alt="Agregar imágenes"
             className={styles.iconoCamara}
           />
+
           <p className={styles.dropzoneTexto}>
-            Agrega URLs de imágenes (máx. {MAX_IMAGENES})
+            Agregá imágenes a tu publicación (máx. 5)
           </p>
 
-          {imagenesUrls.length < MAX_IMAGENES && (
-            <div className={styles.urlInputRow}>
-              <input
-                ref={urlInputRef}
-                type="text"
-                className={styles.urlInput}
-                title="https://ejemplo.com/imagen.jpg"
-                placeholder="https://ejemplo.com/imagen.jpg"
-                value={inputUrlImagen}
-                onChange={(e) => {
-                  setInputUrlImagen(e.target.value);
-                  if (errorImagenes) setErrorImagenes("");
-                }}
-                onKeyDown={handleKeyDownUrl}
-              />
-              <Button variant="secundario" onClick={agregarUrlImagen}>
-                + Agregar
-              </Button>
-            </div>
-          )}
+          <div className={styles.urlInputRow}>
+            <input
+              ref={urlInputRef}
+              type="text"
+              className={styles.urlInput}
+              placeholder="Pegá una URL de imagen..."
+              value={inputUrlImagen}
+              onChange={(e) => setInputUrlImagen(e.target.value)}
+              onKeyDown={handleKeyDownUrl}
+            />
+
+            <Button
+              variant="secundario"
+              onClick={agregarUrlImagen}
+              disabled={disponibles <= 0}
+            >
+              + Agregar URL
+            </Button>
+          </div>
+
+          <input
+            ref={archivoInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            hidden
+            onChange={handleSeleccionArchivos}
+          />
+
+          <button
+            type="button"
+            className={styles.btnSeleccionarArchivo}
+            onClick={() => archivoInputRef.current?.click()}
+            disabled={disponibles <= 0}
+          >
+            <span>📁</span> Seleccionar desde la computadora
+          </button>
+
+          <small className={styles.textoAyudaImagenes}>
+            JPG, PNG, WEBP o GIF. Máximo 5 MB por imagen.
+          </small>
         </div>
 
-        {imagenesUrls.length > 0 && (
+        {(imagenesUrls.length > 0 || archivos.length > 0) && (
           <div className={styles.previewsGrid}>
-            {imagenesUrls.map((url, index) => {
-              const esInvalida = Boolean(urlsRotas[url]);
-              return (
-                <div key={`${url}-${index}`} className={styles.previewItem}>
-                  <img
-                    src={esInvalida ? errorImageIcon : url}
-                    alt={
-                      esInvalida
-                        ? "Imagen no válida"
-                        : `Vista previa ${index + 1}`
-                    }
-                    className={styles.previewImg}
-                    onError={() => {
-                      if (!esInvalida) {
-                        handleImageError(url, index);
-                      }
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className={styles.btnQuitarImg}
-                    onClick={() => eliminarImagen(index)}
-                    aria-label="Eliminar imagen"
-                  >
-                    ×
-                  </button>
-                </div>
-              );
-            })}
+            {imagenesUrls.map((url, index) => (
+              <div key={`${url}-${index}`} className={styles.previewItem}>
+                <img
+                  src={urlsRotas[url] ? errorImageIcon : url}
+                  alt="Vista previa"
+                  className={styles.previewImg}
+                  onError={() => handleImageError(url)}
+                />
+
+                <button
+                  type="button"
+                  className={styles.btnQuitarImg}
+                  onClick={() => eliminarUrl(index)}
+                  aria-label="Eliminar imagen"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+
+            {archivos.map((archivo, index) => (
+              <div key={`${archivo.name}-${index}`} className={styles.previewItem}>
+                <img
+                  src={previews[index]}
+                  alt={archivo.name}
+                  className={styles.previewImg}
+                />
+
+                <button
+                  type="button"
+                  className={styles.btnQuitarImg}
+                  onClick={() => eliminarArchivo(index)}
+                  aria-label="Eliminar imagen"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
           </div>
         )}
       </div>

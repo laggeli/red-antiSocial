@@ -6,21 +6,26 @@ interface DataUserProps {
   cantidadPublicaciones: number;
 }
 
-// info del usuario, como el nombre, el email, la cantidad de posteos
 function DataUser({ usuario, cantidadPublicaciones }: DataUserProps) {
   const inicial = usuario.nickName?.charAt(0).toUpperCase() || "U";
+
   return (
     <section className="datosUsuario">
       {usuario.fotoPerfil ? (
-        <img className="avatarPerfil" src={obtenerUrlImagen(usuario.fotoPerfil)} alt="Foto de perfil" />
+        <img
+          className="avatarPerfil"
+          src={obtenerUrlImagen(usuario.fotoPerfil)}
+          alt="Foto de perfil"
+        />
       ) : (
         <div className="avatarPerfil">{inicial}</div>
       )}
+
       <div className="informacionUsuario">
-        <h2>@{usuario.nickName}</h2>
-        {usuario.nombre && <p>{usuario.nombre}</p>}
-        <p>{usuario.email}</p>
+        <h2>{usuario.nombre || usuario.nickName}</h2>
+        <p className="nicknamePerfil">@{usuario.nickName}</p>
       </div>
+
       <div className="resumenPerfil">
         <strong>{cantidadPublicaciones}</strong>
         <span>Publicaciones</span>

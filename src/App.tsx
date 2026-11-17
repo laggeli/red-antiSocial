@@ -5,6 +5,7 @@ import Profile from "./pages/profile/Profile";
 import Posts from "./pages/postCreation/Posts";
 import NotFound from "./pages/notFound/NotFound";
 import PostDetail from "./pages/postDetail/PostDetail";
+import Explore from "./pages/explore/Explore";
 
 // importaciones del módulo de autenticación (verificar minúsculas en las rutas de carpetas)
 import Login from "./pages/login/Login";
@@ -21,13 +22,14 @@ function MainLayout() {
       {user && <AppNavBar onLogout={logout} />}
 
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Registro />} />
-        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="/create-post" element={<ProtectedRoute><Posts /></ProtectedRoute>} />
-        <Route path="/post/:id" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/login" element= { <Login /> } />
+        <Route path="/registro" element= { <Registro /> } />
+        <Route path="/" element= { <ProtectedRoute> <Home /> </ProtectedRoute> } />
+        <Route path="/profile" element= { <ProtectedRoute> <Profile /> </ProtectedRoute> } />
+        <Route path="/create-post" element= { <ProtectedRoute> <Posts /> </ProtectedRoute> } />
+        <Route path="/post/:id" element= { <ProtectedRoute> <PostDetail /> </ProtectedRoute> } />
+        <Route path="/explore" element= { <ProtectedRoute> <Explore /> </ProtectedRoute> } />
+        <Route path="*" element= { <NotFound /> } />
       </Routes>
     </>
   );

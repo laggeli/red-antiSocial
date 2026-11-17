@@ -25,7 +25,9 @@ function Posteo({ publicacion }: PostProfileProps) {
       )}
       <div className="piePublicacion">
         <span>{publicacion.cantidadComentarios} comentarios</span>
-        <Link to={`/post/${publicacion._id}`}>Ver más</Link>
+        <Link to={`/post/${publicacion._id}`} state={{ from: "/profile" }} >
+          Ver más
+        </Link>
       </div>
     </article>
   );

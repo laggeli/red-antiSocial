@@ -30,7 +30,7 @@ export const CommentForm = ({ onEnviarComentario, submitting }: CommentFormProps
 
   return (
     <>
-      <h4>Agregar un comentario</h4>
+      <h4 className={styles.tituloComentario}>Agregar un comentario</h4>
       {errorLocal && <p className={styles.mensajeError}>{errorLocal}</p>}
 
       {/* aplicamos las clases del modulo */}

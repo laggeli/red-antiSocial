@@ -13,7 +13,6 @@ El proyecto propone una pequeña red social donde las personas usuarias pueden r
 - **Fetch API** – Comunicación con el backend.
 - **CSS** – Estilos y diseño responsive.
 - **Node.js + Express** – API REST proporcionada por la cátedra.
-- **SQLite + Sequelize** – Base de datos utilizada por el backend.
 
 ## ✧ Estructura del proyecto
 
@@ -35,27 +34,15 @@ Para ejecutar la aplicación localmente es necesario levantar primero el backend
 Clonar el repositorio proporcionado por la cátedra:
 
 ```bash
-git clone https://github.com/lucasfigarola/backend-api.git
+git clone https://github.com/laggeli/red-antiSocial-back
+cd red-antiSocial-back
+code .
 ```
 
-Ingresar a la carpeta e instalar las dependencias:
+Instalar las dependencias:
 
 ```bash
-cd backend-api
 npm install
-```
-
-Si durante la instalación aparece un aviso indicando que se bloquearon los scripts de `sqlite3`, ejecutar:
-
-```bash
-npm install-scripts approve sqlite3
-npm rebuild sqlite3
-```
-
-Crear y cargar la base de datos con los datos de prueba:
-
-```bash
-node seed.js
 ```
 
 Iniciar el servidor:
@@ -67,7 +54,7 @@ npm start
 El backend estará disponible en:
 
 ```text
-http://localhost:3001
+http://localhost:3000
 ```
 
 ### 2. FrontEnd
@@ -104,7 +91,7 @@ La aplicación utiliza `fetch` para realizar peticiones HTTP a la API.
 La dirección base del backend es:
 
 ```ts
-const API_URL = "http://localhost:3001";
+const API_URL = "http://localhost:3000";
 ```
 
 Por ejemplo, para consultar los usuarios:
@@ -119,7 +106,7 @@ El backend tiene CORS habilitado, por lo que permite las peticiones desde el fro
 Ambos servidores deben permanecer ejecutándose mientras se utiliza la aplicación:
 
 - FrontEnd: `localhost:5173`
-- BackEnd: `localhost:3001`
+- BackEnd: `localhost:3000`
 
 ## ✧ Funcionalidades del proyecto
 
@@ -135,8 +122,6 @@ La aplicación contempla las siguientes funcionalidades:
 - Asociación de imágenes y etiquetas.
 - Navegación entre las distintas secciones.
 - Persistencia de la sesión mediante `localStorage`.
-
-El inicio de sesión utiliza una contraseña fija (`123456`), validada desde el frontend, de acuerdo con las consignas del trabajo práctico. No se implementa autenticación real ni JWT.
 
 ## ✧ Perfil de usuario
 
