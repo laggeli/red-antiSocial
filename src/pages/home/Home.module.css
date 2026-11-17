@@ -8,6 +8,7 @@
   flex-direction: column;
   /* alineamos a la izquierda para aprovechar el espacio de pantalla */
   align-items: stretch; 
+  gap: 1.5rem;
 }
 
 .seccionFeed {

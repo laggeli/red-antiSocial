@@ -1,27 +1,37 @@
 .container {
-  display: flex;
-  justify-content: center;
-  padding: 1.5rem 2rem 3rem;
-  width: 100%;
-  box-sizing: border-box;
+  min-height: 100vh;
+  padding: 30px 40px;
+  background-color: #f5f3f8;
   font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.banner {
+  background: linear-gradient(135deg, #5b3a82 0%, #6f499c 100%);
+  border-radius: 16px;
+  padding: 2rem 2.4rem;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(91, 58, 130, 0.12);
 }
 
 .card {
   background-color: #ffffff;
   border-radius: 16px;
   padding: 2rem 2.2rem;
-  max-width: 820px;
   width: 100%;
+  box-sizing: border-box;
   box-shadow: 0 4px 12px rgba(91, 58, 130, 0.08);
   border: 1px solid #ede9f5;
-}
-
-.titulo {
-  margin: 0 0 1.5rem;
-  font-size: 1.65rem;
-  font-weight: 700;
-  color: #1f1f1f;
 }
 
 .form {
@@ -515,10 +525,6 @@
   background-color: #292731;
   border-color: #45414f;
   box-shadow: 0 4px 12px #00000030;
-}
-
-:global(#appShell[data-theme="dark"]) .titulo {
-  color: #c6a5ed;
 }
 
 :global(#appShell[data-theme="dark"]) .label {

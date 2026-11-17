@@ -38,34 +38,33 @@ export const PostForm = ({
 
   return (
     <section className={styles.card}>
-      <h1 className={styles.titulo}>Crear nueva publicación</h1>
-      <form onSubmit={handleFormSubmit} className={styles.form}>
+    <form onSubmit={handleFormSubmit} className={styles.form}>
         <PostDescription
-          descripcion={descripcion}
-          setDescripcion={setDescripcion}
-          errorDescripcion={errorDescripcion}
-          setErrorDescripcion={setErrorDescripcion}
-          userNickName={userNickName}
-          descripcionRef={descripcionRef}
+        descripcion={descripcion}
+        setDescripcion={setDescripcion}
+        errorDescripcion={errorDescripcion}
+        setErrorDescripcion={setErrorDescripcion}
+        userNickName={userNickName}
+        descripcionRef={descripcionRef}
         />
 
         <PostImages
-          imagenesUrls={imagenesUrls}
-          onChangeImagenes={setImagenesUrls}
-          archivos={archivos}
-          onChangeArchivos={setArchivos}
-          onUrlsInvalidasChange={setUrlsInvalidas}
+        imagenesUrls={imagenesUrls}
+        onChangeImagenes={setImagenesUrls}
+        archivos={archivos}
+        onChangeArchivos={setArchivos}
+        onUrlsInvalidasChange={setUrlsInvalidas}
         />
 
         <PostTags
-          tagsSeleccionados={tagsSeleccionados}
-          onChangeTags={setTagsSeleccionados}
+        tagsSeleccionados={tagsSeleccionados}
+        onChangeTags={setTagsSeleccionados}
         />
 
         {error && <p className={styles.mensajeError}>{error}</p>}
 
         <PostFormButtons enviando={enviando} onCancel={onCancel} />
-      </form>
+    </form>
     </section>
   );
 };

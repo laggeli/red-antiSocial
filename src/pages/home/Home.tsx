@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { PostDetailModel } from "../../types/PostDetailTypes";
-import { BannerWelcome } from "../../components/banner/BannerWelcome";
+import { BannerWelcome } from "../../components/pageBanner/BannerWelcome";
 import styles from "./Home.module.css";
 import { API_URL, obtenerUrlImagen } from '../../config/api';
 
@@ -50,7 +50,7 @@ export default function Home() {
 
   return (
     <main className={styles.homeContainer}>
-      <BannerWelcome />
+      <BannerWelcome/>
       <div className={styles.seccionFeed}>
         {posts.length === 0 ? (
           <p className={styles.mensajePerfil}>No hay publicaciones disponibles en este momento.</p>
