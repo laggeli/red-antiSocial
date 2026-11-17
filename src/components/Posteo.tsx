@@ -1,38 +1,33 @@
 import { Link } from "react-router-dom";
 import type { PostProfile } from "../types/PerfilTypes";
+import { obtenerUrlImagen } from "../config/api";
 
 interface PostProfileProps { publicacion: PostProfile; }
 
 function Posteo({ publicacion }: PostProfileProps) {
+  const imagenes = publicacion.imagenes || [];
+  const etiquetas = publicacion.tagIds || [];
   return (
     <article className="tarjetaPublicacion">
-      <p className="descripcionPublicacion"> {publicacion.description} </p>
-
-      <small>
-        Publicado el{" "} 
-        {new Date(publicacion.createdAt).toLocaleDateString("es-AR")}
-      </small>
-
-      {publicacion.imagenes.length > 0 && (
+      <p className="descripcionPublicacion">{publicacion.descripcion}</p>
+      <small>Publicado el {new Date(publicacion.publicadoEn).toLocaleDateString("es-AR")}</small>
+      {imagenes.length > 0 && (
         <div className="imagenesPublicacion">
-          {publicacion.imagenes.map((imagen) => (
-            <img key={imagen.id} src={imagen.url} alt="Imagen de la publicación"/>
+          {imagenes.map((imagen, index) => (
+            <img key={imagen._id || `${imagen.url}-${index}`} src={obtenerUrlImagen(imagen.url)} alt="Imagen de la publicación" />
           ))}
         </div>
       )}
-
-      {publicacion.Tags && publicacion.Tags.length > 0 && (
+      {etiquetas.length > 0 && (
         <div className="etiquetasPublicacion">
-          {publicacion.Tags.map((etiqueta) => ( <span key={etiqueta.id}> #{etiqueta.name} </span> ))}
+          {etiquetas.map((tag) => <span key={tag._id}>#{tag.nombre}</span>)}
         </div>
       )}
-
       <div className="piePublicacion">
-        <span> {publicacion.cantidadComentarios} comentarios </span>
-        <Link to={`/post/${publicacion.id}`}> Ver más </Link>
+        <span>{publicacion.cantidadComentarios} comentarios</span>
+        <Link to={`/post/${publicacion._id}`}>Ver más</Link>
       </div>
     </article>
   );
 }
-
 export default Posteo;

@@ -1,126 +1,72 @@
 import { useState, useEffect, useRef } from "react";
 import type { KeyboardEvent } from "react";
 import styles from "./Posts.module.css";
+import { API_URL } from "../../config/api";
 
-const API_URL = "http://localhost:3001";
-
-export interface TagItem {
-  id: number;
-  name: string;
-}
+export interface TagItem { _id: string; nombre: string; }
 
 interface PostTagsProps {
   tagsSeleccionados: TagItem[];
   onChangeTags: (nuevosTags: TagItem[]) => void;
 }
 
-export const PostTags = ({
-  tagsSeleccionados,
-  onChangeTags,
-}: PostTagsProps) => {
+export const PostTags = ({ tagsSeleccionados, onChangeTags }: PostTagsProps) => {
   const tagInputRef = useRef<HTMLInputElement | null>(null);
   const [tagsDisponibles, setTagsDisponibles] = useState<TagItem[]>([]);
-  const [inputEtiqueta, setInputEtiqueta] = useState<string>("");
-  const [errorTags, setErrorTags] = useState<string>("");
+  const [inputEtiqueta, setInputEtiqueta] = useState("");
+  const [errorTags, setErrorTags] = useState("");
 
-  // Se obtiene por GET /tags el listado de etiquetas disponibles
   useEffect(() => {
-    const cargarTags = async () => {
-      try {
-        const res = await fetch(`${API_URL}/tags`);
-        if (res.ok) {
-          const data: TagItem[] = await res.json();
-          setTagsDisponibles(data);
-        }
-      } catch (err) {
-        console.error("Error al cargar etiquetas:", err);
-      }
-    };
-    cargarTags();
+    fetch(`${API_URL}/tags`)
+      .then((res) => {
+        if (!res.ok) throw new Error("No se pudieron cargar las etiquetas");
+        return res.json();
+      })
+      .then((data: TagItem[]) => setTagsDisponibles(data))
+      .catch((err) => console.error(err));
   }, []);
-
-  const enfocarInputTags = () => {
-    tagInputRef.current?.focus();
-  };
 
   const seleccionarTagPorNombre = (nombreRaw: string) => {
     const limpia = nombreRaw.trim().replace(/^#/, "").toLowerCase();
     if (!limpia) return;
-
-    const encontrada = tagsDisponibles.find(
-      (t) => t.name.toLowerCase() === limpia
-    );
-
+    const encontrada = tagsDisponibles.find((t) => t.nombre.toLowerCase() === limpia);
     if (!encontrada) {
-      setErrorTags(
-        `La etiqueta "#${limpia}" inexistente en el listado disponible. Debes elegir una de las opciones que se muestran debajo.`
-      );
-      enfocarInputTags();
+      setErrorTags(`La etiqueta #${limpia} no existe. Elegí una de las opciones.`);
+      tagInputRef.current?.focus();
       return;
     }
-
-    if (tagsSeleccionados.some((t) => t.id === encontrada.id)) {
-      setErrorTags(`La etiqueta "#${encontrada.name}" ya fue agregada.`);
-      enfocarInputTags();
+    if (tagsSeleccionados.some((t) => t._id === encontrada._id)) {
+      setErrorTags(`La etiqueta #${encontrada.nombre} ya fue agregada.`);
       return;
     }
-
     setErrorTags("");
     onChangeTags([...tagsSeleccionados, encontrada]);
     setInputEtiqueta("");
+  };
+
+  const toggleTag = (tag: TagItem) => {
+    setErrorTags("");
+    const existe = tagsSeleccionados.some((t) => t._id === tag._id);
+    onChangeTags(existe ? tagsSeleccionados.filter((t) => t._id !== tag._id) : [...tagsSeleccionados, tag]);
   };
 
   const handleKeyDownEtiqueta = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
       seleccionarTagPorNombre(inputEtiqueta);
-    } else if (
-      e.key === "Backspace" &&
-      !inputEtiqueta &&
-      tagsSeleccionados.length > 0
-    ) {
+    } else if (e.key === "Backspace" && !inputEtiqueta && tagsSeleccionados.length) {
       onChangeTags(tagsSeleccionados.slice(0, -1));
-      if (errorTags) setErrorTags("");
     }
-  };
-
-  const toggleTag = (tag: TagItem) => {
-    setErrorTags("");
-    const existe = tagsSeleccionados.some((t) => t.id === tag.id);
-    if (existe) {
-      onChangeTags(tagsSeleccionados.filter((t) => t.id !== tag.id));
-    } else {
-      onChangeTags([...tagsSeleccionados, tag]);
-    }
-  };
-
-  const eliminarEtiqueta = (id: number) => {
-    onChangeTags(tagsSeleccionados.filter((t) => t.id !== id));
-    if (errorTags) setErrorTags("");
   };
 
   return (
     <div className={styles.campoGrupo}>
-      <label htmlFor="etiquetas" className={styles.label}>
-        Etiquetas
-      </label>
-
-      <div
-        className={`${styles.tagsBox} ${
-          errorTags ? styles.tagsBoxError : ""
-        }`}
-      >
+      <label htmlFor="etiquetas" className={styles.label}>Etiquetas</label>
+      <div className={`${styles.tagsBox} ${errorTags ? styles.tagsBoxError : ""}`}>
         {tagsSeleccionados.map((tag) => (
-          <span key={tag.id} className={styles.tagChip}>
-            #{tag.name}
-            <button
-              type="button"
-              className={styles.tagRemove}
-              onClick={() => eliminarEtiqueta(tag.id)}
-              aria-label={`Quitar etiqueta ${tag.name}`}
-            >
-              ×
-            </button>
+          <span key={tag._id} className={styles.tagChip}>
+            #{tag.nombre}
+            <button type="button" className={styles.tagRemove} onClick={() => toggleTag(tag)} aria-label={`Quitar ${tag.nombre}`}>×</button>
           </span>
         ))}
         <input
@@ -128,45 +74,22 @@ export const PostTags = ({
           id="etiquetas"
           type="text"
           className={styles.tagInput}
-          title="Escribí el nombre de la etiqueta buscada y presiona Enter..."
-          placeholder="Escribí el nombre de la etiqueta buscada y presiona Enter..."
+          placeholder="Escribí una etiqueta y presioná Enter..."
           value={inputEtiqueta}
-          onChange={(e) => {
-            setInputEtiqueta(e.target.value);
-            if (errorTags) setErrorTags("");
-          }}
+          onChange={(e) => { setInputEtiqueta(e.target.value); setErrorTags(""); }}
           onKeyDown={handleKeyDownEtiqueta}
         />
       </div>
-      {/* Leyenda de error debajo del contenedor de tags */}
       {errorTags && <span className={styles.leyendaError}>{errorTags}</span>}
-
-      {/* Etiquetas obtenidas de GET /tags */}
       {tagsDisponibles.length > 0 && (
         <div className={styles.tagsSugeridos}>
-          {tagsDisponibles
-            .filter((t) =>
-              t.name.toLowerCase().includes(inputEtiqueta.trim().toLowerCase())
-            )
-            .map((tag) => {
-              const activo = tagsSeleccionados.some((t) => t.id === tag.id);
-              return (
-                <button
-                  key={tag.id}
-                  type="button"
-                  className={`${styles.tagSugeridoBtn} ${
-                    activo ? styles.tagSugeridoActivo : ""
-                  }`}
-                  onClick={() => toggleTag(tag)}
-                >
-                  #{tag.name}
-                </button>
-              );
-            })}
+          {tagsDisponibles.filter((t) => t.nombre.toLowerCase().includes(inputEtiqueta.trim().toLowerCase())).map((tag) => {
+            const activo = tagsSeleccionados.some((t) => t._id === tag._id);
+            return <button key={tag._id} type="button" className={`${styles.tagSugeridoBtn} ${activo ? styles.tagSugeridoActivo : ""}`} onClick={() => toggleTag(tag)}>#{tag.nombre}</button>;
+          })}
         </div>
       )}
     </div>
   );
 };
-
 export default PostTags;

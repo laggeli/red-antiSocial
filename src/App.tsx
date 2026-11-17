@@ -6,7 +6,7 @@ import Posts from "./pages/postCreation/Posts";
 import NotFound from "./pages/notFound/NotFound";
 import PostDetail from "./pages/postDetail/PostDetail";
 
-// Importaciones del módulo de autenticación (verificar minúsculas en las rutas de carpetas)
+// importaciones del módulo de autenticación (verificar minúsculas en las rutas de carpetas)
 import Login from "./pages/login/Login";
 import Registro from "./pages/registro/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -21,45 +21,12 @@ function MainLayout() {
       {user && <AppNavBar onLogout={logout} />}
 
       <Routes>
-        {/* Rutas Públicas */}
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
-
-        {/* Rutas Protegidas (Redirigen a /login si no hay usuario autenticado) */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile nickName={user?.nickName || "luna"} modoOscuro={false} />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/create-post"
-          element={
-            <ProtectedRoute>
-              <Posts nickName={user?.nickName || "luna"} />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/post/:id"
-          element={
-            <ProtectedRoute>
-              <PostDetail />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* Ruta comodín para manejo de errores 404 */}
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/create-post" element={<ProtectedRoute><Posts /></ProtectedRoute>} />
+        <Route path="/post/:id" element={<ProtectedRoute><PostDetail /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

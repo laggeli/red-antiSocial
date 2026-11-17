@@ -1,226 +1,105 @@
-// src/pages/postDetail/PostDetail.tsx
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import type { PostDetailModel, PostImage, Comment } from "../../types/PostDetailTypes";
-import type { User } from "../../types/PerfilTypes";
+import { useAuth } from "../../context/AuthContext";
+import type { PostDetailModel } from "../../types/PostDetailTypes";
+import type { Comment } from "../../types/PerfilTypes";
 import { CommentForm } from "../../components/postDetails/CommentForm";
 import { ImageModal } from "../../components/postDetails/ImageModal";
 import styles from "./PostDetail.module.css";
+import { API_URL, obtenerUrlImagen } from "../../config/api";
 
-const API_URL = "http://localhost:3001";
-
-interface PostDetailProps {
-  nickName: string; // recibimos el nickname actual para obtener el id del usuario al comentar
-}
-
-// funciones atomicas de servicio para traer la data especifica del post
-async function fetchPostById(id: string): Promise<PostDetailModel> {
-  const response = await fetch(`${API_URL}/posts/${id}`);
-  if (!response.ok) throw new Error("No se pudo cargar la publicación.");
-  return await response.json();
-}
-
-async function fetchImagesByPostId(id: string): Promise<PostImage[]> {
-  try {
-    const res = await fetch(`${API_URL}/postimages/post/${id}`);
-    if (!res.ok) return [];
-    return await res.json();
-  } catch {
-    return [];
-  }
-}
-
-async function fetchCommentsByPostId(id: string): Promise<Comment[]> {
-  try {
-    const res = await fetch(`${API_URL}/comments/post/${id}`);
-    if (!res.ok) return [];
-    return await res.json();
-  } catch {
-    return [];
-  }
-}
-
-async function fetchCurrentUserId(nickName: string): Promise<number> {
-  const resUsers = await fetch(`${API_URL}/users`);
-  if (!resUsers.ok) throw new Error("Error al verificar el usuario.");
-  const usuarios: User[] = await resUsers.json();
-  const usuarioActual = usuarios.find((u) => u.nickName === nickName);
-
-  if (!usuarioActual) {
-    throw new Error("Debes iniciar sesión para comentar.");
-  }
-  return usuarioActual.id;
-}
-
-async function sendNewComment(payload: { text: string; postId: number; userId: number }): Promise<Comment> {
-  const response = await fetch(`${API_URL}/comments`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-
-  if (!response.ok) {
-    throw new Error("Error al guardar el comentario en el servidor.");
-  }
-  return await response.json();
-}
-
-export default function PostDetail({ nickName }: PostDetailProps) {
+export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
-
+  const { user } = useAuth();
   const [post, setPost] = useState<PostDetailModel | null>(null);
-  const [images, setImages] = useState<PostImage[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
-  
-  // estado para controlar la imagen seleccionada que se vera en el modal
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const [loading, setLoading] = useState<boolean>(true);
-  const [submitting, setSubmitting] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // hook para cargar toda la data del post al montar o cambiar el id de la url
   useEffect(() => {
     if (!id) return;
-
-    const loadPostDetails = async () => {
+    const cargarDetalle = async () => {
       try {
         setLoading(true);
-        setError(null);
-
-        // traemos en paralelo o secuencial los datos de la publicacion, imagenes y comentarios
-        const postData = await fetchPostById(id);
-        const imagesData = await fetchImagesByPostId(id);
-        const commentsData = await fetchCommentsByPostId(id);
-
-        setPost(postData);
-        setImages(imagesData);
-        setComments(commentsData);
+        setError("");
+        const [resPost, resComments] = await Promise.all([
+          fetch(`${API_URL}/posts/${id}`),
+          fetch(`${API_URL}/posts/${id}/comments`),
+        ]);
+        if (!resPost.ok) throw new Error("No se pudo cargar la publicación.");
+        const datosPost: PostDetailModel = await resPost.json();
+        setPost(datosPost);
+        if (resComments.ok) {
+          const datosComentarios = await resComments.json();
+          setComments(Array.isArray(datosComentarios) ? datosComentarios : []);
+        } else {
+          setComments([]);
+        }
       } catch (err) {
         console.error(err);
-        setError("Error al cargar el detalle de la publicación.");
+        setError(err instanceof Error ? err.message : "Error al cargar el detalle de la publicación.");
       } finally {
         setLoading(false);
       }
     };
-
-    loadPostDetails();
+    cargarDetalle();
   }, [id]);
 
-  // funcion que le pasamos al componente hijo para manejar el envio del comentario
   const handleEnviarComentario = async (texto: string) => {
-    if (!id) return;
-
+    if (!id || !user?._id) throw new Error("No se pudo identificar al usuario. Volvé a iniciar sesión.");
     setSubmitting(true);
     try {
-      const userId = await fetchCurrentUserId(nickName);
-
-      const createdComment = await sendNewComment({
-        text: texto,
-        postId: Number(id),
-        userId,
+      const response = await fetch(`${API_URL}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contenido: texto, userId: user._id, postId: id }),
       });
-
-      // actualizacion inmutable del estado local de comentarios
-      setComments((prev) => [...prev, createdComment]);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || data.message || "No se pudo guardar el comentario.");
+      const nuevo = data.comment as Comment;
+      setComments((prev) => [{ ...nuevo, userId: user }, ...prev]);
     } finally {
       setSubmitting(false);
     }
   };
 
-  // validaciones de carga o error
-  if (loading) {
-    return <p className={styles.mensajePerfil}>Cargando publicación...</p>;
-  }
+  if (loading) return <p className={styles.mensajePerfil}>Cargando publicación...</p>;
+  if (error || !post) return <main className={styles.detailContainer}><p className={styles.mensajePerfil}>{error || "Publicación no encontrada."}</p><Link to="/" className={styles.btnVolver}>Volver al inicio</Link></main>;
 
-  if (error || !post) {
-    return (
-      <main className={styles.detailContainer}>
-        <p className={styles.mensajePerfil}>{error || "Publicación no encontrada"}</p>
-        <Link to="/" className={styles.btnVolver}>
-          Volver al inicio
-        </Link>
-      </main>
-    );
-  }
-
-  // protegemos el valor de nickName para evitar errores si viene undefined (me dio problemas en la primera implementacion)
-  const postNickName = post.user?.nickName || nickName || "usuario";
-  const inicial = String(postNickName).replace(/^@/, "").charAt(0).toUpperCase();
+  const autor = typeof post.userId === "object" ? post.userId : null;
+  const nickName = autor?.nickName || "usuario";
+  const inicial = nickName.replace(/^@/, "").charAt(0).toUpperCase();
+  const imagenes = post.imagenes || [];
+  const etiquetas = post.tagIds || [];
 
   return (
     <main className={styles.detailContainer}>
-      {/* boton para regresar al feed principal */}
-      <Link to="/" className={styles.btnVolver}>
-        ← Volver al feed
-      </Link>
-
-      {/* tarjeta principal con la info completa */}
+      <Link to="/" className={styles.btnVolver}>← Volver al feed</Link>
       <article className={styles.tarjetaDetalle}>
         <div className={styles.cabeceraPost}>
           <div className={styles.avatar}>{inicial}</div>
-          <div className={styles.infoUsuario}>
-            <span className={styles.nickName}>@{String(postNickName).replace(/^@/, "")}</span>
-          </div>
+          <div className={styles.infoUsuario}><span className={styles.nickName}>@{nickName.replace(/^@/, "")}</span>{autor?.nombre && <span>{autor.nombre}</span>}</div>
         </div>
-
-        <p className={styles.descripcionCompleta}>{post.description}</p>
-
-        {/* galeria de imagenes adjuntas con evento onClick para abrirlas en grande */}
-        {images.length > 0 && (
-          <div className={styles.imagenesDetalle}>
-            {images.map((img) => (
-              <img
-                key={img.id}
-                src={img.url}
-                alt="Imagen adjunta al post"
-                onClick={() => setImagenSeleccionada(img.url)}
-                style={{ cursor: "pointer" }}
-                title="Haz clic para ampliar"
-              />
-            ))}
-          </div>
-        )}
-
-        {/* etiquetas del post */}
-        {post.tags && post.tags.length > 0 && (
-          <div className={styles.etiquetasPublicacion}>
-            {post.tags.map((tag) => (
-              <span key={tag.id}>#{tag.name}</span>
-            ))}
-          </div>
-        )}
+        <p className={styles.descripcionCompleta}>{post.descripcion}</p>
+        {imagenes.length > 0 && <div className={styles.imagenesDetalle}>{imagenes.map((img, index) => {
+          const url = obtenerUrlImagen(img.url);
+          return <img key={img._id || `${img.url}-${index}`} src={url} alt="Imagen adjunta" onClick={() => setImagenSeleccionada(url)} style={{ cursor: "pointer" }} />;
+        })}</div>}
+        {etiquetas.length > 0 && <div className={styles.etiquetasPublicacion}>{etiquetas.map((tag) => <span key={tag._id}>#{tag.nombre}</span>)}</div>}
       </article>
-
-      {/* seccion interactiva de comentarios */}
       <section className={styles.seccionComentarios}>
         <h3>Comentarios ({comments.length})</h3>
-
         <div className={styles.listaComentarios}>
-          {comments.length === 0 ? (
-            <p className={styles.sinComentarios}>Aún no hay comentarios. ¡Sé el primero en comentar!</p>
-          ) : (
-            comments.map((com) => {
-              const autorComentario = com.user?.nickName || `Usuario #${com.userId}`;
-              return (
-                <div key={com.id} className={styles.itemComentario}>
-                  <span className={styles.autorComentario}>@{String(autorComentario).replace(/^@/, "")}</span>
-                  <p className={styles.textoComentario}>{com.text}</p>
-                </div>
-              );
-            })
-          )}
+          {comments.length === 0 ? <p className={styles.sinComentarios}>Aún no hay comentarios. ¡Sé el primero!</p> : comments.map((com) => {
+            const autorComentario = typeof com.userId === "object" ? com.userId.nickName : "usuario";
+            return <div key={com._id} className={styles.itemComentario}><span className={styles.autorComentario}>@{autorComentario}</span><p className={styles.textoComentario}>{com.contenido}</p></div>;
+          })}
         </div>
-
-        {/* renderizamos el formulario de comentarios modularizado */}
         <CommentForm onEnviarComentario={handleEnviarComentario} submitting={submitting} />
       </section>
-
-      {/* modal modularizado para mostrar la imagen ampliada */}
-      <ImageModal
-        imagenUrl={imagenSeleccionada}
-        onCerrar={() => setImagenSeleccionada(null)}
-      />
+      <ImageModal imagenUrl={imagenSeleccionada} onCerrar={() => setImagenSeleccionada(null)} />
     </main>
   );
 }

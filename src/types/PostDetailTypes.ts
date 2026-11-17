@@ -1,37 +1,19 @@
-import type { User } from "./PerfilTypes";
+import type { User, Tag, Image, Comment } from "./PerfilTypes";
 
-export interface Tag {
-  id: number;
-  name: string;
-}
-
-export interface PostImage {
-  id: number;
-  url: string;
-  postId: number;
-}
-
-export interface Comment {
-  id: number;
-  text: string;
-  postId: number;
-  userId: number;
-  user?: User;
-  createdAt?: string;
-}
+export type PostImage = Image;
 
 export interface PostDetailModel {
-  id: number;
-  description: string;
-  userId: number;
-  user?: User;
-  tags?: Tag[];
-  images?: PostImage[];
-  commentsCount?: number;
+  _id: string;
+  descripcion: string;
+  publicadoEn: string;
+  userId: User | string;
+  tagIds?: Tag[];
+  imagenes?: Image[];
+  comentarios?: Comment[];
 }
 
 export interface CreateCommentPayload {
-  text: string;
-  postId: number;
-  userId: number;
+  contenido: string;
+  postId: string;
+  userId: string;
 }

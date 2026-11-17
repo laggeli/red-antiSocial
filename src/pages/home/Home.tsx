@@ -1,147 +1,94 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import type { PostDetailModel, PostImage, Comment } from "../../types/PostDetailTypes";
+import type { PostDetailModel } from "../../types/PostDetailTypes";
 import { BannerWelcome } from "../../components/banner/BannerWelcome";
 import styles from "./Home.module.css";
-import { API_URL } from '../../config/api';
+import { API_URL, obtenerUrlImagen } from '../../config/api';
+
+interface PostFeed extends PostDetailModel { commentsCount: number; }
 
 export default function Home() {
-  const [posts, setPosts] = useState<PostDetailModel[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
+  const [posts, setPosts] = useState<PostFeed[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  // hook para cargar los datos apenas se monta el componente
   useEffect(() => {
-    const obtenerPostsYDetalles = async () => {
+    const cargarPosts = async () => {
       try {
         setLoading(true);
         setError("");
+        const respuesta = await fetch(`${API_URL}/posts`);
+        if (!respuesta.ok) throw new Error("No se pudieron obtener las publicaciones.");
+        const datos: PostDetailModel[] = await respuesta.json();
 
-        // listado general de publicaciones con GET /posts
-        const respuestaPosts = await fetch(`${API_URL}/posts`);
-        if (!respuestaPosts.ok) {
-          throw new Error("Error al obtener las publicaciones");
-        }
-        const datosPosts: PostDetailModel[] = await respuestaPosts.json();
-
-        // recorremos las publicaciones de forma secuencial para enriquecerlas con imagenes y comentarios
-        const postsEnriquecidos: PostDetailModel[] = [];
-
-        for (const post of datosPosts) {
-          // imagenes del post
-          let imagenes: PostImage[] = [];
+        const postsConComentarios = await Promise.all((Array.isArray(datos) ? datos : []).map(async (post) => {
+          let commentsCount = 0;
           try {
-            const resImg = await fetch(`${API_URL}/postimages/post/${post.id}`);
-            if (resImg.ok) {
-              imagenes = await resImg.json();
+            const resComentarios = await fetch(`${API_URL}/posts/${post._id}/comments`);
+            if (resComentarios.ok) {
+              const comentarios = await resComentarios.json();
+              commentsCount = Array.isArray(comentarios) ? comentarios.length : 0;
             }
-          } catch {
-            imagenes = [];
+          } catch (err) {
+            console.error("No se pudieron cargar los comentarios", err);
           }
-
-          // los comentarios del post
-          let comentarios: Comment[] = [];
-          try {
-            const resCom = await fetch(`${API_URL}/comments/post/${post.id}`);
-            if (resCom.ok) {
-              comentarios = await resCom.json();
-            }
-          } catch {
-            comentarios = [];
-          }
-
-          // agregamos el post con sus datos enriquecidos al nuevo array
-          postsEnriquecidos.push({
-            ...post,
-            images: imagenes,
-            commentsCount: comentarios.length,
-          });
-        }
-
-        // actualizamos el estado con el nuevo array de forma inmutable
-        setPosts(postsEnriquecidos);
+          return { ...post, commentsCount };
+        }));
+        setPosts(postsConComentarios);
       } catch (err) {
         console.error(err);
         setError("Ocurrió un error al cargar las publicaciones.");
       } finally {
-        // nos aseguramos de apagar el estado de carga pase lo que pase
         setLoading(false);
       }
     };
-
-    obtenerPostsYDetalles();
+    cargarPosts();
   }, []);
 
-  // validamos si esta cargando para mostrar el mensaje correspondiente
-  if (loading) {
-    return <p className={styles.mensajePerfil}>Cargando publicaciones...</p>;
-  }
-
-  // si hubo algun problema en el fetch lo atrapamos aca
-  if (error) {
-    return <p className={styles.mensajePerfil}>{error}</p>;
-  }
+  if (loading) return <p className={styles.mensajePerfil}>Cargando publicaciones...</p>;
+  if (error) return <p className={styles.mensajePerfil}>{error}</p>;
 
   return (
     <main className={styles.homeContainer}>
-      {/* renderizamos el banner institucional modularizado */}
       <BannerWelcome />
-
       <div className={styles.seccionFeed}>
-        {/* controlamos si el array de posts esta vacio o tiene elementos */}
         {posts.length === 0 ? (
           <p className={styles.mensajePerfil}>No hay publicaciones disponibles en este momento.</p>
-        ) : (
-          posts.map((post) => {
-            // obtenemos la inicial para el avatar a partir del nickname del usuario
-            const nickName = post.user?.nickName || "usuario";
-            const inicial = nickName.replace(/^@/, "").charAt(0).toUpperCase();
-
-            return (
-              <article key={post.id} className={styles.tarjetaPublicacion}>
-                {/* cabecera con avatar y nombre de usuario */}
-                <div className={styles.cabeceraPost}>
-                  <div className={styles.avatar}>{inicial}</div>
-                  <div className={styles.infoUsuario}>
-                    <span className={styles.nickName}>@{nickName.replace(/^@/, "")}</span>
-                  </div>
+        ) : posts.map((post) => {
+          const autor = typeof post.userId === "object" ? post.userId : null;
+          const nickName = autor?.nickName || "usuario";
+          const inicial = nickName.replace(/^@/, "").charAt(0).toUpperCase();
+          const imagenes = post.imagenes || [];
+          const etiquetas = post.tagIds || [];
+          return (
+            <article key={post._id} className={styles.tarjetaPublicacion}>
+              <div className={styles.cabeceraPost}>
+                <div className={styles.avatar}>{inicial}</div>
+                <div className={styles.infoUsuario}>
+                  <span className={styles.nickName}>@{nickName.replace(/^@/, "")}</span>
+                  {autor?.nombre && <span>{autor.nombre}</span>}
                 </div>
-
-                {/* descripcion del post */}
-                <p className={styles.descripcionPublicacion}>{post.description}</p>
-
-                {/* validamos si existen imagenes asociadas para renderizarlas */}
-                {post.images && post.images.length > 0 && (
-                  <div className={styles.imagenesPublicacion}>
-                    {post.images.map((img) => (
-                      <img key={img.id} src={img.url} alt="Imagen adjunta" />
-                    ))}
-                  </div>
-                )}
-
-                {/* etiquetas del post */}
-                {post.tags && post.tags.length > 0 && (
-                  <div className={styles.etiquetasPublicacion}>
-                    {post.tags.map((tag) => (
-                      <span key={tag.id}>#{tag.name}</span>
-                    ))}
-                  </div>
-                )}
-
-                {/* pie con comentarios y boton ver mas */}
-                <div className={styles.piePublicacion}>
-                  <span className={styles.contadorComentarios}>
-                    💬 {post.commentsCount ?? 0} comentarios
-                  </span>
-                  {/* enlace para navegar al detalle usando el id del post */}
-                  <Link to={`/post/${post.id}`} className={styles.btnVerMas}>
-                    Ver más
-                  </Link>
+              </div>
+              <p className={styles.descripcionPublicacion}>{post.descripcion}</p>
+              {imagenes.length > 0 && (
+                <div className={styles.imagenesPublicacion}>
+                  {imagenes.map((img, index) => (
+                    <img key={img._id || `${img.url}-${index}`} src={obtenerUrlImagen(img.url)} alt="Imagen adjunta" />
+                  ))}
                 </div>
-              </article>
-            );
-          })
-        )}
+              )}
+              {etiquetas.length > 0 && (
+                <div className={styles.etiquetasPublicacion}>
+                  {etiquetas.map((tag) => <span key={tag._id}>#{tag.nombre}</span>)}
+                </div>
+              )}
+              <div className={styles.piePublicacion}>
+                <span className={styles.contadorComentarios}>💬 {post.commentsCount} comentarios</span>
+                <Link to={`/post/${post._id}`} className={styles.btnVerMas}>Ver más</Link>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </main>
   );
