@@ -87,11 +87,12 @@ export const Posts = () => {
 
   return (
     <main className={styles.container}>
+      <PageBanner
+        titulo="Crear nueva publicación"
+        subtitulo="Compartí tus ideas, apuntes o proyectos con la comunidad universitaria."
+      />
+      
       <div className={styles.wrapper}>
-        <PageBanner
-          titulo="Crear nueva publicación"
-          subtitulo="Compartí tus ideas, apuntes o proyectos con la comunidad universitaria."
-        />
         <PostForm
           descripcion={descripcion}
           setDescripcion={setDescripcion}
