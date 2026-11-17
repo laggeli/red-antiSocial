@@ -1,0 +1,181 @@
+
+.fondoModal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(20, 16, 27, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.modal {
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  color: #292333;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 12px 40px #00000030;
+}
+
+.encabezado {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.encabezado h2 {
+  color: #62458a;
+  margin: 0 0 5px;
+}
+
+.encabezado p {
+  color: #777080;
+  margin: 0;
+  font-size: 14px;
+}
+
+.btnCerrar {
+  border: none;
+  background: transparent;
+  color: #777080;
+  font-size: 28px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.fotoSeccion {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.fotoPerfil,
+.fotoInicial {
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.fotoInicial {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #e8ddf3;
+  color: #62458a;
+  font-size: 38px;
+  font-weight: bold;
+}
+
+.btnFoto {
+  background: #eee6f7;
+  color: #62458a;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnFoto input {
+  display: none;
+}
+
+.ayuda {
+  color: #888;
+  font-size: 12px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.campo label {
+  color: #51465f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.campo input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ddd5e7;
+  border-radius: 8px;
+  padding: 11px 12px;
+  font: inherit;
+  outline: none;
+}
+
+.campo input:focus {
+  border-color: #8055a8;
+  box-shadow: 0 0 0 2px #8055a820;
+}
+
+.error {
+  color: #b42318;
+  background: #fff0ee;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+}
+
+.botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.btnCancelar,
+.btnGuardar {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnCancelar {
+  color: #62458a;
+  background: #eee6f7;
+}
+
+.btnGuardar {
+  color: white;
+  background: #62458a;
+}
+
+.btnGuardar:hover {
+  background: #482d68;
+}
+
+.btnCancelar:disabled,
+.btnGuardar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 500px) {
+  .modal {
+    padding: 20px;
+  }
+
+  .botones {
+    flex-direction: column-reverse;
+  }
+
+  .botones button {
+    width: 100%;
+  }
+}

@@ -21,14 +21,20 @@ export default function PostDetail() {
   const [post, setPost] = useState<PostDetailModel | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [eliminando, setEliminando] = useState(false);
+
   const [error, setError] = useState("");
   const [errorEliminar, setErrorEliminar] = useState("");
+
+  // Edición de comentarios
   const [comentarioEditando, setComentarioEditando] = useState<string | null>(null);
   const [textoEditado, setTextoEditado] = useState("");
   const [errorComentario, setErrorComentario] = useState("");
+
+  // Edición de publicación
   const [editandoPost, setEditandoPost] = useState(false);
   const [descripcionEditada, setDescripcionEditada] = useState("");
   const [nuevaImagenUrl, setNuevaImagenUrl] = useState("");
@@ -62,11 +68,10 @@ export default function PostDetail() {
           setComments([]);
         }
       } catch (err) {
-        console.error(err);
         setError(
           err instanceof Error
             ? err.message
-            : "Error al cargar el detalle de la publicación."
+            : "Error al cargar la publicación."
         );
       } finally {
         setLoading(false);
@@ -76,6 +81,7 @@ export default function PostDetail() {
     cargarDetalle();
   }, [id]);
 
+  // Crear comentario
   const handleEnviarComentario = async (texto: string) => {
     if (!id || !user?._id) {
       throw new Error("No se pudo identificar al usuario. Volvé a iniciar sesión.");
@@ -109,59 +115,78 @@ export default function PostDetail() {
     }
   };
 
+  // Editar comentario
   const handleEditarComentario = async (comentarioId: string) => {
-  try {
-    setErrorComentario("");
-
     if (textoEditado.trim().length < 2) {
       setErrorComentario("El comentario debe tener al menos 2 caracteres.");
       return;
     }
 
-    const respuesta = await fetch(`${API_URL}/comments/${comentarioId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contenido: textoEditado.trim() }),
-    });
+    try {
+      setErrorComentario("");
 
-    const datos = await respuesta.json().catch(() => ({}));
+      const respuesta = await fetch(`${API_URL}/comments/${comentarioId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ contenido: textoEditado.trim() }),
+      });
 
-    if (!respuesta.ok) { throw new Error(datos.message || "No se pudo editar el comentario."); }
+      const datos = await respuesta.json().catch(() => ({}));
 
-    setComments((prev) =>
-      prev.map((com) =>
-        com._id === comentarioId
-          ? { ...com, contenido: textoEditado.trim() }
-          : com
-      )
-    );
+      if (!respuesta.ok) {
+        throw new Error(datos.message || datos.error || "No se pudo editar el comentario.");
+      }
 
-    setComentarioEditando(null);
-    setTextoEditado("");
-  } catch (err) {
-    setErrorComentario(
-      err instanceof Error ? err.message : "Error al editar el comentario."
-    );
-  }
-};
+      setComments((prev) =>
+        prev.map((com) =>
+          com._id === comentarioId
+            ? { ...com, contenido: textoEditado.trim() }
+            : com
+        )
+      );
 
-const handleEliminarComentario = async (comentarioId: string) => {
-  const confirmar = window.confirm( "¿Querés eliminar este comentario?" );
-  if (!confirmar) return;
-  try {
-    setErrorComentario("");
+      setComentarioEditando(null);
+      setTextoEditado("");
+    } catch (err) {
+      setErrorComentario(
+        err instanceof Error ? err.message : "Error al editar el comentario."
+      );
+    }
+  };
 
-    const respuesta = await fetch(`${API_URL}/comments/${comentarioId}`, { method: "DELETE", });
-    const datos = await respuesta.json().catch(() => ({}));
+  // Eliminar comentario
+  const handleEliminarComentario = async (comentarioId: string) => {
+    if (!window.confirm("¿Querés eliminar este comentario?")) return;
 
-    if (!respuesta.ok) { throw new Error(datos.message || datos.error || "No se pudo eliminar el comentario."); }
+    try {
+      setErrorComentario("");
 
-    setComments((prev) => prev.filter((com) => com._id !== comentarioId) );
-    } catch (err) { setErrorComentario( err instanceof Error ? err.message : "Error al eliminar el comentario." ); }
-};
+      const respuesta = await fetch(`${API_URL}/comments/${comentarioId}`, {
+        method: "DELETE",
+      });
 
-const handleGuardarPost = async () => {
+      const datos = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        throw new Error(datos.message || datos.error || "No se pudo eliminar el comentario.");
+      }
+
+      setComments((prev) => prev.filter((com) => com._id !== comentarioId));
+    } catch (err) {
+      setErrorComentario(
+        err instanceof Error ? err.message : "Error al eliminar el comentario."
+      );
+    }
+  };
+
+  // Guardar cambios de la publicación
+  const handleGuardarPost = async () => {
     if (!id) return;
+
+    if (!descripcionEditada.trim()) {
+      setErrorEdicionPost("La descripción no puede estar vacía.");
+      return;
+    }
 
     try {
       setGuardandoPost(true);
@@ -169,9 +194,7 @@ const handleGuardarPost = async () => {
 
       const respuesta = await fetch(`${API_URL}/posts/${id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           descripcion: descripcionEditada.trim(),
           ...(nuevaImagenUrl.trim()
@@ -183,7 +206,7 @@ const handleGuardarPost = async () => {
       const datos = await respuesta.json().catch(() => ({}));
 
       if (!respuesta.ok) {
-        throw new Error(datos.error || "No se pudo modificar la publicación.");
+        throw new Error(datos.error || datos.message || "No se pudo modificar la publicación.");
       }
 
       setPost(datos.post);
@@ -198,27 +221,24 @@ const handleGuardarPost = async () => {
     }
   };
 
+  // Eliminar imagen de la publicación
   const handleEliminarImagen = async (imagenId: string) => {
     if (!id) return;
-
-    const confirmar = window.confirm("¿Querés eliminar esta imagen?");
-    if (!confirmar) return;
+    if (!window.confirm("¿Querés eliminar esta imagen?")) return;
 
     try {
+      setErrorEdicionPost("");
+
       const respuesta = await fetch(`${API_URL}/posts/${id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          eliminarImagenId: imagenId,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ eliminarImagenId: imagenId }),
       });
 
       const datos = await respuesta.json().catch(() => ({}));
 
       if (!respuesta.ok) {
-        throw new Error(datos.error || "No se pudo eliminar la imagen.");
+        throw new Error(datos.error || datos.message || "No se pudo eliminar la imagen.");
       }
 
       setPost(datos.post);
@@ -229,10 +249,13 @@ const handleGuardarPost = async () => {
     }
   };
 
+  // Eliminar publicación
   const handleEliminarPost = async () => {
     if (!id) return;
 
-    const confirmar = window.confirm( "¿Estás seguro de que querés eliminar esta publicación? Esta acción no se puede deshacer." );
+    const confirmar = window.confirm(
+      "¿Estás seguro de que querés eliminar esta publicación? Esta acción no se puede deshacer."
+    );
 
     if (!confirmar) return;
 
@@ -240,26 +263,39 @@ const handleGuardarPost = async () => {
     setErrorEliminar("");
 
     try {
-      const respuesta = await fetch(`${API_URL}/posts/${id}`, { method: "DELETE", });
+      const respuesta = await fetch(`${API_URL}/posts/${id}`, {
+        method: "DELETE",
+      });
 
       const datos = await respuesta.json().catch(() => ({}));
 
-      if (!respuesta.ok) { throw new Error( datos.error || datos.message || "No se pudo eliminar la publicación." ); }
+      if (!respuesta.ok) {
+        throw new Error(datos.error || datos.message || "No se pudo eliminar la publicación.");
+      }
 
       navigate(volverA, { replace: true });
     } catch (err) {
-      console.error(err);
-      setErrorEliminar( err instanceof Error ? err.message : "Ocurrió un error al eliminar." );
-    } finally { setEliminando(false); }
+      setErrorEliminar(
+        err instanceof Error ? err.message : "Ocurrió un error al eliminar."
+      );
+    } finally {
+      setEliminando(false);
+    }
   };
 
-  if (loading) { return <p className={styles.mensajePerfil}>Cargando publicación...</p>; }
+  if (loading) {
+    return <p className={styles.mensajePerfil}>Cargando publicación...</p>;
+  }
 
   if (error || !post) {
     return (
       <main className={styles.detailContainer}>
-        <p className={styles.mensajePerfil}> {error || "Publicación no encontrada."} </p>
-        <Link to={volverA} className={styles.btnVolver}> ← Volver </Link>
+        <p className={styles.mensajePerfil}>
+          {error || "Publicación no encontrada."}
+        </p>
+        <Link to={volverA} className={styles.btnVolver}>
+          ← Volver
+        </Link>
       </main>
     );
   }
@@ -269,7 +305,9 @@ const handleGuardarPost = async () => {
   const inicial = nickName.replace(/^@/, "").charAt(0).toUpperCase();
   const imagenes = post.imagenes || [];
   const etiquetas = post.tagIds || [];
-  const esMiPublicacion = !!user?._id && !!autor?._id && user._id === autor._id;
+
+  const esMiPublicacion =
+    !!user?._id && !!autor?._id && user._id === autor._id;
 
   return (
     <main className={styles.detailContainer}>
@@ -277,102 +315,173 @@ const handleGuardarPost = async () => {
         ← {volverA === "/profile" ? "Volver al perfil" : "Volver al inicio"}
       </Link>
 
+      {/* Publicación */}
       <article className={styles.tarjetaDetalle}>
         <div className={styles.cabeceraPost}>
           {autor?.fotoPerfil ? (
-            <img className={styles.avatar}
-            src={obtenerUrlImagen(autor.fotoPerfil)} alt="Foto de perfil" />
-          ) : ( <div className={styles.avatar}>{inicial}</div> )}
+            <img
+              className={styles.avatar}
+              src={obtenerUrlImagen(autor.fotoPerfil)}
+              alt="Foto de perfil"
+            />
+          ) : (
+            <div className={styles.avatar}>{inicial}</div>
+          )}
 
           <div className={styles.infoUsuario}>
-            <span className={styles.nickName}> @{nickName.replace(/^@/, "")} </span>
+            <span className={styles.nickName}>@{nickName.replace(/^@/, "")}</span>
             {autor?.nombre && <span>{autor.nombre}</span>}
           </div>
 
           {esMiPublicacion && (
-            <button type="button" className={styles.btnEditar} onClick={() => {
-                setDescripcionEditada(post.descripcion);
-                setEditandoPost(true);
-              }}
-            >
-              ✎ Editar publicación
-            </button>
+            <div className={styles.accionesPost}>
+              <button
+                type="button"
+                className={styles.btnEditar}
+                onClick={() => {
+                  setDescripcionEditada(post.descripcion);
+                  setErrorEdicionPost("");
+                  setEditandoPost(true);
+                }}
+              >
+                ✎ Editar
+              </button>
+
+              <button
+                type="button"
+                className={styles.btnEliminar}
+                onClick={handleEliminarPost}
+                disabled={eliminando}
+              >
+                {eliminando ? "Eliminando..." : "Eliminar"}
+              </button>
+            </div>
           )}
-
-          {esMiPublicacion && (
-            <button type="button" className={styles.btnEliminar} onClick={handleEliminarPost} disabled={eliminando} >
-              {eliminando ? "Eliminando..." : "⨂ Eliminar publicación"}
-            </button>
-          )}
-
-          {errorEliminar && ( <p className={styles.errorEliminar}>{errorEliminar} </p> )}
-
         </div>
 
+        {errorEliminar && (
+          <p className={styles.errorMensaje}>{errorEliminar}</p>
+        )}
+
+        {/* Formulario de edición */}
         {editandoPost ? (
           <div className={styles.formularioEdicion}>
             <h3>Editar publicación</h3>
 
-            <label>Descripción</label>
-            <textarea value={descripcionEditada} onChange={(e) => setDescripcionEditada(e.target.value)} rows={4} />
+            <label htmlFor="descripcionEditada">Descripción</label>
+            <textarea
+              id="descripcionEditada"
+              value={descripcionEditada}
+              onChange={(e) => setDescripcionEditada(e.target.value)}
+              rows={4}
+            />
 
-            <label>Agregar imagen mediante URL</label>
-            <input type="text" value={nuevaImagenUrl}
+            <label htmlFor="nuevaImagenUrl">Agregar imagen mediante URL</label>
+            <input
+              id="nuevaImagenUrl"
+              type="text"
+              value={nuevaImagenUrl}
               onChange={(e) => setNuevaImagenUrl(e.target.value)}
               placeholder="https://..."
             />
 
+            {errorEdicionPost && (
+              <p className={styles.errorMensaje}>{errorEdicionPost}</p>
+            )}
+
             <div className={styles.botonesEdicion}>
-              <button type="button" onClick={handleGuardarPost} disabled={guardandoPost} >
+              <button
+                type="button"
+                className={styles.btnGuardar}
+                onClick={handleGuardarPost}
+                disabled={guardandoPost}
+              >
                 {guardandoPost ? "Guardando..." : "Guardar cambios"}
               </button>
 
-              <button type="button" onClick={() => setEditandoPost(false)} >
+              <button
+                type="button"
+                className={styles.btnCancelar}
+                onClick={() => {
+                  setEditandoPost(false);
+                  setNuevaImagenUrl("");
+                  setErrorEdicionPost("");
+                }}
+              >
                 Cancelar
               </button>
             </div>
-
-            {errorEdicionPost && ( <p className={styles.errorComentario}>{errorEdicionPost}</p> )}
           </div>
-        ) : ( <p className={styles.descripcionCompleta}>{post.descripcion}</p> )};
+        ) : (
+          <p className={styles.descripcionCompleta}>{post.descripcion}</p>
+        )}
 
-        <p className={styles.descripcionCompleta}>{post.descripcion}</p>
+        {/* Imágenes */}
+        {imagenes.length > 0 && (
+          <div className={styles.imagenesDetalle}>
+            {imagenes.map((img, index) => {
+              const url = obtenerUrlImagen(img.url);
 
-        {imagenes.map((img, index) => {
-          const url = obtenerUrlImagen(img.url);
+              return (
+                <div
+                  key={img._id || `${img.url}-${index}`}
+                  className={styles.imagenEditable}
+                >
+                  <img
+                    src={url}
+                    alt="Imagen adjunta"
+                    onClick={() => setImagenSeleccionada(url)}
+                  />
 
-          return (
-            <div key={img._id || `${img.url}-${index}`} className={styles.imagenEditable}>
-              <img src={url} alt="Imagen adjunta" onClick={() => setImagenSeleccionada(url)} />
+                  {esMiPublicacion && editandoPost && img._id && (
+                    <button
+                      type="button"
+                      className={styles.btnEliminarImagen}
+                      onClick={() => handleEliminarImagen(img._id!)}
+                    >
+                      Eliminar imagen
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
 
-              {esMiPublicacion && editandoPost && img._id && (
-                <button type="button" onClick={() => handleEliminarImagen(img._id!)}>
-                  Eliminar imagen
-                </button>
-              )}
-            </div>
-          );
-        })}
-
+        {/* Etiquetas */}
         {etiquetas.length > 0 && (
           <div className={styles.etiquetasPublicacion}>
-            {etiquetas.map((tag) => ( <span key={tag._id}>#{tag.nombre}</span> ))}
+            {etiquetas.map((tag) => (
+              <span key={tag._id}>#{tag.nombre}</span>
+            ))}
           </div>
         )}
       </article>
 
+      {/* Comentarios */}
       <section className={styles.seccionComentarios}>
-        <h3>Comentarios ({comments.length})</h3>
+        <h3 className={styles.tituloSeccion}>
+          Comentarios ({comments.length})
+        </h3>
 
         {comments.length === 0 ? (
-          <p className={styles.mensajePerfil}> Todavía no hay comentarios. ¡Sé el primero en comentar! </p>
+          <p className={styles.mensajeSinComentarios}>
+            Todavía no hay comentarios. ¡Sé el primero en comentar!
+          </p>
         ) : (
           <div className={styles.listaComentarios}>
             {comments.map((com) => {
-              const autorComentario = typeof com.userId === "object" ? com.userId : null;
+              const autorComentario =
+                typeof com.userId === "object" ? com.userId : null;
+
               const nickComentario = autorComentario?.nickName || "usuario";
-              const esMiComentario = !!user?.nickName && nickComentario === user.nickName;
-              const inicialComentario = nickComentario.charAt(0).toUpperCase();
+              const esMiComentario =
+                !!user?.nickName && nickComentario === user.nickName;
+
+              const inicialComentario = nickComentario
+                .replace(/^@/, "")
+                .charAt(0)
+                .toUpperCase();
 
               return (
                 <article key={com._id} className={styles.itemComentario}>
@@ -384,21 +493,34 @@ const handleGuardarPost = async () => {
                         alt="Foto de perfil"
                       />
                     ) : (
-                      <div className={styles.avatarComentario}> {inicialComentario} </div>
+                      <div className={styles.avatarComentario}>
+                        {inicialComentario}
+                      </div>
                     )}
 
-                    <span className={styles.autorComentario}> @{nickComentario} </span>
+                    <span className={styles.autorComentario}>
+                      @{nickComentario.replace(/^@/, "")}
+                    </span>
 
                     {esMiComentario && (
                       <div className={styles.accionesComentario}>
-                        <button type="button" onClick={() => {
-                          setComentarioEditando(com._id);
-                          setTextoEditado(com.contenido);
-                        }}>
+                        <button
+                          type="button"
+                          className={styles.btnAccionComentario}
+                          onClick={() => {
+                            setComentarioEditando(com._id);
+                            setTextoEditado(com.contenido);
+                            setErrorComentario("");
+                          }}
+                        >
                           Editar
                         </button>
 
-                        <button type="button" onClick={() => handleEliminarComentario(com._id)}>
+                        <button
+                          type="button"
+                          className={styles.btnAccionEliminar}
+                          onClick={() => handleEliminarComentario(com._id)}
+                        >
                           Eliminar
                         </button>
                       </div>
@@ -413,15 +535,24 @@ const handleGuardarPost = async () => {
                         rows={3}
                       />
 
-                      <div>
-                        <button type="button" onClick={() => handleEditarComentario(com._id)}>
+                      <div className={styles.botonesEdicionComentario}>
+                        <button
+                          type="button"
+                          className={styles.btnGuardar}
+                          onClick={() => handleEditarComentario(com._id)}
+                        >
                           Guardar
                         </button>
 
-                        <button type="button" onClick={() => {
-                          setComentarioEditando(null);
-                          setTextoEditado("");
-                        }}>
+                        <button
+                          type="button"
+                          className={styles.btnCancelar}
+                          onClick={() => {
+                            setComentarioEditando(null);
+                            setTextoEditado("");
+                            setErrorComentario("");
+                          }}
+                        >
                           Cancelar
                         </button>
                       </div>
@@ -435,24 +566,39 @@ const handleGuardarPost = async () => {
           </div>
         )}
 
-        {errorComentario && ( <p className={styles.errorComentario}> {errorComentario} </p> )}
+        {errorComentario && (
+          <p className={styles.errorMensaje}>{errorComentario}</p>
+        )}
 
-        <div className={styles.formularioConAvatar}>
-          {user?.fotoPerfil ? (
-            <img className={styles.avatarComentario}
-              src={obtenerUrlImagen(user.fotoPerfil)}
-              alt="Tu foto de perfil"
-            />
-          ) : (
-            <div className={styles.avatarComentario}>
-              {user?.nickName?.charAt(0).toUpperCase() || "U"}
+        {/* Formulario para agregar comentario */}
+        {user && (
+          <div className={styles.bloqueNuevoComentario}>
+            <div className={styles.encabezadoNuevoComentario}>
+              {user.fotoPerfil ? (
+                <img
+                  className={styles.avatarComentario}
+                  src={obtenerUrlImagen(user.fotoPerfil)}
+                  alt="Tu foto de perfil"
+                />
+              ) : (
+                <div className={styles.avatarComentario}>
+                  {user.nickName?.charAt(0).toUpperCase() || "U"}
+                </div>
+              )}
+
+              <Link to={`/profile/${encodeURIComponent(nickName)}`} className={styles.nickName}>
+                @{nickName.replace(/^@/, "")}
+              </Link>
             </div>
-          )}
 
-          <div className={styles.formularioComentario}>
-            <CommentForm onEnviarComentario={handleEnviarComentario} submitting={submitting} />
+            <div className={styles.formularioComentario}>
+              <CommentForm
+                onEnviarComentario={handleEnviarComentario}
+                submitting={submitting}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </section>
 
       <ImageModal

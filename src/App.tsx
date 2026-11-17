@@ -26,6 +26,8 @@ function MainLayout() {
         <Route path="/registro" element= { <Registro /> } />
         <Route path="/" element= { <ProtectedRoute> <Home /> </ProtectedRoute> } />
         <Route path="/profile" element= { <ProtectedRoute> <Profile /> </ProtectedRoute> } />
+        <Route path="/profile/:nickName" element= { <ProtectedRoute> <Profile /> </ProtectedRoute> }
+/>
         <Route path="/create-post" element= { <ProtectedRoute> <Posts /> </ProtectedRoute> } />
         <Route path="/post/:id" element= { <ProtectedRoute> <PostDetail /> </ProtectedRoute> } />
         <Route path="/explore" element= { <ProtectedRoute> <Explore /> </ProtectedRoute> } />

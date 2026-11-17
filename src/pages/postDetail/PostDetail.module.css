@@ -1,52 +1,122 @@
+
 .detailContainer {
   min-height: 100vh;
-  padding: 30px 40px;
-  background-color: #f5f3f8;
-  font-family: Arial, sans-serif;
-  color: #292333;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  /* amplia el ancho para aprovechar mejor toda la pantalla igual que el home */
   width: 100%;
   box-sizing: border-box;
+  padding: 35px 45px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background-color: #f5f3f8;
+  color: #292333;
+  font-family: Arial, sans-serif;
 }
 
 .btnVolver {
-  background-color: #62458a;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
+  align-self: flex-start;
   display: inline-flex;
   align-items: center;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background-color: #62458a;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
   transition: background-color 0.2s ease;
-  align-self: flex-start;
 }
 
 .btnVolver:hover {
   background-color: #482d68;
 }
 
-.btnEliminar {
+/* Tarjeta de publicación */
+
+.tarjetaDetalle,
+.seccionComentarios {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30px;
+  background-color: #ffffff;
+  border: 1px solid #ede9f5;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.tarjetaDetalle {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.cabeceraPost {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #d9c9ee;
+  color: #62458a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.infoUsuario {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.nickName {
+  color: #5b3a82;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.accionesPost {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin-left: auto;
+}
+
+.btnEditar,
+.btnEliminar {
+  padding: 9px 14px;
+  border: 1px solid #d8c8eb;
+  border-radius: 8px;
   background-color: #eee6f7;
   color: #62458a;
-  border: 1px solid #d8c8eb;
-  padding: 9px 15px;
-  border-radius: 8px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
-.btnEliminar:hover {
+.btnEditar:hover {
   background-color: #e1d3f1;
+}
+
+.btnEliminar {
+  background-color: #fff0f0;
+  border-color: #f0cccc;
+  color: #b42318;
+}
+
+.btnEliminar:hover {
+  background-color: #ffe0e0;
 }
 
 .btnEliminar:disabled {
@@ -54,82 +124,154 @@
   cursor: not-allowed;
 }
 
-.errorEliminar {
-  color: #b42318;
-  font-size: 0.9rem;
+.descripcionCompleta {
   margin: 0;
+  color: #292333;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 
-/* tarjeta principal del post */
-.tarjetaDetalle {
-  background-color: #ffffff;
-  padding: 28px;
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-  border: 1px solid #ede9f5;
+/* Formulario para editar publicación */
+
+.formularioEdicion {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-  /* ancho completo optimizado */
+  gap: 12px;
+  padding: 22px;
+  border: 1px solid #e4d9f0;
+  border-radius: 12px;
+  background-color: #faf8fc;
+}
+
+.formularioEdicion h3 {
+  margin: 0 0 5px;
+  color: #62458a;
+  font-size: 1.2rem;
+}
+
+.formularioEdicion label {
+  color: #51465e;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.formularioEdicion textarea,
+.formularioEdicion input {
   width: 100%;
   box-sizing: border-box;
-}
-
-.cabeceraPost {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: #d9c9ee;
-  color: #62458a;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  font-weight: bold;
-}
-
-.infoUsuario {
-  display: flex;
-  flex-direction: column;
-}
-
-.nickName {
-  font-weight: bold;
-  font-size: 1.1rem;
-  color: #1f1f1f;
-}
-
-.descripcionCompleta {
-  font-size: 1.1rem;
+  padding: 12px 14px;
+  border: 1px solid #cfc1df;
+  border-radius: 8px;
+  background-color: white;
   color: #292333;
-  line-height: 1.5;
-  margin: 0;
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
 }
 
-/* detalle de imagenes */
+.formularioEdicion textarea {
+  resize: vertical;
+}
+
+.formularioEdicion textarea:focus,
+.formularioEdicion input:focus {
+  border-color: #62458a;
+  box-shadow: 0 0 0 2px rgba(98, 69, 138, 0.12);
+}
+
+.botonesEdicion,
+.botonesEdicionComentario {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.btnGuardar,
+.btnCancelar {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btnGuardar {
+  background-color: #62458a;
+  color: white;
+}
+
+.btnGuardar:hover {
+  background-color: #482d68;
+}
+
+.btnGuardar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnCancelar {
+  background-color: #e9e5ee;
+  color: #51465e;
+}
+
+.btnCancelar:hover {
+  background-color: #dcd5e5;
+}
+
+/* Imágenes */
+
 .imagenesDetalle {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  /* margen superior para separar del texto */
-  margin-top: 0.5rem;
+  gap: 18px;
+  margin-top: 5px;
 }
 
-.imagenesDetalle img {
-  width: 280px;
-  height: 220px;
+.imagenEditable {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-width: 380px;
+}
+
+.imagenEditable img {
+  display: block;
+  width: 100%;
+  max-height: 300px;
   object-fit: cover;
-  border-radius: 12px;
   border: 1px solid #e2dcf2;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-/* etiquetas */
+.imagenEditable img:hover {
+  transform: scale(1.01);
+}
+
+.btnEliminarImagen {
+  align-self: flex-start;
+  padding: 7px 12px;
+  border: 1px solid #f0cccc;
+  border-radius: 7px;
+  background-color: #fff0f0;
+  color: #b42318;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnEliminarImagen:hover {
+  background-color: #ffe0e0;
+}
+
+/* Etiquetas */
+
 .etiquetasPublicacion {
   display: flex;
   flex-wrap: wrap;
@@ -137,225 +279,241 @@
 }
 
 .etiquetasPublicacion span {
-  color: #5b3a82;
-  background-color: #eee6f7;
-  padding: 5px 12px;
+  padding: 6px 12px;
   border-radius: 15px;
-  font-size: 13px;
+  background-color: #eee6f7;
+  color: #5b3a82;
+  font-size: 0.85rem;
   font-weight: 600;
 }
 
-/* seccion de comentarios */
+/* Comentarios */
+
 .seccionComentarios {
-  background-color: #ffffff;
-  padding: 28px;
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-  border: 1px solid #ede9f5;
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-  /* ancho completo */
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.seccionComentarios h3,
-.seccionComentarios h4 {
-  color: #62458a;
-  margin: 0;
-}
-
-.listaComentarios {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.itemComentario {
-  background-color: #faf8fc;
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid #f0edf5;
-}
-
-.autorComentario {
-  font-weight: bold;
-  color: #5b3a82;
-  font-size: 0.95rem;
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.textoComentario {
-  margin: 0;
-  color: #292333;
-  font-size: 0.95rem;
-}
-
-.sinComentarios {
-  font-style: italic;
-  color: #777080;
-  margin: 0;
-}
-
-.mensajePerfil {
-  color: #777080;
-  text-align: center;
-  padding: 2rem;
-  font-size: 1.1rem;
-}
-
-.detailContainer {
-  gap: 2rem;
-  padding: 35px 45px;
-  font-size: 17px;
-}
-
-.tarjetaDetalle,
-.seccionComentarios {
-  padding: 35px;
-}
-
-.cabeceraPost {
-  gap: 18px;
-}
-
-.avatar {
-  width: 65px;
-  height: 65px;
-  min-width: 65px;
-  font-size: 25px;
-  object-fit: cover;
-}
-
-.infoUsuario {
-  gap: 7px;
-}
-
-.nickName {
-  font-size: 1.2rem;
-}
-
-.descripcionCompleta {
-  font-size: 1.25rem;
-  line-height: 1.7;
-}
-
-.imagenesDetalle {
   gap: 20px;
 }
 
-.imagenesDetalle img {
-  width: 380px;
-  height: 300px;
-}
-
-.seccionComentarios h3 {
+.tituloSeccion {
+  margin: 0;
+  color: #62458a;
   font-size: 1.4rem;
 }
 
-.itemComentario {
-  padding: 18px;
-}
-
-.cabeceraComentario {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
-}
-
-.avatarComentario {
-  width: 45px;
-  height: 45px;
-  min-width: 45px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-color: #d9c9ee;
-  color: #62458a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
-}
-
-.autorComentario {
-  font-size: 1rem;
+.mensajeSinComentarios {
   margin: 0;
-}
-
-.textoComentario {
-  font-size: 1.05rem;
-  line-height: 1.5;
-  margin-left: 57px;
-}
-
-.formularioConAvatar {
-  display: flex;
-  align-items: flex-start;
-  gap: 15px;
-}
-
-.formularioComentario {
-  flex: 1;
-  min-width: 0;
+  color: #777080;
+  font-style: italic;
 }
 
 .listaComentarios {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  margin: 20px 0 30px;
+  gap: 15px;
 }
 
 .itemComentario {
-  padding: 18px;
+  padding: 17px;
+  border: 1px solid #eee8f5;
   border-radius: 12px;
-  background-color: #f5f0fa;
+  background-color: #faf8fc;
 }
 
 .cabeceraComentario {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 11px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
 .avatarComentario {
-  width: 45px;
-  height: 45px;
-  min-width: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
   border-radius: 50%;
   object-fit: cover;
   background-color: #d9c9ee;
   color: #62458a;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 17px;
   font-weight: bold;
 }
 
 .autorComentario {
-  font-weight: 600;
   color: #62458a;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.accionesComentario {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.btnAccionComentario,
+.btnAccionEliminar {
+  padding: 6px 11px;
+  border: 1px solid #d8c8eb;
+  border-radius: 7px;
+  background-color: #eee6f7;
+  color: #62458a;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btnAccionComentario:hover {
+  background-color: #e1d3f1;
+}
+
+.btnAccionEliminar {
+  border-color: #f0cccc;
+  background-color: #fff0f0;
+  color: #b42318;
+}
+
+.btnAccionEliminar:hover {
+  background-color: #ffe0e0;
 }
 
 .textoComentario {
-  margin: 0 0 0 57px;
-  font-size: 16px;
+  margin: 0 0 0 53px;
+  color: #292333;
+  font-size: 1rem;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
-.formularioConAvatar {
+/* Edición de comentario */
+
+.edicionComentario {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 53px;
+}
+
+.edicionComentario textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 13px;
+  border: 1px solid #cfc1df;
+  border-radius: 8px;
+  background-color: white;
+  color: #292333;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  outline: none;
+}
+
+.edicionComentario textarea:focus {
+  border-color: #62458a;
+  box-shadow: 0 0 0 2px rgba(98, 69, 138, 0.12);
+}
+
+/* Nuevo comentario */
+
+.bloqueNuevoComentario {
+  display: flex;
+  flex-direction: column;
   gap: 15px;
-  margin-top: 25px;
+  margin-top: 12px;
+  padding-top: 22px;
+  border-top: 1px solid #eee8f5;
+}
+
+.encabezadoNuevoComentario {
+  display: flex;
+  align-items: center;
+  gap: 11px;
 }
 
 .formularioComentario {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 53px;
+}
+
+.errorMensaje {
+  margin: 0;
+  color: #b42318;
+  font-size: 0.9rem;
+}
+
+.mensajePerfil {
+  padding: 2rem;
+  color: #777080;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* Adaptación a pantallas chicas */
+
+@media (max-width: 700px) {
+  .detailContainer {
+    padding: 20px 14px;
+    gap: 16px;
+  }
+
+  .tarjetaDetalle,
+  .seccionComentarios {
+    padding: 18px;
+  }
+
+  .cabeceraPost {
+    align-items: flex-start;
+  }
+
+  .accionesPost {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .btnEditar,
+  .btnEliminar {
+    flex: 1;
+  }
+
+  .imagenEditable {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .imagenEditable img {
+    max-height: 260px;
+  }
+
+  .itemComentario {
+    padding: 13px;
+  }
+
+  .accionesComentario {
+    width: 100%;
+    margin-left: 53px;
+  }
+
+  .textoComentario,
+  .edicionComentario {
+    margin-left: 0;
+  }
+
+  .formularioComentario {
+    padding-left: 0;
+  }
+
+  .botonesEdicion,
+  .botonesEdicionComentario {
+    justify-content: stretch;
+  }
+
+  .botonesEdicion button,
+  .botonesEdicionComentario button {
+    flex: 1;
+  }
 }

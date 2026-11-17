@@ -59,11 +59,13 @@ export default function Explore() {
               <div className={styles.contenido}>
                 <p>{post.descripcion}</p>
 
-                <span>
-                  @{typeof post.userId === "object"
-                    ? post.userId.nickName
-                    : "usuario"}
-                </span>
+                <Link to={`/profile/${encodeURIComponent(
+                  typeof post.userId === "object"
+                  ? post.userId.nickName
+                  : "usuario" )}`}
+                >
+                  @{typeof post.userId === "object" ? post.userId.nickName : "usuario"}
+                </Link>
 
                 <div className={styles.etiquetas}>
                   {post.tagIds?.map((tag) => ( <small key={tag._id}>#{tag.nombre}</small> ))}

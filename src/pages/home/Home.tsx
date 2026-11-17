@@ -74,9 +74,9 @@ export default function Home() {
                   )}
                 </div>
                 <div className={styles.infoUsuario}>
-                  <span className={styles.nickName}>
+                  <Link to={`/profile/${encodeURIComponent(nickName)}`} className={styles.nickName} >
                     @{nickName.replace(/^@/, "")}
-                  </span>
+                  </Link>
                   {autor?.nombre && <span>{autor.nombre}</span>}
                 </div>
               </div>

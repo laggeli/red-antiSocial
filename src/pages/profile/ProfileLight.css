@@ -164,3 +164,72 @@
   color: #777080;
 }
 
+
+.perfil-claro .resumenPerfil {
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+}
+
+.perfil-claro .resumenPerfil div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.perfil-claro .resumenPerfil span {
+  color: #777080;
+  font-size: 14px;
+}
+
+.perfil-claro .botonEditarPerfil,
+.perfil-claro .botonSeguir {
+  margin-top: 12px;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  background: #62458a;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.perfil-claro .botonEditarPerfil:hover,
+.perfil-claro .botonSeguir:hover {
+  background: #482d68;
+}
+
+.perfil-claro .botonSeguir.siguiendo {
+  background: #eee6f7;
+  color: #62458a;
+}
+
+.perfil-claro .botonSeguir:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.perfil-claro .etiquetaTeSigue {
+  display: inline-block;
+  color: #62458a;
+  background: #eee6f7;
+  padding: 4px 9px;
+  border-radius: 12px;
+  font-size: 12px;
+  margin-top: 7px;
+}
+
+@media (max-width: 700px) {
+  .perfil-claro .datosUsuario {
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .perfil-claro .resumenPerfil {
+    width: 100%;
+    justify-content: space-around;
+    margin-left: 0;
+    gap: 12px;
+  }
+}

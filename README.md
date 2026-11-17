@@ -48,7 +48,8 @@ npm install
 Iniciar el servidor:
 
 ```bash
-npm start
+docker compose up-d
+npm run dev
 ```
 
 El backend estará disponible en:
