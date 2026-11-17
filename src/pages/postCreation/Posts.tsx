@@ -24,7 +24,7 @@ export const Posts = () => {
     e.preventDefault();
 
     if (!descripcion.trim()) {
-      setErrorDescripcion("La descripción es obligatoria.");
+      setErrorDescripcion("La descripción es obligatoria!! Por favor, escribí algo para publicar.");
       return;
     }
 
