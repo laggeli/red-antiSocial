@@ -1,11 +1,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import type { KeyboardEvent, ChangeEvent } from "react";
-import { Button } from "../../components/botonGenerico/Button";
 import styles from "./Posts.module.css";
-import cameraIcon from "../../img/camara.png";
-import errorImageIcon from "../../img/image-notFound.jpg";
 import type { PostImagesProps } from "../../types/PostTypes";
+import { PostImageDropzone } from "./PostImageDropzone";
 
 const MAX_IMAGENES = 5;
 const MAX_TAMANO = 5 * 1024 * 1024; // 5 MB
@@ -134,105 +132,27 @@ export const PostImages = ({
 
   return (
     <div className={styles.campoGrupo}>
-      <div className={styles.dropzone}>
-        <div className={styles.dropzonePrompt}>
-          <img
-            src={cameraIcon}
-            alt="Agregar imágenes"
-            className={styles.iconoCamara}
-          />
-
-          <p className={styles.dropzoneTexto}>
-            Agregá imágenes a tu publicación (máx. 5)
-          </p>
-
-          <div className={styles.urlInputRow}>
-            <input
-              ref={urlInputRef}
-              type="text"
-              className={styles.urlInput}
-              placeholder="Pegá una URL de imagen..."
-              value={inputUrlImagen}
-              onChange={(e) => setInputUrlImagen(e.target.value)}
-              onKeyDown={handleKeyDownUrl}
-            />
-
-            <Button
-              variant="secundario"
-              onClick={agregarUrlImagen}
-              disabled={disponibles <= 0}
-            >
-              + Agregar URL
-            </Button>
-          </div>
-
-          <input
-            ref={archivoInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            hidden
-            onChange={handleSeleccionArchivos}
-          />
-
-          <button
-            type="button"
-            className={styles.btnSeleccionarArchivo}
-            onClick={() => archivoInputRef.current?.click()}
-            disabled={disponibles <= 0}
-          >
-            <span>📁</span> Seleccionar desde la computadora
-          </button>
-
-          <small className={styles.textoAyudaImagenes}>
-            JPG, PNG, WEBP o GIF. Máximo 5 MB por imagen.
-          </small>
-        </div>
-
-        {(imagenesUrls.length > 0 || archivos.length > 0) && (
-          <div className={styles.previewsGrid}>
-            {imagenesUrls.map((url, index) => (
-              <div key={`${url}-${index}`} className={styles.previewItem}>
-                <img
-                  src={urlsRotas[url] ? errorImageIcon : url}
-                  alt="Vista previa"
-                  className={styles.previewImg}
-                  onError={() => handleImageError(url)}
-                />
-
-                <button
-                  type="button"
-                  className={styles.btnQuitarImg}
-                  onClick={() => eliminarUrl(index)}
-                  aria-label="Eliminar imagen"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-
-            {archivos.map((archivo, index) => (
-              <div key={`${archivo.name}-${index}`} className={styles.previewItem}>
-                <img
-                  src={previews[index]}
-                  alt={archivo.name}
-                  className={styles.previewImg}
-                />
-
-                <button
-                  type="button"
-                  className={styles.btnQuitarImg}
-                  onClick={() => eliminarArchivo(index)}
-                  aria-label="Eliminar imagen"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
+      
+      <PostImageDropzone
+        inputUrlImagen={inputUrlImagen}
+        onInputUrlChange={(val) => {
+          setInputUrlImagen(val);
+          setErrorImagenes("");
+        }}
+        onKeyDownUrl={handleKeyDownUrl}
+        onAgregarUrl={agregarUrlImagen}
+        onSeleccionArchivos={handleSeleccionArchivos}
+        disponibles={disponibles}
+        urlInputRef={urlInputRef}
+        archivoInputRef={archivoInputRef}
+        imagenesUrls={imagenesUrls}
+        archivos={archivos}
+        previews={previews}
+        urlsRotas={urlsRotas}
+        onImageError={handleImageError}
+        onEliminarUrl={eliminarUrl}
+        onEliminarArchivo={eliminarArchivo}
+      />
       {errorImagenes && (
         <span className={styles.leyendaError}>{errorImagenes}</span>
       )}
