@@ -6,7 +6,6 @@ import { PostImages } from "./PostImages";
 import { PostTags } from "./PostTags";
 import { PostFormButtons } from "./PostFormButtons";
 import type { TagItem } from "./PostTags";
-import { Button } from "../../components/botonGenerico/Button";
 
 interface PostFormProps {
   descripcion: string;

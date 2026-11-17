@@ -3,9 +3,17 @@ import styles from './AppNavBar.module.css';
 import logoImg from "../../img/iconoUnahurRed.jpg";
 import { Button } from "../botonGenerico/Button"; 
 
-interface AppNavBarProps { onLogout: () => void; }
+interface UserData {
+  nickName?: string;
+  name?: string;
+}
 
-export const AppNavBar = ({ onLogout }: AppNavBarProps) => {
+interface AppNavBarProps { 
+  user?: UserData; 
+  onLogout: () => void; 
+}
+
+export const AppNavBar = ({ user, onLogout }: AppNavBarProps) => {
   return (
     <nav className={styles.navbar}>
       <div className={styles.leftNav}>
@@ -37,6 +45,9 @@ export const AppNavBar = ({ onLogout }: AppNavBarProps) => {
       </div>
 
       <div className={styles.rightNav}>
+        <span className={styles.saludo}>
+          Bienvenido/a, @{user?.nickName || user?.name || "usuario"}
+        </span>
         <Button variant="secundario" onClick={onLogout}> Cerrar sesión </Button>
       </div>
     </nav>
