@@ -4,20 +4,37 @@ import { useAuth } from '../../context/AuthContext';
 import styles from './Login.module.css';
 import { API_URL } from '../../config/api';
 
+interface FormErrors {
+  nickName?: string;
+  password?: string;
+  [key: string]: string | undefined;
+}
+
+interface FormData { 
+  nickName: string; 
+  password: string; 
+}
+
+interface User {
+  id: number;
+  nickName: string;
+  [key: string]: unknown;
+}
+
 export default function Login() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     nickName: '',
     password: '',
   });
 
-  const [Errores, setErrores] = useState({});
+  const [Errores, setErrores] = useState<FormErrors>({});
   const [generalError, setGeneralError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const {login} = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
@@ -32,8 +49,8 @@ export default function Login() {
     }
   };
 
-  const Validar = (dato) => {
-    const newErrores = {};
+  const Validar = (dato: FormData) => {
+    const newErrores: FormErrors = {};
 
     if (!dato.nickName.trim()) {
       newErrores.nickName = 'El nombre de usuario es obligatorio';
@@ -48,43 +65,52 @@ export default function Login() {
     return newErrores;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setGeneralError('');
 
-    const validacionDeErrores = Validar(formData);
-    setErrores(validacionDeErrores);
 
-    if (Object.keys(validacionDeErrores).length === 0) {
-      setLoading(true);
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setGeneralError('');
 
-      try {
-        const response = await fetch(`${API_URL}/users`);
+  const validacionDeErrores = Validar(formData);
+  setErrores(validacionDeErrores);
 
-        if (!response.ok) {
-          throw new Error('Error al conectar con el servidor');
-        }
+  if (Object.keys(validacionDeErrores).length === 0) {
+    setLoading(true);
 
-        const users = await response.json();
-        const foundUser = users.find(
-          (u) => u.nickName?.toLowerCase() === formData.nickName.trim().toLowerCase()
-        );
+    try {
+      const response = await fetch(`${API_URL}/users`);
 
-        if (!foundUser) {
-          setGeneralError('El usuario ingresado no existe');
-          setLoading(false);
-          return;
-        }
-
-        login(foundUser);
-        navigate('/');
-      } catch (err) {
-        setGeneralError(err.message || 'Error al intentar iniciar sesión');
-      } finally {
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error('Error al conectar con el servidor');
       }
+
+      
+      const users: User[] = await response.json();
+
+      
+      const foundUser = users.find(
+        (u: User) => u.nickName?.toLowerCase() === formData.nickName.trim().toLowerCase()
+      );
+
+      if (!foundUser) {
+        setGeneralError('El usuario ingresado no existe');
+        setLoading(false);
+        return;
+      }
+
+      login(foundUser);
+      navigate('/');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setGeneralError(err.message);
+      } else {
+        setGeneralError('Error al intentar iniciar sesión');
+      }
+    } finally {
+      setLoading(false);
     }
-  };
+  }
+};
 
   return (
     <div className={styles.loginContainer}>

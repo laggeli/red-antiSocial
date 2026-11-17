@@ -1,220 +1,221 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import styles from './Register.module.css';
+import styles from './Registro.module.css';
 import { API_URL } from '../../config/api';
 
+// Los 4 campos son OBLIGATORIOS en el formulario
+interface FormData {
+  nickName: string;
+  nombre: string;
+  email: string;
+  password: string;
+}
+
+// Los mensajes de error son OPCIONALES para permitir el estado inicial
+interface FormErrors {
+  nickName?: string;
+  nombre?: string;
+  email?: string;
+  password?: string;
+  [key: string]: string | undefined; 
+}
+
 export default function Registro() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     nickName: '',
     nombre: '',
     email: '',
-    contraseña: '123456',
+    password: '',
   });
 
-  // Guarda los errores por campo
-  const [Errores, setErrores] = useState({});
-  // Controla la confirmación del estado del envío
-  const [submitted, setSubmitted] = useState(false);
-  const [generalError, setGeneralError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [Errores, setErrores] = useState<FormErrors>({});
+  const [generalError, setGeneralError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // Función dinámica para actualizar cualquier campo del formulario
-  const handleChange = (e) => {
+  // Manejador del cambio en inputs
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
 
-    // Limpia el mensaje de error del campo en cuanto el usuario vuelve a escribir
     if (Errores[name]) {
-      setErrores({
-        ...Errores,
-        [name]: '',
-      });
+      setErrores((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }));
     }
   };
 
-  // Función de validación manual según las reglas del backend (Joi)
-  const Validar = (dato) => {
-    const newErrores = {};
+  // Función de validación obligatoria para los 4 campos
+  const Validar = (dato: FormData): FormErrors => {
+    const newErrores: FormErrors = {};
 
-    // Validar nickName (obligatorio, entre 3 y 20 caracteres)
     if (!dato.nickName.trim()) {
-      newErrores.nickName = 'El nickName no puede estar vacío';
-    } else if (dato.nickName.trim().length < 3) {
-      newErrores.nickName = 'El nickName debe tener al menos 3 caracteres';
-    } else if (dato.nickName.trim().length > 20) {
-      newErrores.nickName = 'El nickName no puede sobrepasar los 20 caracteres';
+      newErrores.nickName = 'El nombre de usuario (nickName) es obligatorio';
     }
 
-    // Validar nombre (obligatorio, entre 3 y 50 caracteres)
     if (!dato.nombre.trim()) {
-      newErrores.nombre = 'El nombre no puede estar vacío';
-    } else if (dato.nombre.trim().length < 3) {
-      newErrores.nombre = 'El nombre debe tener al menos 3 caracteres';
-    } else if (dato.nombre.trim().length > 50) {
-      newErrores.nombre = 'El nombre no puede sobrepasar los 50 caracteres';
+      newErrores.nombre = 'El nombre es obligatorio';
     }
 
-    // Validar email (obligatorio y formato con @ y .)
     if (!dato.email.trim()) {
-      newErrores.email = 'El email no puede estar vacío';
-    } else if (!dato.email.includes('@') || !dato.email.includes('.')) {
-      newErrores.email = 'Debe ser un correo electrónico válido (ejemplo@dominio.com)';
+      newErrores.email = 'El correo electrónico es obligatorio';
+    } else if (!/\S+@\S+\.\S+/.test(dato.email)) {
+      newErrores.email = 'El correo electrónico no tiene un formato válido';
     }
 
-    // Validar contraseña (mínimo 5 caracteres)
-    if (!dato.contraseña.trim()) {
-      newErrores.contraseña = 'La contraseña no puede estar vacía';
-    } else if (dato.contraseña.trim().length < 5) {
-      newErrores.contraseña = 'La contraseña debe tener al menos 5 caracteres';
+    if (!dato.password.trim()) {
+      newErrores.password = 'La contraseña es obligatoria';
     }
 
     return newErrores;
   };
 
-  // Manejador del evento onSubmit
-  const handleSubmit = async (e) => {
+  // Envío del formulario al backend
+  const handleSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setGeneralError('');
 
     const validacionDeErrores = Validar(formData);
     setErrores(validacionDeErrores);
 
-    // Si el objeto de errores está vacío, el formulario es válido
     if (Object.keys(validacionDeErrores).length === 0) {
-      setSubmitted(true);
       setLoading(true);
 
       try {
-        const response = await fetch(`${API_URL}/users`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            nickName: formData.nickName.trim(),
-            nombre: formData.nombre.trim(),
-            email: formData.email.trim(),
-            contraseña: formData.contraseña,
-          }),
-        });
+        // 1. Verificar si el nickName o email ya existen
+        const checkRes = await fetch(`${API_URL}/users`);
+        if (checkRes.ok) {
+          const existingUsers = await checkRes.json();
+          const userExists = existingUsers.some(
+            (u: { nickName?: string; email?: string }) =>
+              u.nickName?.toLowerCase() === formData.nickName.trim().toLowerCase() ||
+              u.email?.toLowerCase() === formData.email.trim().toLowerCase()
+          );
 
-        const data = await response.json().catch(() => ({}));
-
-        if (!response.ok) {
-          throw new Error(data.error || data.message || 'Error al registrar el usuario');
+          if (userExists) {
+            setGeneralError('El nickName o el email ya se encuentran registrados.');
+            setLoading(false);
+            return;
+          }
         }
 
-        const userToSave = data.user || {
-          nickName: formData.nickName.trim(),
-          nombre: formData.nombre.trim(),
-          email: formData.email.trim(),
-        };
+        // 2. Crear el nuevo usuario mediante POST
+        const response = await fetch(`${API_URL}/users`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
 
-        login(userToSave);
+        if (!response.ok) {
+          throw new Error('Error al registrar el usuario en el servidor.');
+        }
+
+        const newUser = await response.json();
+        login(newUser);
         navigate('/');
-      } catch (err) {
-        setGeneralError(err.message || 'Ocurrió un error inesperado al registrar el usuario');
-        setSubmitted(false);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setGeneralError(err.message);
+        } else {
+          setGeneralError('Ocurrió un error inesperado al intentar registrarte.');
+        }
       } finally {
         setLoading(false);
       }
-    } else {
-      setSubmitted(false);
     }
   };
 
   return (
-    <div className={styles.registroContainer}>
-      <div className={styles.registroCard}>
-        <div className={styles.registroHeader}>
-          <h1>Crear una cuenta</h1>
-          <p>Únete a UnaHur Anti-Social Net</p>
+    <div className={styles.loginContainer || styles.registroContainer}>
+      <div className={styles.loginCard || styles.registroCard}>
+        <div className={styles.loginHeader || styles.registroHeader}>
+          <h1>UnaHur Anti-Social Net</h1>
+          <p>Creá tu cuenta para ingresar</p>
         </div>
 
-        <form onSubmit={handleSubmit} className={styles.registroForm}>
-          {/* Alerta de éxito tras el envío válido */}
-          {submitted && !generalError && (
-            <div className={styles.successAlert}>
-              ¡Registro exitoso! Iniciando sesión...
-            </div>
-          )}
-
-          {/* Alerta de error proveniente del servidor */}
+        <form onSubmit={handleSubmit} className={styles.loginForm || styles.registroForm}>
           {generalError && (
-            <div className={styles.errorAlert}>
-              {generalError}
-            </div>
+            <div className={styles.errorAlert}>{generalError}</div>
           )}
 
           <div className={styles.formGroup}>
-            <label htmlFor="nickName">Nombre de usuario</label>
+            <label htmlFor="nickName">Nombre de usuario (nickName)</label>
             <input
               type="text"
               id="nickName"
               name="nickName"
               value={formData.nickName}
               onChange={handleChange}
-              placeholder="Tu nickName"
+              placeholder="Ej: luna99"
               disabled={loading}
             />
-            {Errores.nickName && <span className={styles.fieldError}>{Errores.nickName}</span>}
+            {Errores.nickName && (
+              <span className={styles.fieldError}>{Errores.nickName}</span>
+            )}
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="nombre">Nombre completo</label>
+            <label htmlFor="nombre">Nombre Completo</label>
             <input
               type="text"
               id="nombre"
               name="nombre"
               value={formData.nombre}
               onChange={handleChange}
-              placeholder="Tu nombre"
+              placeholder="Ej: Luna Pérez"
               disabled={loading}
             />
-            {Errores.nombre && <span className={styles.fieldError}>{Errores.nombre}</span>}
+            {Errores.nombre && (
+              <span className={styles.fieldError}>{Errores.nombre}</span>
+            )}
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="email">Correo electrónico</label>
+            <label htmlFor="email">Correo Electrónico</label>
             <input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="correo@ejemplo.com"
+              placeholder="ejemplo@unahur.edu.ar"
               disabled={loading}
             />
-            {Errores.email && <span className={styles.fieldError}>{Errores.email}</span>}
+            {Errores.email && (
+              <span className={styles.fieldError}>{Errores.email}</span>
+            )}
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="contraseña">Contraseña</label>
+            <label htmlFor="password">Contraseña</label>
             <input
               type="password"
-              id="contraseña"
-              name="contraseña"
-              value={formData.contraseña}
+              id="password"
+              name="password"
+              value={formData.password}
               onChange={handleChange}
+              placeholder="••••••"
               disabled={loading}
             />
-            {Errores.contraseña && <span className={styles.fieldError}>{Errores.contraseña}</span>}
+            {Errores.password && (
+              <span className={styles.fieldError}>{Errores.password}</span>
+            )}
           </div>
 
           <button type="submit" className={styles.btnSubmit} disabled={loading}>
-            {loading ? 'Registrando...' : 'Registrarse'}
+            {loading ? 'Registrando...' : 'Crear Cuenta'}
           </button>
         </form>
 
-        <div className={styles.loginFooter}>
-          <p>¿Ya tienes cuenta? <Link to="/login">Inicia sesión aquí</Link></p>
+        <div className={styles.loginFooter || styles.registroFooter}>
+          <p>¿Ya tenés una cuenta? <Link to="/login">Iniciá sesión aquí</Link></p>
         </div>
       </div>
     </div>
