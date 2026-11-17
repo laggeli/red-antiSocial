@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import styles from './Registro.module.css';
+import styles from "./Register.module.css";
 import { API_URL } from '../../config/api';
 
 // Los 4 campos son OBLIGATORIOS en el formulario
