@@ -4,6 +4,7 @@ import styles from "./Posts.module.css";
 import { PostDescription } from "./PostDescription";
 import { PostImages } from "./PostImages";
 import { PostTags } from "./PostTags";
+import { PostFormButtons } from "./PostFormButtons";
 import type { TagItem } from "./PostTags";
 import { Button } from "../../components/botonGenerico/Button";
 
@@ -83,19 +84,7 @@ export const PostForm = ({
 
         {error && <p className={styles.mensajeError}>{error}</p>}
 
-        <div className={styles.acciones}>
-          <Button
-            type="button"
-            variant="cancelar"
-            onClick={onCancel}
-            disabled={enviando}
-          >
-            Cancelar
-          </Button>
-          <Button type="submit" variant="primario" disabled={enviando}>
-            {enviando ? "Publicando..." : "Publicar"}
-          </Button>
-        </div>
+        <PostFormButtons enviando={enviando} onCancel={onCancel} />
       </form>
     </section>
   );
