@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import type { SubmitEvent } from "react";
 import styles from "./Posts.module.css";
+import { PostDescription } from "./PostDescription";
 import { PostImages } from "./PostImages";
 import { PostTags } from "./PostTags";
 import type { TagItem } from "./PostTags";
@@ -43,34 +44,29 @@ export const PostForm = ({
   onSubmit,
   onCancel,
 }: PostFormProps) => {
+    //Se crea la referencia para poder hacer el .focus() desde el contenedor padre o manejarlo
   const descripcionRef = useRef<HTMLTextAreaElement | null>(null);
+
+  // En el submit se verifica que haga el focus si la descripción está vacía
+  const handleFormSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+    if (!descripcion.trim()) {
+      descripcionRef.current?.focus();
+    }
+    onSubmit(e);
+  };
 
   return (
     <section className={styles.card}>
       <h1 className={styles.titulo}>Crear nueva publicación</h1>
-      <form onSubmit={onSubmit} className={styles.form}>
-        <div className={styles.campoGrupo}>
-          <label htmlFor="descripcion" className={styles.label}>
-            Descripción
-          </label>
-          <textarea
-            ref={descripcionRef}
-            id="descripcion"
-            className={`${styles.textarea} ${
-              errorDescripcion ? styles.textareaError : ""
-            }`}
-            placeholder={`¿Qué te gustaría compartir hoy, @${userNickName || ""}?`}
-            value={descripcion}
-            onChange={(e) => {
-              setDescripcion(e.target.value);
-              setErrorDescripcion("");
-            }}
-            rows={4}
-          />
-          {errorDescripcion && (
-            <span className={styles.leyendaError}>{errorDescripcion}</span>
-          )}
-        </div>
+      <form onSubmit={handleFormSubmit} className={styles.form}>
+        <PostDescription
+          descripcion={descripcion}
+          setDescripcion={setDescripcion}
+          errorDescripcion={errorDescripcion}
+          setErrorDescripcion={setErrorDescripcion}
+          userNickName={userNickName}
+          descripcionRef={descripcionRef}
+        />
 
         <PostImages
           imagenesUrls={imagenesUrls}
