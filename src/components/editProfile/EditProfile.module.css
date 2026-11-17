@@ -179,3 +179,38 @@
     width: 100%;
   }
 }
+
+:global(#appShell[data-theme="dark"]) .modal {
+  background-color: #292731;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .encabezado h2 {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .encabezado p,
+:global(#appShell[data-theme="dark"]) .ayuda {
+  color: #b5b0c0;
+}
+
+:global(#appShell[data-theme="dark"]) .campo label {
+  color: #ded8e8;
+}
+
+:global(#appShell[data-theme="dark"]) .campo input {
+  background-color: #211e29;
+  border-color: #59466f;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .btnFoto,
+:global(#appShell[data-theme="dark"]) .btnCancelar {
+  background-color: #49365f;
+  color: #e0c8ff;
+}
+
+:global(#appShell[data-theme="dark"]) .btnGuardar {
+  background-color: #8055a8;
+  color: white;
+}

@@ -506,3 +506,81 @@
     font-size: 0.65rem;
   }
 }
+
+:global(#appShell[data-theme="dark"]) .container {
+  background-color: #1c1b22;
+}
+
+:global(#appShell[data-theme="dark"]) .card {
+  background-color: #292731;
+  border-color: #45414f;
+  box-shadow: 0 4px 12px #00000030;
+}
+
+:global(#appShell[data-theme="dark"]) .titulo {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .label {
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .textarea,
+:global(#appShell[data-theme="dark"]) .urlInput,
+:global(#appShell[data-theme="dark"]) .tagsBox,
+:global(#appShell[data-theme="dark"]) .tagInput {
+  background-color: #211e29;
+  border-color: #59466f;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .textarea::placeholder,
+:global(#appShell[data-theme="dark"]) .urlInput::placeholder,
+:global(#appShell[data-theme="dark"]) .tagInput::placeholder {
+  color: #aaa2b5;
+}
+
+:global(#appShell[data-theme="dark"]) .dropzone {
+  background-color: #211e29;
+  border-color: #8055a8;
+}
+
+:global(#appShell[data-theme="dark"]) .dropzone:hover,
+:global(#appShell[data-theme="dark"]) .dropzoneActive {
+  background-color: #33283f;
+}
+
+:global(#appShell[data-theme="dark"]) .dropzoneTexto {
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .tagChip,
+:global(#appShell[data-theme="dark"]) .tagSugeridoBtn {
+  background-color: #49365f;
+  border-color: #59466f;
+  color: #e0c8ff;
+}
+
+:global(#appShell[data-theme="dark"]) .tagSugeridoBtn:hover {
+  background-color: #604778;
+}
+
+:global(#appShell[data-theme="dark"]) .tagSugeridoActivo {
+  background-color: #8055a8;
+  color: white;
+}
+
+:global(#appShell[data-theme="dark"]) .textoAyudaImagenes {
+  color: #b5b0c0;
+}
+
+:global(#appShell[data-theme="dark"]) .btnCancelar {
+  background-color: #45414f;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .btnSeleccionarArchivo {
+  background-color: #49365f;
+  border-color: #59466f;
+  color: #e0c8ff;
+}

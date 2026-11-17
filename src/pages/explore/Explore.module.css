@@ -96,3 +96,48 @@
     padding: 25px 18px;
   }
 }
+
+:global(#appShell[data-theme="dark"]) .explore {
+  background-color: #1c1b22;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .encabezado h1 {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .encabezado p {
+  color: #b5b0c0;
+}
+
+:global(#appShell[data-theme="dark"]) .busqueda {
+  background-color: #292731;
+  border-color: #59466f;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .busqueda::placeholder {
+  color: #aaa2b5;
+}
+
+:global(#appShell[data-theme="dark"]) .tarjeta {
+  background-color: #292731;
+  box-shadow: 0 2px 8px #00000030;
+}
+
+:global(#appShell[data-theme="dark"]) .contenido p {
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .contenido span {
+  color: #b5b0c0;
+}
+
+:global(#appShell[data-theme="dark"]) .etiquetas small {
+  background-color: #49365f;
+  color: #e0c8ff;
+}
+
+:global(#appShell[data-theme="dark"]) .contenido a {
+  color: #c6a5ed;
+}

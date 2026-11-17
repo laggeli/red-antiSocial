@@ -143,6 +143,43 @@
   background-color: #482d68;
 }
 
+.themeButton {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #dfd3ee;
+  border-radius: 50%;
+  background-color: #f4effa;
+  color: #5b3a82;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.themeButton svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.themeButton:hover {
+  background-color: #5b3a82;
+  color: white;
+  transform: rotate(12deg);
+}
+
+:global(#appShell[data-theme="dark"]) .themeButton {
+  background-color: #383044;
+  border-color: #59466f;
+  color: #e2c8ff;
+}
+
 /* Para pantallas chicas (51.25em = 820px)*/
 @media (max-width: 51.25em) {
   .navbar {
@@ -179,4 +216,29 @@
       max-width: none;
       text-align: center;
   }
+}
+
+:global(#appShell[data-theme="dark"]) .navbar {
+  background-color: #211e29;
+}
+
+:global(#appShell[data-theme="dark"]) .navItem {
+  color: #ded8e8;
+}
+
+:global(#appShell[data-theme="dark"]) .navItem:hover,
+:global(#appShell[data-theme="dark"]) .active {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .saludo {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .logoTitle {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .logoSubtitle {
+  color: #b5a2ca;
 }

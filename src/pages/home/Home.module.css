@@ -145,3 +145,36 @@
   padding: 2rem;
   font-size: 1.1rem;
 }
+
+:global(#appShell[data-theme="dark"]) .homeContainer {
+  background-color: #1c1b22;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .tarjetaPublicacion {
+  background-color: #292731;
+  border-color: #45414f;
+  box-shadow: 0 2px 10px #00000025;
+}
+
+:global(#appShell[data-theme="dark"]) .nickName {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .descripcionPublicacion {
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .contadorComentarios,
+:global(#appShell[data-theme="dark"]) .mensajePerfil {
+  color: #b5b0c0;
+}
+
+:global(#appShell[data-theme="dark"]) .piePublicacion {
+  border-color: #45414f;
+}
+
+:global(#appShell[data-theme="dark"]) .etiquetasPublicacion span {
+  background-color: #49365f;
+  color: #e0c8ff;
+}

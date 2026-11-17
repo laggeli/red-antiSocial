@@ -71,7 +71,7 @@
   margin-left: auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 5px;
 }
 
@@ -175,6 +175,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   gap: 5px;
 }
 
@@ -183,8 +184,7 @@
   font-size: 14px;
 }
 
-.perfil-claro .botonEditarPerfil,
-.perfil-claro .botonSeguir {
+.perfil-claro .botonEditarPerfil {
   margin-top: 12px;
   border: none;
   border-radius: 8px;
@@ -195,29 +195,55 @@
   cursor: pointer;
 }
 
-.perfil-claro .botonEditarPerfil:hover,
-.perfil-claro .botonSeguir:hover {
+.perfil-claro .botonEditarPerfil:hover {
   background: #482d68;
 }
 
+.perfil-claro .botonSeguir {
+  margin-top: 16px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #5b3a82 0%, #744ba6 100%);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(91, 58, 130, 0.24);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.perfil-claro .botonSeguir:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 18px rgba(91, 58, 130, 0.34);
+}
+
 .perfil-claro .botonSeguir.siguiendo {
-  background: #eee6f7;
-  color: #62458a;
+  background: linear-gradient(135deg, #5b3a82 0%, #744ba6 100%);
+  color: white;
 }
 
 .perfil-claro .botonSeguir:disabled {
   opacity: 0.6;
   cursor: wait;
+  transform: none;
+}
+
+.perfil-claro .datoSeguidores {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
 }
 
 .perfil-claro .etiquetaTeSigue {
   display: inline-block;
-  color: #62458a;
-  background: #eee6f7;
+  margin-top: 3px;
   padding: 4px 9px;
   border-radius: 12px;
+  background: #eee6f7;
+  color: #62458a;
   font-size: 12px;
-  margin-top: 7px;
 }
 
 @media (max-width: 700px) {

@@ -6,6 +6,7 @@ import Posts from "./pages/postCreation/Posts";
 import NotFound from "./pages/notFound/NotFound";
 import PostDetail from "./pages/postDetail/PostDetail";
 import Explore from "./pages/explore/Explore";
+import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
 // importaciones del módulo de autenticación (verificar minúsculas en las rutas de carpetas)
 import Login from "./pages/login/Login";
@@ -15,24 +16,25 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 
 function MainLayout() {
   const { user, logout } = useAuth();
+   const { theme } = useTheme();
 
   return (
     <>
-      {/* La barra de navegación se renderiza únicamente cuando el usuario inició sesión */}
-      {user && <AppNavBar user={user} onLogout={logout} />}
+      <div id="appShell" data-theme={theme}>
+        {user && <AppNavBar user={user} onLogout={logout} />}
 
-      <Routes>
-        <Route path="/login" element= { <Login /> } />
-        <Route path="/registro" element= { <Registro /> } />
-        <Route path="/" element= { <ProtectedRoute> <Home /> </ProtectedRoute> } />
-        <Route path="/profile" element= { <ProtectedRoute> <Profile /> </ProtectedRoute> } />
-        <Route path="/profile/:nickName" element= { <ProtectedRoute> <Profile /> </ProtectedRoute> }
-/>
-        <Route path="/create-post" element= { <ProtectedRoute> <Posts /> </ProtectedRoute> } />
-        <Route path="/post/:id" element= { <ProtectedRoute> <PostDetail /> </ProtectedRoute> } />
-        <Route path="/explore" element= { <ProtectedRoute> <Explore /> </ProtectedRoute> } />
-        <Route path="*" element= { <NotFound /> } />
-      </Routes>
+        <Routes>
+          <Route path="/login" element= { <Login /> } />
+          <Route path="/registro" element= { <Registro /> } />
+          <Route path="/" element= { <ProtectedRoute> <Home /> </ProtectedRoute> } />
+          <Route path="/profile" element= { <ProtectedRoute> <Profile /> </ProtectedRoute> } />
+          <Route path="/profile/:nickName" element= { <ProtectedRoute> <Profile /> </ProtectedRoute> }/>
+          <Route path="/create-post" element= { <ProtectedRoute> <Posts /> </ProtectedRoute> } />
+          <Route path="/post/:id" element= { <ProtectedRoute> <PostDetail /> </ProtectedRoute> } />
+          <Route path="/explore" element= { <ProtectedRoute> <Explore /> </ProtectedRoute> } />
+          <Route path="*" element= { <NotFound /> } />
+        </Routes>
+      </div>
     </>
   );
 }
@@ -40,7 +42,9 @@ function MainLayout() {
 export default function App() {
   return (
     <AuthProvider>
-      <MainLayout />
+      <ThemeProvider>
+        <MainLayout />
+      </ThemeProvider>
     </AuthProvider>
   );
 }

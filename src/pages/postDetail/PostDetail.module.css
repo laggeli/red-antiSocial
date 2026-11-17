@@ -517,3 +517,67 @@
     flex: 1;
   }
 }
+
+:global(#appShell[data-theme="dark"]) .detailContainer {
+  background-color: #1c1b22;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .tarjetaDetalle,
+:global(#appShell[data-theme="dark"]) .seccionComentarios {
+  background-color: #292731;
+  border-color: #45414f;
+  box-shadow: 0 2px 10px #00000030;
+}
+
+:global(#appShell[data-theme="dark"]) .nickName,
+:global(#appShell[data-theme="dark"]) .autorComentario,
+:global(#appShell[data-theme="dark"]) .tituloSeccion {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .descripcionCompleta,
+:global(#appShell[data-theme="dark"]) .textoComentario {
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .mensajeSinComentarios,
+:global(#appShell[data-theme="dark"]) .mensajePerfil {
+  color: #b5b0c0;
+}
+
+:global(#appShell[data-theme="dark"]) .formularioEdicion,
+:global(#appShell[data-theme="dark"]) .itemComentario {
+  background-color: #211e29;
+  border-color: #45414f;
+}
+
+:global(#appShell[data-theme="dark"]) .formularioEdicion h3 {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .formularioEdicion label {
+  color: #ded8e8;
+}
+
+:global(#appShell[data-theme="dark"]) .formularioEdicion textarea,
+:global(#appShell[data-theme="dark"]) .formularioEdicion input,
+:global(#appShell[data-theme="dark"]) .edicionComentario textarea {
+  background-color: #292731;
+  border-color: #59466f;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .btnCancelar {
+  background-color: #45414f;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .etiquetasPublicacion span {
+  background-color: #49365f;
+  color: #e0c8ff;
+}
+
+:global(#appShell[data-theme="dark"]) .bloqueNuevoComentario {
+  border-color: #45414f;
+}

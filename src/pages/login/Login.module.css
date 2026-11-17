@@ -140,3 +140,30 @@
 .registerFooter a:hover {
   text-decoration: underline;
 }
+
+:global(#appShell[data-theme="dark"]) .loginContainer {
+  background-color: #1c1b22;
+}
+
+:global(#appShell[data-theme="dark"]) .loginCard {
+  background-color: #292731;
+  border-color: #45414f;
+}
+
+:global(#appShell[data-theme="dark"]) .formLabel {
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .formControl {
+  background-color: #211e29;
+  border-color: #59466f;
+  color: #eeeeF5;
+}
+
+:global(#appShell[data-theme="dark"]) .registerFooter {
+  color: #b5b0c0;
+}
+
+:global(#appShell[data-theme="dark"]) .registerFooter a {
+  color: #c6a5ed;
+}
