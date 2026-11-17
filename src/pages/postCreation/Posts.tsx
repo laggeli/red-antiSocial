@@ -43,6 +43,7 @@ export const Posts = () => {
       formData.append("descripcion", descripcion.trim());
       formData.append("userId", user._id);
 
+      // Se filtran las URLs inválidas que detectó PostImages
       const imagenesValidas = imagenesUrls.filter(
         (url) => !urlsInvalidas.includes(url)
       );
@@ -90,7 +91,6 @@ export const Posts = () => {
         setDescripcion={setDescripcion}
         imagenesUrls={imagenesUrls}
         setImagenesUrls={setImagenesUrls}
-        urlsInvalidas={urlsInvalidas}
         setUrlsInvalidas={setUrlsInvalidas}
         tagsSeleccionados={tagsSeleccionados}
         setTagsSeleccionados={setTagsSeleccionados}

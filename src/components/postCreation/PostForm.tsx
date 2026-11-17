@@ -11,7 +11,6 @@ interface PostFormProps {
   setDescripcion: (value: string) => void;
   imagenesUrls: string[];
   setImagenesUrls: (urls: string[]) => void;
-  urlsInvalidas: string[];
   setUrlsInvalidas: (urls: string[]) => void;
   tagsSeleccionados: TagItem[];
   setTagsSeleccionados: (tags: TagItem[]) => void;
@@ -31,7 +30,6 @@ export const PostForm = ({
   setDescripcion,
   imagenesUrls,
   setImagenesUrls,
-  urlsInvalidas,
   setUrlsInvalidas,
   tagsSeleccionados,
   setTagsSeleccionados,
