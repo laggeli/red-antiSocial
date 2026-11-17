@@ -3,12 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import type { KeyboardEvent } from "react";
 import styles from "./Posts.module.css";
 import { API_URL } from "../../config/api";
-import type { TagItem } from "../../types/PostTypes";
-
-interface PostTagsProps {
-  tagsSeleccionados: TagItem[];
-  onChangeTags: (nuevosTags: TagItem[]) => void;
-}
+import type { TagItem, PostTagsProps } from "../../types/PostTypes";
+import { PostTagInput } from "./PostTagInput";
+import { PostTagOptionsList } from "./PostTagOptionsList";
 
 export const PostTags = ({
   tagsSeleccionados,
@@ -127,40 +124,18 @@ export const PostTags = ({
         Etiquetas
       </label>
 
-      <div
-        className={`${styles.tagsBox} ${
-          errorTags ? styles.tagsBoxError : ""
-        }`}
-      >
-        {tagsSeleccionados.map((tag) => (
-          <span key={tag._id} className={styles.tagChip}>
-            #{tag.nombre}
-
-            <button
-              type="button"
-              className={styles.tagRemove}
-              onClick={() => toggleTag(tag)}
-              aria-label={`Quitar ${tag.nombre}`}
-            >
-              ×
-            </button>
-          </span>
-        ))}
-
-        <input
-          ref={tagInputRef}
-          id="etiquetas"
-          type="text"
-          className={styles.tagInput}
-          placeholder="Escribí una etiqueta y presioná Enter..."
-          value={inputEtiqueta}
-          onChange={(e) => {
-            setInputEtiqueta(e.target.value);
-            setErrorTags("");
-          }}
-          onKeyDown={handleKeyDownEtiqueta}
-        />
-      </div>
+      <PostTagInput
+        tagsSeleccionados={tagsSeleccionados}
+        inputEtiqueta={inputEtiqueta}
+        onInputChange={(val) => {
+          setInputEtiqueta(val);
+          setErrorTags("");
+        }}
+        onKeyDown={handleKeyDownEtiqueta}
+        onToggleTag={toggleTag}
+        hasError={Boolean(errorTags)}
+        inputRef={tagInputRef}
+      />
 
       {errorTags && (
         <span className={styles.leyendaError}>
@@ -168,34 +143,12 @@ export const PostTags = ({
         </span>
       )}
 
-      {tagsDisponibles.length > 0 && (
-        <div className={styles.tagsSugeridos}>
-          {tagsDisponibles
-            .filter((tag) =>
-              tag.nombre
-                .toLowerCase()
-                .includes(inputEtiqueta.trim().toLowerCase())
-            )
-            .map((tag) => {
-              const activo = tagsSeleccionados.some(
-                (seleccionada) => seleccionada._id === tag._id
-              );
-
-              return (
-                <button
-                  key={tag._id}
-                  type="button"
-                  className={`${styles.tagSugeridoBtn} ${
-                    activo ? styles.tagSugeridoActivo : ""
-                  }`}
-                  onClick={() => toggleTag(tag)}
-                >
-                  #{tag.nombre}
-                </button>
-              );
-            })}
-        </div>
-      )}
+      <PostTagOptionsList
+        tagsDisponibles={tagsDisponibles}
+        tagsSeleccionados={tagsSeleccionados}
+        busqueda={inputEtiqueta}
+        onToggleTag={toggleTag}
+      />
     </div>
   );
 };
