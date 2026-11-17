@@ -5,17 +5,10 @@ import { Button } from "../../components/botonGenerico/Button";
 import styles from "./Posts.module.css";
 import cameraIcon from "../../img/camara.png";
 import errorImageIcon from "../../img/image-notFound.jpg";
+import type { PostImagesProps } from "../../types/PostTypes";
 
 const MAX_IMAGENES = 5;
 const MAX_TAMANO = 5 * 1024 * 1024; // 5 MB
-
-interface PostImagesProps {
-  imagenesUrls: string[];
-  onChangeImagenes: (nuevasUrls: string[]) => void;
-  archivos: File[];
-  onChangeArchivos: (nuevosArchivos: File[]) => void;
-  onUrlsInvalidasChange?: (urlsInvalidas: string[]) => void;
-}
 
 export const PostImages = ({
   imagenesUrls,

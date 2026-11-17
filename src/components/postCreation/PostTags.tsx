@@ -3,11 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import type { KeyboardEvent } from "react";
 import styles from "./Posts.module.css";
 import { API_URL } from "../../config/api";
-
-export interface TagItem {
-  _id: string;
-  nombre: string;
-}
+import type { TagItem } from "../../types/PostTypes";
 
 interface PostTagsProps {
   tagsSeleccionados: TagItem[];
