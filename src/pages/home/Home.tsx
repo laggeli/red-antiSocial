@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { PostDetailModel } from "../../types/PostDetailTypes";
-import { PageBanner } from "../../components/pageBanner/PageBanner";
+import { BannerWelcome } from "../../components/pageBanner/BannerWelcome";
 import styles from "./Home.module.css";
 import { API_URL, obtenerUrlImagen } from '../../config/api';
 
@@ -50,10 +50,7 @@ export default function Home() {
 
   return (
     <main className={styles.homeContainer}>
-      <PageBanner
-        titulo="UnaHur Anti-Social Net"
-        subtitulo="La red académica para compartir publicaciones, debates e ideas en la comunidad universitaria."
-      />
+      <BannerWelcome/>
       <div className={styles.seccionFeed}>
         {posts.length === 0 ? (
           <p className={styles.mensajePerfil}>No hay publicaciones disponibles en este momento.</p>
