@@ -38,7 +38,11 @@ export const PostImages = ({
   const agregarUrlImagen = () => {
     const limpia = inputUrlImagen.trim();
 
-    if (!limpia) return;
+    if (!limpia) {
+      setErrorImagenes("Por favor, pegá la URL de una imagen antes de hacer clic en agregar.");
+      urlInputRef.current?.focus();
+      return;
+    }
 
     if (cantidadImagenes >= MAX_IMAGENES) {
       setErrorImagenes("Solo puedes agregar un máximo de 5 imágenes.");

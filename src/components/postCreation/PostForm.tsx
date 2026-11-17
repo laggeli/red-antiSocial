@@ -38,33 +38,39 @@ export const PostForm = ({
 
   return (
     <section className={styles.card}>
-    <form onSubmit={handleFormSubmit} className={styles.form}>
-        <PostDescription
-        descripcion={descripcion}
-        setDescripcion={setDescripcion}
-        errorDescripcion={errorDescripcion}
-        setErrorDescripcion={setErrorDescripcion}
-        userNickName={userNickName}
-        descripcionRef={descripcionRef}
-        />
+        <form onSubmit={handleFormSubmit} className={styles.form}>
+            <div className={styles.formGrid}>
+                <div className={styles.columnaIzquierda}>
+                <PostDescription
+                    descripcion={descripcion}
+                    setDescripcion={setDescripcion}
+                    errorDescripcion={errorDescripcion}
+                    setErrorDescripcion={setErrorDescripcion}
+                    userNickName={userNickName}
+                    descripcionRef={descripcionRef}
+                />
 
-        <PostImages
-        imagenesUrls={imagenesUrls}
-        onChangeImagenes={setImagenesUrls}
-        archivos={archivos}
-        onChangeArchivos={setArchivos}
-        onUrlsInvalidasChange={setUrlsInvalidas}
-        />
+                <PostTags
+                    tagsSeleccionados={tagsSeleccionados}
+                    onChangeTags={setTagsSeleccionados}
+                />
+                </div>
 
-        <PostTags
-        tagsSeleccionados={tagsSeleccionados}
-        onChangeTags={setTagsSeleccionados}
-        />
+                <div className={styles.columnaDerecha}>
+                <PostImages
+                    imagenesUrls={imagenesUrls}
+                    onChangeImagenes={setImagenesUrls}
+                    archivos={archivos}
+                    onChangeArchivos={setArchivos}
+                    onUrlsInvalidasChange={setUrlsInvalidas}
+                />
+                </div>
+            </div>
 
-        {error && <p className={styles.mensajeError}>{error}</p>}
+            {error && <p className={styles.mensajeError}>{error}</p>}
+            <PostFormButtons enviando={enviando} onCancel={onCancel} />
+        </form>
 
-        <PostFormButtons enviando={enviando} onCancel={onCancel} />
-    </form>
     </section>
   );
 };
