@@ -3,7 +3,7 @@ import type { SubmitEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import styles from "../../components/postCreation/Posts.module.css";
-import type { TagItem } from "../../components/postCreation/PostTags";
+import type { TagItem } from "../../types/PostTypes";
 import { PostForm } from "../../components/postCreation/PostForm";
 import { API_URL } from "../../config/api";
 
