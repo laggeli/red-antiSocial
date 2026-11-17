@@ -34,6 +34,54 @@ export interface PostImagesProps {
   onUrlsInvalidasChange?: (urlsInvalidas: string[]) => void;
 }
 
+export interface PostImageDropzoneProps {
+  inputUrlImagen: string;
+  onInputUrlChange: (value: string) => void;
+  onKeyDownUrl: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onAgregarUrl: () => void;
+  onSeleccionArchivos: (e: ChangeEvent<HTMLInputElement>) => void;
+  disponibles: number;
+  urlInputRef: RefObject<HTMLInputElement | null>;
+  archivoInputRef: RefObject<HTMLInputElement | null>;
+  imagenesUrls: string[];
+  archivos: File[];
+  previews: string[];
+  urlsRotas: Record<string, boolean>;
+  onImageError: (url: string) => void;
+  onEliminarUrl: (index: number) => void;
+  onEliminarArchivo: (index: number) => void;
+}
+
+export interface PostImageUrlInputProps {
+  inputUrlImagen: string;
+  onInputUrlChange: (value: string) => void;
+  onKeyDownUrl: (e: KeyboardEvent<HTMLInputElement>) => void;
+  onAgregarUrl: () => void;
+  disponibles: number;
+  urlInputRef: RefObject<HTMLInputElement | null>;
+}
+
+export interface PostImageFileSelectorProps {
+  archivoInputRef: RefObject<HTMLInputElement | null>;
+  onSeleccionArchivos: (e: ChangeEvent<HTMLInputElement>) => void;
+  disponibles: number;
+}
+
+export interface PostImagePreviewsListProps {
+  imagenesUrls: string[];
+  archivos: File[];
+  previews: string[];
+  urlsRotas: Record<string, boolean>;
+  onImageError: (url: string) => void;
+  onEliminarUrl: (index: number) => void;
+  onEliminarArchivo: (index: number) => void;
+}
+
+export interface AddImageButtonProps {
+  onClick: () => void;
+  disabled: boolean;
+}
+
 export interface PostTagsProps {
   tagsSeleccionados: TagItem[];
   onChangeTags: (nuevosTags: TagItem[]) => void;
