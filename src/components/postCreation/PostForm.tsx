@@ -5,26 +5,7 @@ import { PostDescription } from "./PostDescription";
 import { PostImages } from "./PostImages";
 import { PostTags } from "./PostTags";
 import { PostFormButtons } from "./PostFormButtons";
-import type { TagItem } from "./PostTags";
-
-interface PostFormProps {
-  descripcion: string;
-  setDescripcion: (value: string) => void;
-  imagenesUrls: string[];
-  setImagenesUrls: (urls: string[]) => void;
-  setUrlsInvalidas: (urls: string[]) => void;
-  tagsSeleccionados: TagItem[];
-  setTagsSeleccionados: (tags: TagItem[]) => void;
-  archivos: File[];
-  setArchivos: (archivos: File[]) => void;
-  errorDescripcion: string;
-  setErrorDescripcion: (error: string) => void;
-  error: string;
-  enviando: boolean;
-  userNickName?: string;
-  onSubmit: (e: SubmitEvent<HTMLFormElement>) => void;
-  onCancel: () => void;
-}
+import type { PostFormProps } from "../../types/PostTypes";
 
 export const PostForm = ({
   descripcion,
