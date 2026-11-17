@@ -1,6 +1,6 @@
 .navbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   position: relative;
   padding: 1.2rem 2rem;
@@ -8,21 +8,31 @@
   width: 100%;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
+  gap: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .leftNav {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2.2rem;
+  gap: 1.8rem;
   flex-wrap: wrap;
 }
 
 .rightNav {
   display: flex;
   align-items: center;
-  position: absolute;
-  right: 2rem;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.saludo {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #320268;
+  white-space: nowrap; 
+  font-family: Arial, sans-serif;
 }
 
 .logoLink {
@@ -150,16 +160,23 @@
   }
 
   .rightNav {
-    position: static;
     width: 100%;
     justify-content: center;
+    flex-direction: column-reverse; /*invierte el orden (el botón queda arriba y el saludo abajo)*/
+    align-items: center;
+    gap: 0.5rem;
   }
 
-  .btnCreatePost,
   .btnLogout {
     width: 100%;
     max-width: 260px;
     text-align: center;
     box-sizing: border-box;
+  }
+  
+  .btnCreatePost {
+      width: auto; 
+      max-width: none;
+      text-align: center;
   }
 }

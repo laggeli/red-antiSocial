@@ -19,7 +19,7 @@ function MainLayout() {
   return (
     <>
       {/* La barra de navegación se renderiza únicamente cuando el usuario inició sesión */}
-      {user && <AppNavBar onLogout={logout} />}
+      {user && <AppNavBar user={user} onLogout={logout} />}
 
       <Routes>
         <Route path="/login" element= { <Login /> } />
