@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import styles from "../../components/postCreation/Posts.module.css";
 import type { TagItem } from "../../types/PostTypes";
+import { PageBanner } from "../../components/pageBanner/PageBanner";
 import { PostForm } from "../../components/postCreation/PostForm";
 import { API_URL } from "../../config/api";
 
@@ -86,24 +87,30 @@ export const Posts = () => {
 
   return (
     <main className={styles.container}>
-      <PostForm
-        descripcion={descripcion}
-        setDescripcion={setDescripcion}
-        imagenesUrls={imagenesUrls}
-        setImagenesUrls={setImagenesUrls}
-        setUrlsInvalidas={setUrlsInvalidas}
-        tagsSeleccionados={tagsSeleccionados}
-        setTagsSeleccionados={setTagsSeleccionados}
-        archivos={archivos}
-        setArchivos={setArchivos}
-        errorDescripcion={errorDescripcion}
-        setErrorDescripcion={setErrorDescripcion}
-        error={error}
-        enviando={enviando}
-        userNickName={user?.nickName}
-        onSubmit={handleSubmit}
-        onCancel={() => navigate(-1)}
-      />
+      <div className={styles.wrapper}>
+        <PageBanner
+          titulo="Crear nueva publicación"
+          subtitulo="Compartí tus ideas, apuntes o proyectos con la comunidad universitaria."
+        />
+        <PostForm
+          descripcion={descripcion}
+          setDescripcion={setDescripcion}
+          imagenesUrls={imagenesUrls}
+          setImagenesUrls={setImagenesUrls}
+          setUrlsInvalidas={setUrlsInvalidas}
+          tagsSeleccionados={tagsSeleccionados}
+          setTagsSeleccionados={setTagsSeleccionados}
+          archivos={archivos}
+          setArchivos={setArchivos}
+          errorDescripcion={errorDescripcion}
+          setErrorDescripcion={setErrorDescripcion}
+          error={error}
+          enviando={enviando}
+          userNickName={user?.nickName}
+          onSubmit={handleSubmit}
+          onCancel={() => navigate(-1)}
+        />
+      </div>  
     </main>
   );
 };
