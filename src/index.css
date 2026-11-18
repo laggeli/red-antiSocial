@@ -38,9 +38,18 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
   background-color: #f5f3f8;
   color: #292333;
   transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.mainContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 3.5rem;
 }
 
 html[data-theme="light"],
