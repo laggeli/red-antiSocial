@@ -1,3 +1,4 @@
+
 .loginContainer {
   min-height: 100vh;
   background-color: #f5f3f8;
@@ -29,7 +30,7 @@
 }
 
 .loginHeader h1 {
-  margin: 0 0 0.4rem 0;
+  margin: 0 0 0.4rem;
   font-size: 1.5rem;
   font-weight: 700;
 }
@@ -63,10 +64,16 @@
   padding: 10px 14px;
   border-radius: 8px;
   border: 1px solid #e2dcf2;
+  background-color: #ffffff;
+  color: #292333;
   font-size: 0.95rem;
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
+}
+
+.formControl::placeholder {
+  color: #9991a3;
 }
 
 .formControl:focus {
@@ -74,21 +81,16 @@
   box-shadow: 0 0 0 3px rgba(91, 58, 130, 0.1);
 }
 
-.isInvalid {
-  border-color: #dc3545 !important;
-  background-color: #fff8f8;
+.formControl:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.isInvalid:focus {
-  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15) !important;
-}
-
-.invalidFeedback {
+.fieldError {
   color: #dc3545;
   font-size: 0.82rem;
   font-weight: 600;
   margin-top: 4px;
-  display: block;
 }
 
 .btnSubmit {
@@ -124,22 +126,24 @@
   border: 1px solid #f8b4b4;
 }
 
-.registerFooter {
+.loginFooter {
   text-align: center;
   margin-top: 1.5rem;
   font-size: 0.9rem;
   color: #685f75;
 }
 
-.registerFooter a {
+.loginFooter a {
   color: #5b3a82;
   font-weight: 600;
   text-decoration: none;
 }
 
-.registerFooter a:hover {
+.loginFooter a:hover {
   text-decoration: underline;
 }
+
+/* MODO OSCURO */
 
 :global(#appShell[data-theme="dark"]) .loginContainer {
   background-color: #1c1b22;
@@ -148,6 +152,7 @@
 :global(#appShell[data-theme="dark"]) .loginCard {
   background-color: #292731;
   border-color: #45414f;
+  box-shadow: 0 4px 16px #00000030;
 }
 
 :global(#appShell[data-theme="dark"]) .formLabel {
@@ -160,10 +165,23 @@
   color: #eeeeF5;
 }
 
-:global(#appShell[data-theme="dark"]) .registerFooter {
+:global(#appShell[data-theme="dark"]) .formControl::placeholder {
+  color: #aaa2b5;
+}
+
+:global(#appShell[data-theme="dark"]) .formControl:focus {
+  border-color: #a477d0;
+  box-shadow: 0 0 0 3px rgba(164, 119, 208, 0.15);
+}
+
+:global(#appShell[data-theme="dark"]) .loginFooter {
   color: #b5b0c0;
 }
 
-:global(#appShell[data-theme="dark"]) .registerFooter a {
+:global(#appShell[data-theme="dark"]) .loginFooter a {
   color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .fieldError {
+  color: #ff9292;
 }

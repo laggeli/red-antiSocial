@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -29,12 +28,10 @@ export default function PostDetail() {
   const [error, setError] = useState("");
   const [errorEliminar, setErrorEliminar] = useState("");
 
-  // Edición de comentarios
   const [comentarioEditando, setComentarioEditando] = useState<string | null>(null);
   const [textoEditado, setTextoEditado] = useState("");
   const [errorComentario, setErrorComentario] = useState("");
 
-  // Edición de publicación
   const [editandoPost, setEditandoPost] = useState(false);
   const [descripcionEditada, setDescripcionEditada] = useState("");
   const [nuevaImagenUrl, setNuevaImagenUrl] = useState("");
@@ -109,11 +106,23 @@ export default function PostDetail() {
       }
 
       const nuevo = data.comment as Comment;
-      setComments((prev) => [{ ...nuevo, userId: user }, ...prev]);
-    } finally {
-      setSubmitting(false);
-    }
-  };
+
+      const usuarioComentario = {
+        _id: user._id,
+        nickName: user.nickName,
+        nombre: user.nombre,
+        email: user.email,
+        fotoPerfil: user.fotoPerfil,
+      };
+
+      setComments((prev) => [
+        { ...nuevo, userId: usuarioComentario },
+        ...prev,
+      ]);
+          } finally {
+            setSubmitting(false);
+          }
+        };
 
   // Editar comentario
   const handleEditarComentario = async (comentarioId: string) => {
@@ -134,7 +143,9 @@ export default function PostDetail() {
       const datos = await respuesta.json().catch(() => ({}));
 
       if (!respuesta.ok) {
-        throw new Error(datos.message || datos.error || "No se pudo editar el comentario.");
+        throw new Error(
+          datos.message || datos.error || "No se pudo editar el comentario."
+        );
       }
 
       setComments((prev) =>
@@ -168,7 +179,9 @@ export default function PostDetail() {
       const datos = await respuesta.json().catch(() => ({}));
 
       if (!respuesta.ok) {
-        throw new Error(datos.message || datos.error || "No se pudo eliminar el comentario.");
+        throw new Error(
+          datos.message || datos.error || "No se pudo eliminar el comentario."
+        );
       }
 
       setComments((prev) => prev.filter((com) => com._id !== comentarioId));
@@ -206,7 +219,9 @@ export default function PostDetail() {
       const datos = await respuesta.json().catch(() => ({}));
 
       if (!respuesta.ok) {
-        throw new Error(datos.error || datos.message || "No se pudo modificar la publicación.");
+        throw new Error(
+          datos.error || datos.message || "No se pudo modificar la publicación."
+        );
       }
 
       setPost(datos.post);
@@ -238,7 +253,9 @@ export default function PostDetail() {
       const datos = await respuesta.json().catch(() => ({}));
 
       if (!respuesta.ok) {
-        throw new Error(datos.error || datos.message || "No se pudo eliminar la imagen.");
+        throw new Error(
+          datos.error || datos.message || "No se pudo eliminar la imagen."
+        );
       }
 
       setPost(datos.post);
@@ -270,7 +287,9 @@ export default function PostDetail() {
       const datos = await respuesta.json().catch(() => ({}));
 
       if (!respuesta.ok) {
-        throw new Error(datos.error || datos.message || "No se pudo eliminar la publicación.");
+        throw new Error(
+          datos.error || datos.message || "No se pudo eliminar la publicación."
+        );
       }
 
       navigate(volverA, { replace: true });
@@ -293,6 +312,7 @@ export default function PostDetail() {
         <p className={styles.mensajePerfil}>
           {error || "Publicación no encontrada."}
         </p>
+
         <Link to={volverA} className={styles.btnVolver}>
           ← Volver
         </Link>
@@ -315,7 +335,6 @@ export default function PostDetail() {
         ← {volverA === "/profile" ? "Volver al perfil" : "Volver al inicio"}
       </Link>
 
-      {/* Publicación */}
       <article className={styles.tarjetaDetalle}>
         <div className={styles.cabeceraPost}>
           {autor?.fotoPerfil ? (
@@ -329,7 +348,13 @@ export default function PostDetail() {
           )}
 
           <div className={styles.infoUsuario}>
-            <span className={styles.nickName}>@{nickName.replace(/^@/, "")}</span>
+            <Link
+              to={`/profile/${encodeURIComponent(nickName)}`}
+              className={styles.nickName}
+            >
+              @{nickName.replace(/^@/, "")}
+            </Link>
+
             {autor?.nombre && <span>{autor.nombre}</span>}
           </div>
 
@@ -363,7 +388,6 @@ export default function PostDetail() {
           <p className={styles.errorMensaje}>{errorEliminar}</p>
         )}
 
-        {/* Formulario de edición */}
         {editandoPost ? (
           <div className={styles.formularioEdicion}>
             <h3>Editar publicación</h3>
@@ -416,7 +440,6 @@ export default function PostDetail() {
           <p className={styles.descripcionCompleta}>{post.descripcion}</p>
         )}
 
-        {/* Imágenes */}
         {imagenes.length > 0 && (
           <div className={styles.imagenesDetalle}>
             {imagenes.map((img, index) => {
@@ -448,7 +471,6 @@ export default function PostDetail() {
           </div>
         )}
 
-        {/* Etiquetas */}
         {etiquetas.length > 0 && (
           <div className={styles.etiquetasPublicacion}>
             {etiquetas.map((tag) => (
@@ -458,10 +480,11 @@ export default function PostDetail() {
         )}
       </article>
 
-      {/* Comentarios */}
       <section className={styles.seccionComentarios}>
         <h3 className={styles.tituloSeccion}>
-          Comentarios ({comments.length})
+          {comments.length === 1
+            ? "Comentario (1)"
+            : `Comentarios (${comments.length})`}
         </h3>
 
         {comments.length === 0 ? (
@@ -475,13 +498,12 @@ export default function PostDetail() {
                 typeof com.userId === "object" ? com.userId : null;
 
               const nickComentario = autorComentario?.nickName || "usuario";
-              const esMiComentario =
-                !!user?.nickName && nickComentario === user.nickName;
+              const nickLimpio = nickComentario.replace(/^@/, "");
 
-              const inicialComentario = nickComentario
-                .replace(/^@/, "")
-                .charAt(0)
-                .toUpperCase();
+              const esMiComentario =
+                !!user?.nickName && nickLimpio === user.nickName.replace(/^@/, "");
+
+              const inicialComentario = nickLimpio.charAt(0).toUpperCase();
 
               return (
                 <article key={com._id} className={styles.itemComentario}>
@@ -498,9 +520,12 @@ export default function PostDetail() {
                       </div>
                     )}
 
-                    <span className={styles.autorComentario}>
-                      @{nickComentario.replace(/^@/, "")}
-                    </span>
+                    <Link
+                      to={`/profile/${encodeURIComponent(nickLimpio)}`}
+                      className={styles.autorComentario}
+                    >
+                      @{nickLimpio}
+                    </Link>
 
                     {esMiComentario && (
                       <div className={styles.accionesComentario}>
@@ -570,7 +595,6 @@ export default function PostDetail() {
           <p className={styles.errorMensaje}>{errorComentario}</p>
         )}
 
-        {/* Formulario para agregar comentario */}
         {user && (
           <div className={styles.bloqueNuevoComentario}>
             <div className={styles.encabezadoNuevoComentario}>
@@ -586,8 +610,11 @@ export default function PostDetail() {
                 </div>
               )}
 
-              <Link to={`/profile/${encodeURIComponent(nickName)}`} className={styles.nickName}>
-                @{nickName.replace(/^@/, "")}
+              <Link
+                to={`/profile/${encodeURIComponent(user.nickName)}`}
+                className={styles.nickName}
+              >
+                @{user.nickName}
               </Link>
             </div>
 

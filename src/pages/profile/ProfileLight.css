@@ -1,10 +1,10 @@
 .perfil-claro {
   min-height: 100vh;
-  font-size: 17px;
+  padding: 35px 45px;
   background-color: #f5f3f8;
   color: #292333;
   font-family: Arial, sans-serif;
-  padding: 35px 45px;
+  font-size: 16px;
 }
 
 .perfil-claro .encabezadoPerfil {
@@ -19,37 +19,35 @@
   color: #62458a;
 }
 
-.perfil-claro .botonCerrarSesion {
-  background-color: #62458a;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
 .perfil-claro .datosUsuario {
   display: flex;
   align-items: center;
   gap: 30px;
   padding: 30px;
-  background-color: white;
+  background-color: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 8px #00000010;
 }
 
 .perfil-claro .avatarPerfil {
+  width: 95px;
+  height: 95px;
+  min-width: 95px;
   border-radius: 50%;
   background-color: #d9c9ee;
   color: #62458a;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
-  width: 95px;
-  height: 95px;
-  min-width: 95px;
+  object-fit: cover;
   font-size: 36px;
+  font-weight: bold;
+}
+
+.perfil-claro .informacionUsuario {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .perfil-claro .informacionUsuario h2 {
@@ -63,21 +61,87 @@
 }
 
 .perfil-claro .informacionUsuario .nicknamePerfil {
-  font-size: 17px;
+  font-size: 16px;
   margin: 0;
 }
 
 .perfil-claro .resumenPerfil {
   margin-left: auto;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-start;
+  justify-content: center;
+  gap: 28px;
+}
+
+.perfil-claro .resumenPerfil > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
   gap: 5px;
+  min-width: 75px;
 }
 
 .perfil-claro .resumenPerfil strong {
   font-size: 24px;
   color: #62458a;
+}
+
+.perfil-claro .resumenPerfil span {
+  color: #777080;
+  font-size: 14px;
+  text-align: center;
+}
+
+.perfil-claro .datoSeguidores {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.perfil-claro .etiquetaTeSigue {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 4px 9px;
+  border-radius: 12px;
+  background-color: #eee6f7;
+  color: #62458a !important;
+  font-size: 12px !important;
+}
+
+.perfil-claro .botonEditarPerfil,
+.perfil-claro .botonSeguir {
+  margin-top: 12px;
+  padding: 11px 22px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #5b3a82 0%, #744ba6 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(91, 58, 130, 0.2);
+}
+
+.perfil-claro .botonEditarPerfil:hover,
+.perfil-claro .botonSeguir:hover {
+  background: linear-gradient(135deg, #482d68 0%, #5b3a82 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(91, 58, 130, 0.3);
+}
+
+.perfil-claro .botonSeguir.siguiendo {
+  background: linear-gradient(135deg, #5b3a82 0%, #744ba6 100%);
+  color: white;
+}
+
+.perfil-claro .botonSeguir:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
 }
 
 .perfil-claro .seccionPublicaciones {
@@ -89,7 +153,7 @@
 }
 
 .perfil-claro .tarjetaPublicacion {
-  background-color: white;
+  background-color: #ffffff;
   padding: 28px;
   margin: 15px 0;
   border-radius: 12px;
@@ -102,7 +166,8 @@
 }
 
 .perfil-claro .tarjetaPublicacion small {
-  color: #888;
+  color: #888888;
+  font-size: 13px;
 }
 
 .perfil-claro .imagenesPublicacion {
@@ -113,10 +178,10 @@
 }
 
 .perfil-claro .imagenesPublicacion img {
-  object-fit: cover;
-  border-radius: 10px;
   width: 300px;
   height: 240px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .perfil-claro .etiquetasPublicacion {
@@ -134,14 +199,14 @@
   font-size: 13px;
 }
 
-
 .perfil-claro .piePublicacion {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   margin-top: 25px;
   padding-top: 18px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #eeeeee;
   gap: 20px;
   font-size: 16px;
 }
@@ -164,89 +229,13 @@
   color: #777080;
 }
 
-
-.perfil-claro .resumenPerfil {
-  display: flex;
-  flex-direction: row;
-  gap: 28px;
-}
-
-.perfil-claro .resumenPerfil div {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 5px;
-}
-
-.perfil-claro .resumenPerfil span {
-  color: #777080;
-  font-size: 14px;
-}
-
-.perfil-claro .botonEditarPerfil {
-  margin-top: 12px;
-  border: none;
-  border-radius: 8px;
-  padding: 9px 16px;
-  background: #62458a;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.perfil-claro .botonEditarPerfil:hover {
-  background: #482d68;
-}
-
-.perfil-claro .botonSeguir {
-  margin-top: 16px;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #5b3a82 0%, #744ba6 100%);
-  color: white;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(91, 58, 130, 0.24);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.perfil-claro .botonSeguir:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 7px 18px rgba(91, 58, 130, 0.34);
-}
-
-.perfil-claro .botonSeguir.siguiendo {
-  background: linear-gradient(135deg, #5b3a82 0%, #744ba6 100%);
-  color: white;
-}
-
-.perfil-claro .botonSeguir:disabled {
-  opacity: 0.6;
-  cursor: wait;
-  transform: none;
-}
-
-.perfil-claro .datoSeguidores {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-}
-
-.perfil-claro .etiquetaTeSigue {
-  display: inline-block;
-  margin-top: 3px;
-  padding: 4px 9px;
-  border-radius: 12px;
-  background: #eee6f7;
-  color: #62458a;
-  font-size: 12px;
-}
+/* Adaptación a pantallas pequeñas */
 
 @media (max-width: 700px) {
+  .perfil-claro {
+    padding: 25px 18px;
+  }
+
   .perfil-claro .datosUsuario {
     flex-wrap: wrap;
     gap: 18px;
@@ -257,5 +246,9 @@
     justify-content: space-around;
     margin-left: 0;
     gap: 12px;
+  }
+
+  .perfil-claro .imagenesPublicacion img {
+    max-width: 100%;
   }
 }

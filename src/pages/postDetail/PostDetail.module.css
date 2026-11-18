@@ -518,6 +518,21 @@
   }
 }
 
+.autorComentario {
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.autorComentario:hover {
+  text-decoration: underline;
+  color: #482d68;
+}
+
+:global(#appShell[data-theme="dark"]) .autorComentario:hover {
+  color: #e0c8ff;
+}
+
 :global(#appShell[data-theme="dark"]) .detailContainer {
   background-color: #1c1b22;
   color: #eeeeF5;

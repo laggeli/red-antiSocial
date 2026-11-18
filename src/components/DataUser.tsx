@@ -1,4 +1,3 @@
-
 import type { User } from "../types/PerfilTypes";
 import { obtenerUrlImagen } from "../config/api";
 
@@ -72,21 +71,28 @@ function DataUser({
       <div className="resumenPerfil">
         <div>
           <strong>{cantidadPublicaciones}</strong>
-          <span>Publicaciones</span>
+          <span>
+            {cantidadPublicaciones === 1 ? "Publicación" : "Publicaciones"}
+          </span>
         </div>
 
         <div className="datoSeguidores">
           <strong>{cantidadSeguidores}</strong>
-          <span>Seguidores</span>
+          <span>
+            {cantidadSeguidores === 1 ? "Seguidor" : "Seguidores"}
+          </span>
 
-          {!esMiPerfil && teSigue && ( <span className="etiquetaTeSigue">Te sigue</span> )}
+          {!esMiPerfil && teSigue && (
+            <span className="etiquetaTeSigue">Te sigue</span>
+          )}
         </div>
 
         <div>
           <strong>{cantidadSeguidos}</strong>
-          <span>Seguidos</span>
+          <span>
+            {cantidadSeguidos === 1 ? "Seguido" : "Seguidos"}
+          </span>
         </div>
-
       </div>
     </section>
   );
