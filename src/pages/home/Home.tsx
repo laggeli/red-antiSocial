@@ -142,11 +142,17 @@ export default function Home() {
                 {etiquetas.length > 0 && (
                   <div className={styles.etiquetasPublicacion}>
                     {etiquetas.map((tag) => (
-                      <span key={tag._id}>#{tag.nombre}</span>
+                      <Link 
+                        key={tag._id} 
+                        to={`/explore?tag=${encodeURIComponent(tag.nombre)}`}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                      >
+                        <span>#{tag.nombre}</span>
+                      </Link>
                     ))}
                   </div>
                 )}
-
+                
                 <div className={styles.piePublicacion}>
                   <span className={styles.contadorComentarios}>
                     💬 {post.commentsCount}{" "}
