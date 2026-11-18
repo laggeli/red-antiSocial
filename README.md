@@ -12,7 +12,10 @@ El proyecto propone una pequeña red social donde las personas usuarias pueden r
 - **Context API** – Gestión global del usuario logueado.
 - **Fetch API** – Comunicación con el backend.
 - **CSS** – Estilos y diseño responsive.
-- **Node.js + Express** – API REST proporcionada por la cátedra.
+- **Node.js + Express** – API REST diseñada por el grupo.
+- **MongoDB y Mongoose** – Base de datos NoSQL para la persistencia de la información.
+- **Docker y Docker Compose** – Contenedorización para ejecutar los servicios de base de datos de forma local.
+- **Redis** – Sistema de caché para optimizar las consultas del servidor.
 
 ## ✧ Estructura del proyecto
 
@@ -21,17 +24,23 @@ El trabajo está dividido en dos repositorios independientes:
 | Repositorio | Descripción |
 |---|---|
 | FrontEnd | Interfaz de usuario desarrollada con React y TypeScript |
-| BackEnd | API REST proporcionada por la cátedra para gestionar los datos |
+| BackEnd | API REST desarrollada por el grupo cómo proyecto final de la materia EDP y modificada por la compañera Elisa Laginestra para sumar funcionalidades especificas pertinentes a la consigna. Encargada de la lógica de negocio, conexión con MongoDB y gestión de rutas |
 
 El frontend consume los endpoints del backend mediante peticiones HTTP (`fetch`). De esta manera, ambos proyectos se ejecutan por separado, pero se comunican a través de la API.
 
+## ✧ Requisitos previos
+
+Antes de clonar e iniciar los proyectos, asegúrate de tener instalado en tu computadora:
+- [Node.js](https://nodejs.org/) (versión 18 o superior recomendada).
+- [Docker Desktop](https://www.docker.com/) (debe estar abierto y ejecutándose en segundo plano para levantar los contenedores de MongoDB y Redis).
+
 ## ✧ Instalación y ejecución
 
-Para ejecutar la aplicación localmente es necesario levantar primero el backend y luego el frontend.
+Para ejecutar la aplicación localmente es necesario levantar primero el backend (junto con sus bases de datos) y luego el frontend.
 
 ### 1. Backend
 
-Clonar el repositorio proporcionado por la cátedra:
+Clonar el repositorio desarrollado por el grupo:
 
 ```bash
 git clone https://github.com/laggeli/red-antiSocial-back
