@@ -2,18 +2,12 @@
 .explore {
   width: 100%;
   min-width: 0;
-  min-height: 100%;
+  min-height: 100vh;
   padding: 35px 45px;
   background-color: #f5f3f8;
   color: #292333;
   font-family: Arial, sans-serif;
-  overflow-x: clip;
-}
-
-.explore * {
-  min-width: 0;
-  max-width: 100%;
-  overflow-wrap: anywhere;
+  overflow-x: hidden;
 }
 
 .encabezado {
@@ -29,39 +23,39 @@
 .encabezado p {
   font-size: 17px;
   color: #777080;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 .busqueda {
   display: block;
   width: 100%;
   max-width: 600px;
-  min-width: 0;
   padding: 14px 18px;
   border: 1px solid #d8c8eb;
   border-radius: 10px;
   font-size: 16px;
   margin-bottom: 30px;
   outline-color: #62458a;
+  background-color: #ffffff;
+  color: #292333;
   box-sizing: border-box;
 }
 
 .grilla {
   display: grid;
-  width: 100%;
-  min-width: 0;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
   gap: 25px;
-  align-items: start;
+  width: 100%;
 }
 
 .tarjeta {
-  width: 100%;
   min-width: 0;
   background: white;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 2px 8px #00000010;
+  display: flex;
+  flex-direction: column;
 }
 
 .imagen {
@@ -69,19 +63,23 @@
   width: 100%;
   height: 230px;
   object-fit: cover;
+  flex-shrink: 0;
 }
 
 .contenido {
-  width: 100%;
   min-width: 0;
   padding: 20px;
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .contenido p {
+  width: 100%;
   font-size: 17px;
   line-height: 1.5;
   overflow-wrap: anywhere;
+  margin: 0 0 10px;
 }
 
 .contenido span {
@@ -93,6 +91,7 @@
   flex-wrap: wrap;
   gap: 8px;
   margin: 15px 0;
+  max-width: 100%;
 }
 
 .etiquetas small {
@@ -100,10 +99,12 @@
   background: #eee6f7;
   padding: 5px 10px;
   border-radius: 15px;
+  overflow-wrap: anywhere;
 }
 
 .contenido a {
   display: inline-block;
+  max-width: 100%;
   color: #62458a;
   font-weight: bold;
   text-decoration: none;
@@ -116,6 +117,7 @@
 }
 
 /* MODO OSCURO */
+
 :global(#appShell[data-theme="dark"]) .explore {
   background-color: #1c1b22;
   color: #eeeeF5;
@@ -162,13 +164,14 @@
 }
 
 /* TABLET */
+
 @media (max-width: 1024px) {
   .explore {
-    padding: 28px 22px;
+    padding: 28px 24px;
   }
 
   .grilla {
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr));
     gap: 18px;
   }
 
@@ -178,10 +181,11 @@
 }
 
 /* CELULARES */
+
 @media (max-width: 600px) {
   .explore {
-    width: 100%;
-    padding: 20px 12px;
+    min-height: auto;
+    padding: 20px 14px 30px;
   }
 
   .encabezado {
@@ -189,28 +193,28 @@
   }
 
   .encabezado h1 {
-    font-size: 1.5rem;
+    font-size: 1.45rem;
+    margin-top: 0;
+    margin-bottom: 6px;
   }
 
   .encabezado p {
     font-size: 0.9rem;
-    line-height: 1.45;
+    line-height: 1.4;
+    margin: 0;
   }
 
   .busqueda {
     width: 100%;
-    max-width: 100%;
-    padding: 12px;
-    margin-bottom: 18px;
+    max-width: none;
+    padding: 12px 13px;
+    margin: 18px 0 20px;
     font-size: 16px;
   }
 
-  /* Una publicación por fila */
   .grilla {
-    display: grid;
-    width: 100%;
     grid-template-columns: minmax(0, 1fr);
-    gap: 15px;
+    gap: 16px;
   }
 
   .tarjeta {
@@ -220,19 +224,23 @@
 
   .imagen {
     width: 100%;
-    height: auto;
-    max-height: 360px;
-    aspect-ratio: 16 / 10;
+    height: clamp(150px, 48vw, 220px);
     object-fit: cover;
   }
 
   .contenido {
-    padding: 14px;
+    padding: 14px 15px 16px;
   }
 
   .contenido p {
     font-size: 0.95rem;
-    line-height: 1.5;
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+
+  .contenido a {
+    font-size: 0.85rem;
+    margin-top: 8px;
   }
 
   .etiquetas {
@@ -242,40 +250,37 @@
 
   .etiquetas small {
     font-size: 0.75rem;
-    padding: 5px 8px;
-  }
-
-  .contenido a {
-    font-size: 0.88rem;
+    padding: 4px 9px;
   }
 }
 
 /* IPHONE SE Y CELULARES ANGOSTOS */
+
 @media (max-width: 380px) {
   .explore {
-    padding: 16px 9px;
+    padding: 16px 10px 25px;
   }
 
   .encabezado h1 {
-    font-size: 1.35rem;
+    font-size: 1.3rem;
   }
 
   .encabezado p {
-    font-size: 0.85rem;
+    font-size: 0.84rem;
+  }
+
+  .busqueda {
+    padding: 11px;
+    margin-top: 15px;
+    margin-bottom: 16px;
   }
 
   .grilla {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
-  }
-
-  .tarjeta {
-    border-radius: 10px;
+    gap: 13px;
   }
 
   .imagen {
-    max-height: 300px;
-    aspect-ratio: 4 / 3;
+    height: 155px;
   }
 
   .contenido {
@@ -288,5 +293,10 @@
 
   .contenido a {
     font-size: 0.82rem;
+  }
+
+  .etiquetas small {
+    font-size: 0.7rem;
+    padding: 4px 8px;
   }
 }
