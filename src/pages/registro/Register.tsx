@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import styles from "./Register.module.css";
-import { API_URL } from '../../config/api';
 
-// Los 4 campos son OBLIGATORIOS en el formulario
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import styles from "./Register.module.css";
+import { API_URL } from "../../config/api";
+
 interface FormData {
   nickName: string;
   nombre: string;
@@ -12,210 +12,259 @@ interface FormData {
   password: string;
 }
 
-// Los mensajes de error son OPCIONALES para permitir el estado inicial
 interface FormErrors {
   nickName?: string;
   nombre?: string;
   email?: string;
   password?: string;
-  [key: string]: string | undefined; 
+}
+
+interface RegisterResponse {
+  message: string;
+  user: {
+    _id: string;
+    nickName: string;
+    nombre: string;
+    email: string;
+    fotoPerfil?: string;
+  };
 }
 
 export default function Registro() {
   const [formData, setFormData] = useState<FormData>({
-    nickName: '',
-    nombre: '',
-    email: '',
-    password: '',
+    nickName: "",
+    nombre: "",
+    email: "",
+    password: "",
   });
 
-  const [Errores, setErrores] = useState<FormErrors>({});
-  const [generalError, setGeneralError] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+  const [errores, setErrores] = useState<FormErrors>({});
+  const [generalError, setGeneralError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // Manejador del cambio en inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
-    if (Errores[name]) {
-      setErrores((prev) => ({
-        ...prev,
-        [name]: undefined,
-      }));
-    }
+    setErrores((prev) => ({
+      ...prev,
+      [name]: undefined,
+    }));
+
+    setGeneralError("");
   };
 
-  // Función de validación obligatoria para los 4 campos
-  const Validar = (dato: FormData): FormErrors => {
-    const newErrores: FormErrors = {};
+  const validar = (): FormErrors => {
+    const nuevosErrores: FormErrors = {};
 
-    if (!dato.nickName.trim()) {
-      newErrores.nickName = 'El nombre de usuario (nickName) es obligatorio';
+    if (formData.nickName.trim().length < 3) {
+      nuevosErrores.nickName =
+        "El nickname debe tener al menos 3 caracteres.";
     }
 
-    if (!dato.nombre.trim()) {
-      newErrores.nombre = 'El nombre es obligatorio';
+    if (formData.nombre.trim().length < 3) {
+      nuevosErrores.nombre =
+        "El nombre debe tener al menos 3 caracteres.";
     }
 
-    if (!dato.email.trim()) {
-      newErrores.email = 'El correo electrónico es obligatorio';
-    } else if (!/\S+@\S+\.\S+/.test(dato.email)) {
-      newErrores.email = 'El correo electrónico no tiene un formato válido';
+    if (!/\S+@\S+\.\S+/.test(formData.email.trim())) {
+      nuevosErrores.email =
+        "Ingresá un correo electrónico válido.";
     }
 
-    if (!dato.password.trim()) {
-      newErrores.password = 'La contraseña es obligatoria';
+    if (formData.password.length < 5) {
+      nuevosErrores.password =
+        "La contraseña debe tener al menos 5 caracteres.";
     }
 
-    return newErrores;
+    return nuevosErrores;
   };
 
-  // Envío del formulario al backend
-  const handleSubmit = async (e: React.SyntheticEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setGeneralError('');
+    setGeneralError("");
 
-    const validacionDeErrores = Validar(formData);
-    setErrores(validacionDeErrores);
+    const erroresValidacion = validar();
+    setErrores(erroresValidacion);
 
-    if (Object.keys(validacionDeErrores).length === 0) {
-      setLoading(true);
+    if (Object.keys(erroresValidacion).length > 0) return;
 
-      try {
-        // 1. Verificar si el nickName o email ya existen
-        const checkRes = await fetch(`${API_URL}/users`);
-        if (checkRes.ok) {
-          const existingUsers = await checkRes.json();
-          const userExists = existingUsers.some(
-            (u: { nickName?: string; email?: string }) =>
-              u.nickName?.toLowerCase() === formData.nickName.trim().toLowerCase() ||
-              u.email?.toLowerCase() === formData.email.trim().toLowerCase()
-          );
+    setLoading(true);
 
-          if (userExists) {
-            setGeneralError('El nickName o el email ya se encuentran registrados.');
-            setLoading(false);
-            return;
-          }
-        }
+    try {
+      const response = await fetch(`${API_URL}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nickName: formData.nickName.trim(),
+          nombre: formData.nombre.trim(),
+          email: formData.email.trim(),
+          contraseña: formData.password,
+        }),
+      });
 
-        // 2. Crear el nuevo usuario mediante POST
-        const response = await fetch(`${API_URL}/users`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
+      const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error('Error al registrar el usuario en el servidor.');
-        }
+      if (!response.ok) {
+        const mensajeErrores = Array.isArray(data.errors)
+          ? data.errors.join(" ")
+          : data.error || data.message;
 
-        const newUser = await response.json();
-        login(newUser);
-        navigate('/');
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setGeneralError(err.message);
-        } else {
-          setGeneralError('Ocurrió un error inesperado al intentar registrarte.');
-        }
-      } finally {
-        setLoading(false);
+        throw new Error(
+          mensajeErrores || "No se pudo registrar el usuario."
+        );
       }
+
+      const resultado = data as RegisterResponse;
+
+      if (!resultado.user?._id) {
+        throw new Error("El servidor no devolvió los datos del usuario.");
+      }
+
+      login(resultado.user);
+      navigate("/");
+    } catch (error) {
+      setGeneralError(
+        error instanceof Error
+          ? error.message
+          : "Ocurrió un error al intentar registrarte."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className={styles.loginContainer || styles.registroContainer}>
-      <div className={styles.loginCard || styles.registroCard}>
-        <div className={styles.loginHeader || styles.registroHeader}>
+    <div className={styles.registroContainer}>
+      <div className={styles.registroCard}>
+        <div className={styles.registroHeader}>
           <h1>UnaHur Anti-Social Net</h1>
           <p>Creá tu cuenta para ingresar</p>
         </div>
 
-        <form onSubmit={handleSubmit} className={styles.loginForm || styles.registroForm}>
+        <form onSubmit={handleSubmit} className={styles.registroForm}>
           {generalError && (
-            <div className={styles.errorAlert}>{generalError}</div>
+            <div className={styles.errorAlert}>
+              {generalError}
+            </div>
           )}
 
           <div className={styles.formGroup}>
-            <label htmlFor="nickName">Nombre de usuario (nickName)</label>
+            <label htmlFor="nickName" className={styles.formLabel}>
+              Nombre de usuario (nickName)
+            </label>
+
             <input
               type="text"
               id="nickName"
               name="nickName"
+              className={styles.formControl}
               value={formData.nickName}
               onChange={handleChange}
               placeholder="Ej: luna99"
               disabled={loading}
             />
-            {Errores.nickName && (
-              <span className={styles.fieldError}>{Errores.nickName}</span>
+
+            {errores.nickName && (
+              <span className={styles.invalidFeedback}>
+                {errores.nickName}
+              </span>
             )}
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="nombre">Nombre Completo</label>
+            <label htmlFor="nombre" className={styles.formLabel}>
+              Nombre completo
+            </label>
+
             <input
               type="text"
               id="nombre"
               name="nombre"
+              className={styles.formControl}
               value={formData.nombre}
               onChange={handleChange}
               placeholder="Ej: Luna Pérez"
               disabled={loading}
             />
-            {Errores.nombre && (
-              <span className={styles.fieldError}>{Errores.nombre}</span>
+
+            {errores.nombre && (
+              <span className={styles.invalidFeedback}>
+                {errores.nombre}
+              </span>
             )}
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="email">Correo Electrónico</label>
+            <label htmlFor="email" className={styles.formLabel}>
+              Correo electrónico
+            </label>
+
             <input
               type="email"
               id="email"
               name="email"
+              className={styles.formControl}
               value={formData.email}
               onChange={handleChange}
               placeholder="ejemplo@unahur.edu.ar"
               disabled={loading}
             />
-            {Errores.email && (
-              <span className={styles.fieldError}>{Errores.email}</span>
+
+            {errores.email && (
+              <span className={styles.invalidFeedback}>
+                {errores.email}
+              </span>
             )}
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="password">Contraseña</label>
+            <label htmlFor="password" className={styles.formLabel}>
+              Contraseña
+            </label>
+
             <input
               type="password"
               id="password"
               name="password"
+              className={styles.formControl}
               value={formData.password}
               onChange={handleChange}
-              placeholder="••••••"
+              placeholder="Mínimo 5 caracteres"
+              autoComplete="new-password"
               disabled={loading}
             />
-            {Errores.password && (
-              <span className={styles.fieldError}>{Errores.password}</span>
+
+            {errores.password && (
+              <span className={styles.invalidFeedback}>
+                {errores.password}
+              </span>
             )}
           </div>
 
-          <button type="submit" className={styles.btnSubmit} disabled={loading}>
-            {loading ? 'Registrando...' : 'Crear Cuenta'}
+          <button
+            type="submit"
+            className={styles.btnSubmit}
+            disabled={loading}
+          >
+            {loading ? "Registrando..." : "Crear cuenta"}
           </button>
         </form>
 
-        <div className={styles.loginFooter || styles.registroFooter}>
-          <p>¿Ya tenés una cuenta? <Link to="/login">Iniciá sesión aquí</Link></p>
+        <div className={styles.loginFooter}>
+          <p>
+            ¿Ya tenés una cuenta?{" "}
+            <Link to="/login">Iniciá sesión aquí</Link>
+          </p>
         </div>
       </div>
     </div>

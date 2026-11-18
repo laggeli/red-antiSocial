@@ -49,6 +49,7 @@ Iniciar el servidor:
 
 ```bash
 docker compose up -d
+npm run seed:users
 npm run dev
 ```
 
