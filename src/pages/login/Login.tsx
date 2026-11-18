@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import type { User } from "../../context/AuthContext";
 import styles from "./Login.module.css";
 import { API_URL } from "../../config/api";
+import AnimatedContent from "../../components/animatedContent/AnimatedContent";
 
 interface FormData {
   nickName: string;
@@ -116,122 +116,126 @@ export default function Login() {
 
   return (
     <div className={styles.loginContainer}>
-      <div className={styles.loginCard}>
+      <AnimatedContent className={styles.loginCard} distance={100}
+      direction="vertical" duration={1.5} ease="power2.out" blur={0} wipe="up" stagger={0.08}>
         <div className={styles.loginHeader}>
           <h1>UnaHur Anti-Social Net</h1>
           <p>Iniciá sesión para continuar</p>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.loginForm}>
-          {generalError && (
-            <div className={styles.errorAlert}>
-              {generalError}
-            </div>
-          )}
-
-          <div className={styles.formGroup}>
-            <label htmlFor="nickName" className={styles.formLabel}>
-              Nombre de usuario
-            </label>
-
-            <input
-              type="text"
-              id="nickName"
-              name="nickName"
-              className={styles.formControl}
-              value={formData.nickName}
-              onChange={handleChange}
-              placeholder="Tu nickName"
-              autoComplete="username"
-              disabled={loading}
-            />
-
-            {errores.nickName && (
-              <span className={styles.fieldError}>
-                {errores.nickName}
-              </span>
+          <AnimatedContent className={styles.formAnimation} distance={45}
+          direction="vertical" duration={1} ease="power2.out" wipe="none" stagger={0.08}>
+            {generalError && (
+              <div className={styles.errorAlert}>
+                {generalError}
+              </div>
             )}
-          </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="password" className={styles.formLabel}>
-              Contraseña
-            </label>
+            <div className={styles.formGroup}>
+              <label htmlFor="nickName" className={styles.formLabel}>
+                Nombre de usuario
+              </label>
 
-            <div className={styles.passwordWrapper}>
               <input
-                type={mostrarPassword ? "text" : "password"}
-                id="password"
-                name="password"
+                type="text"
+                id="nickName"
+                name="nickName"
                 className={styles.formControl}
-                value={formData.password}
+                value={formData.nickName}
                 onChange={handleChange}
-                placeholder="Tu contraseña"
-                autoComplete="current-password"
+                placeholder="Tu nickName"
+                autoComplete="username"
                 disabled={loading}
               />
 
-              <button
-                type="button"
-                className={styles.togglePassword}
-                onClick={() => setMostrarPassword(!mostrarPassword)}
-                aria-label={
-                  mostrarPassword
-                    ? "Ocultar contraseña"
-                    : "Mostrar contraseña"
-                }
-                title={
-                  mostrarPassword
-                    ? "Ocultar contraseña"
-                    : "Mostrar contraseña"
-                }
-              >
-                {mostrarPassword ? (
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A11 11 0 0112 5c5.5 0 9 7 9 7a14 14 0 01-3.1 3.8M6.2 6.2C3.9 7.7 2 12 2 12s3.5 7 10 7c1.4 0 2.6-.3 3.7-.8"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path
-                      d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                    />
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="3"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="1.8"
-                    />
-                  </svg>
-                )}
-              </button>
+              {errores.nickName && (
+                <span className={styles.fieldError}>
+                  {errores.nickName}
+                </span>
+              )}
             </div>
 
-            {errores.password && (
-              <span className={styles.fieldError}>
-                {errores.password}
-              </span>
-            )}
-          </div>
+            <div className={styles.formGroup}>
+              <label htmlFor="password" className={styles.formLabel}>
+                Contraseña
+              </label>
 
-          <button
-            type="submit"
-            className={styles.btnSubmit}
-            disabled={loading}
-          >
-            {loading ? "Iniciando sesión..." : "Iniciar sesión"}
-          </button>
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={mostrarPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  className={styles.formControl}
+                  value={formData.password}
+                  onChange={handleChange}
+                  placeholder="Tu contraseña"
+                  autoComplete="current-password"
+                  disabled={loading}
+                />
+
+                <button
+                  type="button"
+                  className={styles.togglePassword}
+                  onClick={() => setMostrarPassword(!mostrarPassword)}
+                  aria-label={
+                    mostrarPassword
+                      ? "Ocultar contraseña"
+                      : "Mostrar contraseña"
+                  }
+                  title={
+                    mostrarPassword
+                      ? "Ocultar contraseña"
+                      : "Mostrar contraseña"
+                  }
+                >
+                  {mostrarPassword ? (
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A11 11 0 0112 5c5.5 0 9 7 9 7a14 14 0 01-3.1 3.8M6.2 6.2C3.9 7.7 2 12 2 12s3.5 7 10 7c1.4 0 2.6-.3 3.7-.8"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path
+                        d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                      />
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="3"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </div>
+
+              {errores.password && (
+                <span className={styles.fieldError}>
+                  {errores.password}
+                </span>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className={styles.btnSubmit}
+              disabled={loading}
+            >
+              {loading ? "Iniciando sesión..." : "Iniciar sesión"}
+            </button>
+          </AnimatedContent>
         </form>
 
         <div className={styles.loginFooter}>
@@ -240,7 +244,7 @@ export default function Login() {
             <Link to="/registro">Registrate aquí</Link>
           </p>
         </div>
-      </div>
+      </AnimatedContent>
     </div>
   );
 }

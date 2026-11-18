@@ -197,6 +197,12 @@
   outline-offset: 2px;
 }
 
+.formAnimation {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 :global(#appShell[data-theme="dark"]) .togglePassword {
   color: #c6a5ed;
 }
