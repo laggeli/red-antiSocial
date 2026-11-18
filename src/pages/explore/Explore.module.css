@@ -141,3 +141,95 @@
 :global(#appShell[data-theme="dark"]) .contenido a {
   color: #c6a5ed;
 }
+
+
+@media (max-width: 1024px) {
+  .explore {
+    padding: 28px 24px;
+  }
+
+  .grilla {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 18px;
+  }
+
+  .imagen {
+    height: 210px;
+  }
+}
+
+@media (max-width: 600px) {
+  .explore {
+    min-height: auto;
+    padding: 20px 12px;
+  }
+
+  .encabezado {
+    margin-bottom: 18px;
+  }
+
+  .encabezado h1 {
+    font-size: 1.5rem;
+  }
+
+  .encabezado p {
+    font-size: 0.92rem;
+    line-height: 1.4;
+  }
+
+  .busqueda {
+    width: 100%;
+    max-width: none;
+    padding: 12px 13px;
+    margin-bottom: 20px;
+    font-size: 0.92rem;
+  }
+
+  .grilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .tarjeta {
+    min-width: 0;
+    border-radius: 11px;
+  }
+
+  .imagen {
+    height: auto;
+    aspect-ratio: 1 / 1;
+  }
+
+  .contenido {
+    padding: 12px;
+  }
+
+  .contenido p {
+    font-size: 0.88rem;
+    overflow-wrap: anywhere;
+  }
+
+  .etiquetas {
+    gap: 5px;
+    margin: 10px 0;
+  }
+
+  .etiquetas small {
+    font-size: 0.68rem;
+    padding: 4px 7px;
+  }
+
+  .contenido a {
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .grilla {
+    grid-template-columns: 1fr;
+  }
+
+  .contenido {
+    padding: 14px;
+  }
+}

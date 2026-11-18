@@ -214,3 +214,52 @@
   background-color: #8055a8;
   color: white;
 }
+
+
+@media (max-width: 600px) {
+  .fondoModal {
+    align-items: flex-start;
+    overflow-y: auto;
+    padding: 12px;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: 480px;
+    max-height: calc(100dvh - 24px);
+    margin: auto;
+    padding: 18px;
+    border-radius: 13px;
+  }
+
+  .encabezado {
+    gap: 10px;
+    margin-bottom: 17px;
+  }
+
+  .encabezado h2 {
+    font-size: 1.2rem;
+  }
+
+  .fotoPerfil,
+  .fotoInicial {
+    width: 88px;
+    height: 88px;
+  }
+
+  .campo input {
+    padding: 12px;
+    font-size: 16px;
+  }
+
+  .botones {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .btnCancelar,
+  .btnGuardar {
+    width: 100%;
+    padding: 12px;
+  }
+}

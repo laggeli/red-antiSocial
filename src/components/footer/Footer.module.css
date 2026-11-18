@@ -141,3 +141,62 @@
     white-space: nowrap;
   }
 }
+
+
+@media (max-width: 600px) {
+  .footer {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    z-index: 10;
+    width: 100%;
+    padding: 0.85rem 0.75rem;
+    transform: none;
+    will-change: auto;
+  }
+
+  .contenido {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.6rem;
+    text-align: center;
+  }
+
+  .texto {
+    font-size: 0.76rem;
+    white-space: normal;
+  }
+
+  .textoInstitucional,
+  .badge {
+    display: none;
+  }
+
+  .acciones {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .link,
+  .btnSubir {
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .footer {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .texto {
+    font-size: 0.7rem;
+  }
+
+  .acciones {
+    gap: 0.45rem;
+  }
+}

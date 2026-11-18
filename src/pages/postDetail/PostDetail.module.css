@@ -596,3 +596,180 @@
 :global(#appShell[data-theme="dark"]) .bloqueNuevoComentario {
   border-color: #45414f;
 }
+
+
+@media (max-width: 1024px) {
+  .detailContainer {
+    padding: 28px 24px;
+  }
+
+  .tarjetaDetalle,
+  .seccionComentarios {
+    padding: 24px;
+  }
+
+  .imagenEditable {
+    max-width: min(100%, 340px);
+  }
+}
+
+@media (max-width: 600px) {
+  .detailContainer {
+    padding: 16px 10px;
+    gap: 13px;
+  }
+
+  .btnVolver {
+    padding: 8px 13px;
+    font-size: 0.85rem;
+  }
+
+  .tarjetaDetalle,
+  .seccionComentarios {
+    padding: 15px;
+    border-radius: 12px;
+  }
+
+  .tarjetaDetalle {
+    gap: 15px;
+  }
+
+  .cabeceraPost {
+    align-items: center;
+    gap: 10px;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    font-size: 18px;
+  }
+
+  .infoUsuario {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .nickName {
+    font-size: 0.95rem;
+  }
+
+  .accionesPost {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .btnEditar,
+  .btnEliminar {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+
+  .descripcionCompleta {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .formularioEdicion {
+    padding: 14px;
+  }
+
+  .imagenesDetalle {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .imagenEditable {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .imagenEditable img {
+    width: 100%;
+    height: auto;
+    max-height: none;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+
+  .btnEliminarImagen {
+    font-size: 0.72rem;
+    padding: 6px 8px;
+  }
+
+  .tituloSeccion {
+    font-size: 1.15rem;
+  }
+
+  .itemComentario {
+    padding: 12px;
+  }
+
+  .cabeceraComentario {
+    gap: 8px;
+  }
+
+  .avatarComentario {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: 15px;
+  }
+
+  .autorComentario {
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+  }
+
+  .accionesComentario {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-left: 44px;
+  }
+
+  .btnAccionComentario,
+  .btnAccionEliminar {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+
+  .textoComentario {
+    margin-left: 0;
+    font-size: 0.9rem;
+  }
+
+  .edicionComentario {
+    margin-left: 0;
+  }
+
+  .formularioComentario {
+    padding-left: 0;
+  }
+
+  .botonesEdicion,
+  .botonesEdicionComentario {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+
+  .botonesEdicion button,
+  .botonesEdicionComentario button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 380px) {
+  .imagenesDetalle {
+    grid-template-columns: 1fr;
+  }
+
+  .accionesComentario {
+    margin-left: 0;
+  }
+}
