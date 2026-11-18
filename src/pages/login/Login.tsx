@@ -30,6 +30,7 @@ export default function Login() {
   const [errores, setErrores] = useState<FormErrors>({});
   const [generalError, setGeneralError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mostrarPassword, setMostrarPassword] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -46,17 +47,19 @@ export default function Login() {
       ...prev,
       [name]: undefined,
     }));
+
+    setGeneralError("");
   };
 
   const validar = () => {
     const nuevosErrores: FormErrors = {};
 
     if (!formData.nickName.trim()) {
-      nuevosErrores.nickName = "El nombre de usuario es obligatorio";
+      nuevosErrores.nickName = "El nombre de usuario es obligatorio.";
     }
 
-    if (!formData.password.trim()) {
-      nuevosErrores.password = "La contraseña es obligatoria";
+    if (!formData.password) {
+      nuevosErrores.password = "La contraseña es obligatoria.";
     }
 
     return nuevosErrores;
@@ -90,7 +93,7 @@ export default function Login() {
 
       if (!response.ok) {
         throw new Error(
-          data.message || "No se pudo iniciar sesión."
+          data.message || "El usuario o la contraseña son incorrectos."
         );
       }
 
@@ -155,17 +158,65 @@ export default function Login() {
               Contraseña
             </label>
 
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className={styles.formControl}
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Tu contraseña"
-              autoComplete="current-password"
-              disabled={loading}
-            />
+            <div className={styles.passwordWrapper}>
+              <input
+                type={mostrarPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                className={styles.formControl}
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Tu contraseña"
+                autoComplete="current-password"
+                disabled={loading}
+              />
+
+              <button
+                type="button"
+                className={styles.togglePassword}
+                onClick={() => setMostrarPassword(!mostrarPassword)}
+                aria-label={
+                  mostrarPassword
+                    ? "Ocultar contraseña"
+                    : "Mostrar contraseña"
+                }
+                title={
+                  mostrarPassword
+                    ? "Ocultar contraseña"
+                    : "Mostrar contraseña"
+                }
+              >
+                {mostrarPassword ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A11 11 0 0112 5c5.5 0 9 7 9 7a14 14 0 01-3.1 3.8M6.2 6.2C3.9 7.7 2 12 2 12s3.5 7 10 7c1.4 0 2.6-.3 3.7-.8"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
 
             {errores.password && (
               <span className={styles.fieldError}>
@@ -179,7 +230,7 @@ export default function Login() {
             className={styles.btnSubmit}
             disabled={loading}
           >
-            {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+            {loading ? "Iniciando sesión..." : "Iniciar sesión"}
           </button>
         </form>
 

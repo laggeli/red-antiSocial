@@ -41,6 +41,7 @@ export default function Registro() {
   const [errores, setErrores] = useState<FormErrors>({});
   const [generalError, setGeneralError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mostrarPassword, setMostrarPassword] = useState(false);
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ export default function Registro() {
         "El nombre debe tener al menos 3 caracteres.";
     }
 
-    if (!/\S+@\S+\.\S+/.test(formData.email.trim())) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       nuevosErrores.email =
         "Ingresá un correo electrónico válido.";
     }
@@ -171,6 +172,7 @@ export default function Registro() {
               value={formData.nickName}
               onChange={handleChange}
               placeholder="Ej: luna99"
+              autoComplete="username"
               disabled={loading}
             />
 
@@ -194,6 +196,7 @@ export default function Registro() {
               value={formData.nombre}
               onChange={handleChange}
               placeholder="Ej: Luna Pérez"
+              autoComplete="name"
               disabled={loading}
             />
 
@@ -217,6 +220,7 @@ export default function Registro() {
               value={formData.email}
               onChange={handleChange}
               placeholder="ejemplo@unahur.edu.ar"
+              autoComplete="email"
               disabled={loading}
             />
 
@@ -232,17 +236,65 @@ export default function Registro() {
               Contraseña
             </label>
 
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className={styles.formControl}
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Mínimo 5 caracteres"
-              autoComplete="new-password"
-              disabled={loading}
-            />
+            <div className={styles.passwordWrapper}>
+              <input
+                type={mostrarPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                className={styles.formControl}
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Mínimo 5 caracteres"
+                autoComplete="new-password"
+                disabled={loading}
+              />
+
+              <button
+                type="button"
+                className={styles.togglePassword}
+                onClick={() => setMostrarPassword(!mostrarPassword)}
+                aria-label={
+                  mostrarPassword
+                    ? "Ocultar contraseña"
+                    : "Mostrar contraseña"
+                }
+                title={
+                  mostrarPassword
+                    ? "Ocultar contraseña"
+                    : "Mostrar contraseña"
+                }
+              >
+                {mostrarPassword ? (
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M3 3l18 18M10.6 10.6a2 2 0 002.8 2.8M9.9 5.2A11 11 0 0112 5c5.5 0 9 7 9 7a14 14 0 01-3.1 3.8M6.2 6.2C3.9 7.7 2 12 2 12s3.5 7 10 7c1.4 0 2.6-.3 3.7-.8"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path
+                      d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                    />
+                    <circle
+                      cx="12"
+                      cy="12"
+                      r="3"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
 
             {errores.password && (
               <span className={styles.invalidFeedback}>

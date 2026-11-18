@@ -153,6 +153,60 @@
   text-decoration: underline;
 }
 
+
+.passwordWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.passwordWrapper .formControl {
+  padding-right: 48px;
+}
+
+.togglePassword {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #77678d;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.togglePassword:hover {
+  background-color: #eee6f7;
+  color: #5b3a82;
+}
+
+.togglePassword svg {
+  width: 21px;
+  height: 21px;
+}
+
+.togglePassword:focus-visible {
+  outline: 2px solid #7148a1;
+  outline-offset: 2px;
+}
+
+:global(#appShell[data-theme="dark"]) .togglePassword {
+  color: #c6a5ed;
+}
+
+:global(#appShell[data-theme="dark"]) .togglePassword:hover {
+  background-color: #49365f;
+  color: #ffffff;
+}
+
+
 :global(#appShell[data-theme="dark"]) .registroContainer {
   background-color: #1c1b22;
 }

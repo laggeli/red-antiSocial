@@ -1,10 +1,19 @@
 
 .explore {
-  min-height: 100vh;
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
   padding: 35px 45px;
   background-color: #f5f3f8;
   color: #292333;
   font-family: Arial, sans-serif;
+  overflow-x: clip;
+}
+
+.explore * {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 .encabezado {
@@ -20,26 +29,35 @@
 .encabezado p {
   font-size: 17px;
   color: #777080;
+  line-height: 1.5;
 }
 
 .busqueda {
+  display: block;
   width: 100%;
   max-width: 600px;
+  min-width: 0;
   padding: 14px 18px;
   border: 1px solid #d8c8eb;
   border-radius: 10px;
   font-size: 16px;
   margin-bottom: 30px;
   outline-color: #62458a;
+  box-sizing: border-box;
 }
 
 .grilla {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  width: 100%;
+  min-width: 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 25px;
+  align-items: start;
 }
 
 .tarjeta {
+  width: 100%;
+  min-width: 0;
   background: white;
   border-radius: 14px;
   overflow: hidden;
@@ -47,18 +65,23 @@
 }
 
 .imagen {
+  display: block;
   width: 100%;
   height: 230px;
   object-fit: cover;
 }
 
 .contenido {
+  width: 100%;
+  min-width: 0;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 .contenido p {
   font-size: 17px;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .contenido span {
@@ -85,18 +108,14 @@
   font-weight: bold;
   text-decoration: none;
   margin-top: 10px;
+  overflow-wrap: anywhere;
 }
 
 .contenido a:hover {
   text-decoration: underline;
 }
 
-@media (max-width: 600px) {
-  .explore {
-    padding: 25px 18px;
-  }
-}
-
+/* MODO OSCURO */
 :global(#appShell[data-theme="dark"]) .explore {
   background-color: #1c1b22;
   color: #eeeeF5;
@@ -142,14 +161,14 @@
   color: #c6a5ed;
 }
 
-
+/* TABLET */
 @media (max-width: 1024px) {
   .explore {
-    padding: 28px 24px;
+    padding: 28px 22px;
   }
 
   .grilla {
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
     gap: 18px;
   }
 
@@ -158,14 +177,15 @@
   }
 }
 
+/* CELULARES */
 @media (max-width: 600px) {
   .explore {
-    min-height: auto;
+    width: 100%;
     padding: 20px 12px;
   }
 
   .encabezado {
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
 
   .encabezado h1 {
@@ -173,31 +193,89 @@
   }
 
   .encabezado p {
-    font-size: 0.92rem;
-    line-height: 1.4;
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
 
   .busqueda {
     width: 100%;
-    max-width: none;
-    padding: 12px 13px;
-    margin-bottom: 20px;
-    font-size: 0.92rem;
+    max-width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    font-size: 16px;
+  }
+
+  /* Una publicación por fila */
+  .grilla {
+    display: grid;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 15px;
+  }
+
+  .tarjeta {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .imagen {
+    width: 100%;
+    height: auto;
+    max-height: 360px;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+  }
+
+  .contenido {
+    padding: 14px;
+  }
+
+  .contenido p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .etiquetas {
+    gap: 6px;
+    margin: 10px 0;
+  }
+
+  .etiquetas small {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+
+  .contenido a {
+    font-size: 0.88rem;
+  }
+}
+
+/* IPHONE SE Y CELULARES ANGOSTOS */
+@media (max-width: 380px) {
+  .explore {
+    padding: 16px 9px;
+  }
+
+  .encabezado h1 {
+    font-size: 1.35rem;
+  }
+
+  .encabezado p {
+    font-size: 0.85rem;
   }
 
   .grilla {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
 
   .tarjeta {
-    min-width: 0;
-    border-radius: 11px;
+    border-radius: 10px;
   }
 
   .imagen {
-    height: auto;
-    aspect-ratio: 1 / 1;
+    max-height: 300px;
+    aspect-ratio: 4 / 3;
   }
 
   .contenido {
@@ -205,31 +283,10 @@
   }
 
   .contenido p {
-    font-size: 0.88rem;
-    overflow-wrap: anywhere;
-  }
-
-  .etiquetas {
-    gap: 5px;
-    margin: 10px 0;
-  }
-
-  .etiquetas small {
-    font-size: 0.68rem;
-    padding: 4px 7px;
+    font-size: 0.9rem;
   }
 
   .contenido a {
     font-size: 0.82rem;
-  }
-}
-
-@media (max-width: 380px) {
-  .grilla {
-    grid-template-columns: 1fr;
-  }
-
-  .contenido {
-    padding: 14px;
   }
 }

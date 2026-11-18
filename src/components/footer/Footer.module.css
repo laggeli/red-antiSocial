@@ -1,15 +1,13 @@
 .footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
+  bottom: auto;
+  left: auto;
+  right: auto;
   width: 100%;
-  z-index: 9999;
+  z-index: 10;
   background-color: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  transform: translateZ(0); /* Fuerza el repintado correcto al redimensionar en Chrome */
-  will-change: transform;
   border-top: 1px solid #ede9f5;
   padding: 0.85rem 2.5rem;
   box-sizing: border-box;
@@ -105,98 +103,4 @@
 
 :global(#appShell[data-theme="dark"]) .separador {
   color: #59466f;
-}
-
-@media (max-width: 52em) {
-  .footer {
-    display: block !important;
-    visibility: visible !important;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 9999;
-    padding: 0.75rem 1.25rem;
-  }
-
-  .contenido {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .textoInstitucional,
-  .badge {
-    display: none;
-  }
-
-  .texto,
-  .link,
-  .btnSubir {
-    font-size: 0.82rem;
-    white-space: nowrap;
-  }
-}
-
-
-@media (max-width: 600px) {
-  .footer {
-    position: relative;
-    bottom: auto;
-    left: auto;
-    right: auto;
-    z-index: 10;
-    width: 100%;
-    padding: 0.85rem 0.75rem;
-    transform: none;
-    will-change: auto;
-  }
-
-  .contenido {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 0.6rem;
-    text-align: center;
-  }
-
-  .texto {
-    font-size: 0.76rem;
-    white-space: normal;
-  }
-
-  .textoInstitucional,
-  .badge {
-    display: none;
-  }
-
-  .acciones {
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.6rem;
-  }
-
-  .link,
-  .btnSubir {
-    font-size: 0.78rem;
-  }
-}
-
-@media (max-width: 380px) {
-  .footer {
-    padding: 0.75rem 0.5rem;
-  }
-
-  .texto {
-    font-size: 0.7rem;
-  }
-
-  .acciones {
-    gap: 0.45rem;
-  }
 }
