@@ -13,7 +13,7 @@ import { useTheme } from "../../context/ThemeContext";
 
 export default function Profile() {
   const { nickName: nickNameRuta } = useParams<{ nickName: string }>();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
   const navigate = useNavigate();
 
   const [usuario, setUsuario] = useState<User | null>(null);
@@ -25,8 +25,10 @@ export default function Profile() {
 
   const [cargando, setCargando] = useState(true);
   const [cargandoSeguimiento, setCargandoSeguimiento] = useState(false);
+  const [eliminandoPerfil, setEliminandoPerfil] = useState(false);
   const [editando, setEditando] = useState(false);
   const [error, setError] = useState("");
+  const [errorEliminarPerfil, setErrorEliminarPerfil] = useState("");
 
   const { theme } = useTheme();
 
@@ -114,8 +116,12 @@ export default function Profile() {
         setCantidadSeguidos(Array.isArray(seguidos) ? seguidos.length : 0);
 
         if (user && datosUsuario._id !== user._id) {
-          const sigoAEstaPersona = seguidores.some( (persona) => persona._id === user._id ); // siguiendo a la persona
-          const estaPersonaMeSigue = seguidos.some( (persona) => persona._id === user._id ); // la persona me sigue
+          const sigoAEstaPersona = seguidores.some(
+            (persona) => persona._id === user._id
+          );
+          const estaPersonaMeSigue = seguidos.some(
+            (persona) => persona._id === user._id
+          );
 
           setSiguiendo(sigoAEstaPersona);
           setTeSigue(estaPersonaMeSigue);
@@ -187,6 +193,49 @@ export default function Profile() {
     }
   };
 
+  const handleEliminarPerfil = async () => {
+    if (!usuario || !esMiPerfil || eliminandoPerfil) return;
+
+    const confirmar = window.confirm(
+      `¿Estás seguro/a de que querés eliminar tu cuenta (@${usuario.nickName})?\n\n` +
+      "Se eliminarán también tus publicaciones, comentarios y relaciones de seguidores.\n\n" +
+      "Esta acción no se puede deshacer."
+    );
+
+    if (!confirmar) return;
+
+    try {
+      setEliminandoPerfil(true);
+      setErrorEliminarPerfil("");
+
+      const respuesta = await fetch(
+        `${API_URL}/users/${encodeURIComponent(usuario.nickName)}`,
+        { method: "DELETE" }
+      );
+
+      const datos = await respuesta.json().catch(() => ({}));
+
+      if (!respuesta.ok) {
+        throw new Error(
+          datos.error ||
+          datos.message ||
+          "No se pudo eliminar tu cuenta."
+        );
+      }
+
+      logout();
+      navigate("/login", { replace: true });
+    } catch (err) {
+      setErrorEliminarPerfil(
+        err instanceof Error
+          ? err.message
+          : "Ocurrió un error al eliminar la cuenta."
+      );
+    } finally {
+      setEliminandoPerfil(false);
+    }
+  };
+
   if (cargando) {
     return <p className="mensajePerfil">Cargando perfil...</p>;
   }
@@ -240,6 +289,32 @@ export default function Profile() {
           ))
         )}
       </section>
+
+      {esMiPerfil && (
+        <section className="zonaEliminarCuenta">
+          <div className="textoEliminarCuenta">
+            <h3>Eliminar cuenta</h3>
+            <p>
+              Si eliminás tu cuenta, tus publicaciones, comentarios y
+              relaciones de seguidores también serán eliminados.
+              Esta acción es permanente.
+            </p>
+          </div>
+
+          {errorEliminarPerfil && (
+            <p className="errorEliminarCuenta">{errorEliminarPerfil}</p>
+          )}
+
+          <button
+            type="button"
+            className="botonEliminarCuenta"
+            onClick={handleEliminarPerfil}
+            disabled={eliminandoPerfil}
+          >
+            {eliminandoPerfil ? "Eliminando cuenta..." : "Eliminar mi cuenta"}
+          </button>
+        </section>
+      )}
 
       {editando && esMiPerfil && (
         <EditProfile

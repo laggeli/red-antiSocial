@@ -99,7 +99,7 @@ http://localhost:5173
 
 La aplicación utiliza `fetch` para realizar peticiones HTTP a la API.
 
-La dirección base del backend es:
+La dirección por default del backend es:
 
 ```ts
 const API_URL = "http://localhost:3000";
@@ -140,7 +140,8 @@ La sección de perfil permite visualizar la información del usuario que inició
 
 Entre los datos y elementos mostrados se encuentran:
 
-- Nickname y correo electrónico.
+- NickName y nombre.
+- Cantidad de seguidores y seguidos.
 - Cantidad de publicaciones.
 - Descripción de cada publicación.
 - Imágenes asociadas.
