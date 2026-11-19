@@ -6,9 +6,10 @@ import { obtenerUrlImagen } from "../config/api";
 
 interface PostProfileProps {
   publicacion: PostProfile;
+  perfilNickName?: string;
 }
 
-function Posteo({ publicacion }: PostProfileProps) {
+function Posteo({ publicacion, perfilNickName }: PostProfileProps) {
   const imagenes = publicacion.imagenes || [];
   const etiquetas = publicacion.tagIds || [];
   const cantidadComentarios = publicacion.cantidadComentarios;
@@ -60,7 +61,7 @@ function Posteo({ publicacion }: PostProfileProps) {
           variant="primario"
           icon={<Eye size={16} />}
           to={`/post/${publicacion._id}`}
-          state={{ from: "/profile" }}
+          state={{ from: "/profile", perfilNickName }}
         >
           Ver más
         </ButtonIcon>

@@ -98,7 +98,12 @@ export default function Explore() {
                   ))}
                 </div>
 
-                <Link to={`/post/${post._id}`}> Ver publicación </Link>
+                <Link 
+                  to={`/post/${post._id}`} 
+                  state={{ from: busqueda ? `/explore?tag=${encodeURIComponent(busqueda)}` : "/explore" }}
+                >
+                  Ver publicación
+                </Link>
               </div>
             </article>
           ))

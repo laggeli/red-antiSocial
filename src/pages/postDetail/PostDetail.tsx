@@ -12,15 +12,45 @@ import ButtonIcon from "../../components/botonGenerico/ButtonIcon";
 import styles from "./PostDetail.module.css";
 import { API_URL, obtenerUrlImagen } from "../../config/api";
 
+interface NavigationState {
+  from?: string;
+  perfilNickName?: string;
+}
+
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const volverA =
-    (location.state as { from?: string } | null)?.from || "/";
+  const navState = location.state as NavigationState | null;
+  const origen = navState?.from || "/";
+  const perfilNickName = navState?.perfilNickName;
 
+  const nickOrigenLimpio = perfilNickName?.replace(/^@/, "") || "";
+  const nickUsuarioLogueado = user?.nickName?.replace(/^@/, "") || "";
+
+  const esPerfilPropio =
+    !!nickOrigenLimpio &&
+    !!nickUsuarioLogueado &&
+    nickOrigenLimpio === nickUsuarioLogueado;
+
+  const volverA =
+    origen === "/profile"
+      ? esPerfilPropio || !nickOrigenLimpio
+        ? "/profile"
+        : `/profile/${encodeURIComponent(nickOrigenLimpio)}`
+      : origen;
+
+  const textoVolver =
+    origen === "/profile"
+      ? esPerfilPropio || !nickOrigenLimpio
+        ? "Volver a mi perfil"
+        : `Volver al perfil de @${nickOrigenLimpio}`
+      : origen.startsWith("/explore")
+        ? "Volver a explorar"
+        : "Volver al inicio";
+      
   const [post, setPost] = useState<PostDetailModel | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
@@ -212,7 +242,7 @@ export default function PostDetail() {
       setErrorEdicionPost("");
 
       const imagenesValidas = nuevasImagenesUrls.filter(
-      (url) => !urlsInvalidas.includes(url)
+        (url) => !urlsInvalidas.includes(url)
       );
 
       const formData = new FormData();
@@ -359,7 +389,7 @@ export default function PostDetail() {
         to={volverA}
         className={styles.btnVolverWrapper}
       >
-        {volverA === "/profile" ? "Volver al perfil" : "Volver al inicio"}
+        {textoVolver}
       </ButtonIcon>
 
       <article className={styles.tarjetaDetalle}>
@@ -442,28 +472,28 @@ export default function PostDetail() {
             )}
 
             <div className={styles.botonesEdicion}>
-                <Button
-                  variant="primario"
-                  fullMobile
-                  onClick={handleGuardarPost}
-                  disabled={guardandoPost}
-                >
-                  {guardandoPost ? "Guardando..." : "Guardar cambios"}
-                </Button>
+              <Button
+                variant="primario"
+                fullMobile
+                onClick={handleGuardarPost}
+                disabled={guardandoPost}
+              >
+                {guardandoPost ? "Guardando..." : "Guardar cambios"}
+              </Button>
 
-                <Button
-                  variant="cancelar"
-                  fullMobile
-                  onClick={() => {
-                    setEditandoPost(false);
-                    setNuevasImagenesUrls([]);
-                    setUrlsInvalidas([]);
-                    setNuevosArchivos([]);
-                    setErrorEdicionPost("");
-                  }}
-                >
-                  Cancelar
-                </Button>
+              <Button
+                variant="cancelar"
+                fullMobile
+                onClick={() => {
+                  setEditandoPost(false);
+                  setNuevasImagenesUrls([]);
+                  setUrlsInvalidas([]);
+                  setNuevosArchivos([]);
+                  setErrorEdicionPost("");
+                }}
+              >
+                Cancelar
+              </Button>
             </div>
           </div>
         ) : (
@@ -504,10 +534,10 @@ export default function PostDetail() {
         {etiquetas.length > 0 && (
           <div className={styles.etiquetasPublicacion}>
             {etiquetas.map((tag) => (
-              <Link 
-                key={tag._id} 
+              <Link
+                key={tag._id}
                 to={`/explore?tag=${encodeURIComponent(tag.nombre)}`}
-                style={{ textDecoration: 'none', color: 'inherit' }}
+                style={{ textDecoration: "none", color: "inherit" }}
               >
                 <span>#{tag.nombre}</span>
               </Link>
