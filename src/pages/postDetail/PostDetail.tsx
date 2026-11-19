@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowLeft, Pencil, Trash3, XLg } from "react-bootstrap-icons";
 import { useAuth } from "../../context/AuthContext";
 import type { PostDetailModel } from "../../types/PostDetailTypes";
 import type { Comment } from "../../types/PerfilTypes";
 import { CommentForm } from "../../components/postDetails/CommentForm";
 import { ImageModal } from "../../components/postDetails/ImageModal";
+import Button from "../../components/botonGenerico/Button";
+import ButtonIcon from "../../components/botonGenerico/ButtonIcon";
 import styles from "./PostDetail.module.css";
 import { API_URL, obtenerUrlImagen } from "../../config/api";
 
@@ -313,9 +316,14 @@ export default function PostDetail() {
           {error || "Publicación no encontrada."}
         </p>
 
-        <Link to={volverA} className={styles.btnVolver}>
-          ← Volver
-        </Link>
+        <ButtonIcon
+          variant="primario"
+          icon={<ArrowLeft size={16} />}
+          to={volverA}
+          className={styles.btnVolverWrapper}
+        >
+          Volver
+        </ButtonIcon>
       </main>
     );
   }
@@ -331,9 +339,14 @@ export default function PostDetail() {
 
   return (
     <main className={styles.detailContainer}>
-      <Link to={volverA} className={styles.btnVolver}>
-        ← {volverA === "/profile" ? "Volver al perfil" : "Volver al inicio"}
-      </Link>
+      <ButtonIcon
+        variant="primario"
+        icon={<ArrowLeft size={16} />}
+        to={volverA}
+        className={styles.btnVolverWrapper}
+      >
+        {volverA === "/profile" ? "Volver al perfil" : "Volver al inicio"}
+      </ButtonIcon>
 
       <article className={styles.tarjetaDetalle}>
         <div className={styles.cabeceraPost}>
@@ -360,26 +373,26 @@ export default function PostDetail() {
 
           {esMiPublicacion && (
             <div className={styles.accionesPost}>
-              <button
-                type="button"
-                className={styles.btnEditar}
+              <ButtonIcon
+                variant="secundario"
+                icon={<Pencil size={16} />}
                 onClick={() => {
                   setDescripcionEditada(post.descripcion);
                   setErrorEdicionPost("");
                   setEditandoPost(true);
                 }}
-              >
-                ✎ Editar
-              </button>
+                title="Editar publicación"
+                aria-label="Editar publicación"
+              />
 
-              <button
-                type="button"
-                className={styles.btnEliminar}
+              <ButtonIcon
+                variant="peligro"
+                icon={<Trash3 size={16} />}
                 onClick={handleEliminarPost}
                 disabled={eliminando}
-              >
-                {eliminando ? "Eliminando..." : "Eliminar"}
-              </button>
+                title={eliminando ? "Eliminando..." : "Eliminar publicación"}
+                aria-label="Eliminar publicación"
+              />
             </div>
           )}
         </div>
@@ -414,26 +427,26 @@ export default function PostDetail() {
             )}
 
             <div className={styles.botonesEdicion}>
-              <button
-                type="button"
-                className={styles.btnGuardar}
-                onClick={handleGuardarPost}
-                disabled={guardandoPost}
-              >
-                {guardandoPost ? "Guardando..." : "Guardar cambios"}
-              </button>
+                <Button
+                  variant="primario"
+                  fullMobile
+                  onClick={handleGuardarPost}
+                  disabled={guardandoPost}
+                >
+                  {guardandoPost ? "Guardando..." : "Guardar cambios"}
+                </Button>
 
-              <button
-                type="button"
-                className={styles.btnCancelar}
-                onClick={() => {
-                  setEditandoPost(false);
-                  setNuevaImagenUrl("");
-                  setErrorEdicionPost("");
-                }}
-              >
-                Cancelar
-              </button>
+                <Button
+                  variant="cancelar"
+                  fullMobile
+                  onClick={() => {
+                    setEditandoPost(false);
+                    setNuevaImagenUrl("");
+                    setErrorEdicionPost("");
+                  }}
+                >
+                  Cancelar
+                </Button>
             </div>
           </div>
         ) : (
@@ -457,13 +470,13 @@ export default function PostDetail() {
                   />
 
                   {esMiPublicacion && editandoPost && img._id && (
-                    <button
-                      type="button"
-                      className={styles.btnEliminarImagen}
+                    <ButtonIcon
+                      icon={<XLg size={14} />}
+                      className={styles.btnEliminarImagenFlotante}
                       onClick={() => handleEliminarImagen(img._id!)}
-                    >
-                      Eliminar imagen
-                    </button>
+                      title="Eliminar imagen"
+                      aria-label="Eliminar imagen"
+                    />
                   )}
                 </div>
               );
@@ -535,25 +548,27 @@ export default function PostDetail() {
 
                     {esMiComentario && (
                       <div className={styles.accionesComentario}>
-                        <button
-                          type="button"
-                          className={styles.btnAccionComentario}
+                        <ButtonIcon
+                          variant="secundario"
+                          icon={<Pencil size={14} />}
+                          className={styles.btnComentarioIcono}
                           onClick={() => {
                             setComentarioEditando(com._id);
                             setTextoEditado(com.contenido);
                             setErrorComentario("");
                           }}
-                        >
-                          Editar
-                        </button>
+                          title="Editar comentario"
+                          aria-label="Editar comentario"
+                        />
 
-                        <button
-                          type="button"
-                          className={styles.btnAccionEliminar}
+                        <ButtonIcon
+                          variant="peligro"
+                          icon={<Trash3 size={14} />}
+                          className={styles.btnComentarioIcono}
                           onClick={() => handleEliminarComentario(com._id)}
-                        >
-                          Eliminar
-                        </button>
+                          title="Eliminar comentario"
+                          aria-label="Eliminar comentario"
+                        />
                       </div>
                     )}
                   </div>
@@ -567,17 +582,15 @@ export default function PostDetail() {
                       />
 
                       <div className={styles.botonesEdicionComentario}>
-                        <button
-                          type="button"
-                          className={styles.btnGuardar}
+                        <Button
+                          variant="primario"
                           onClick={() => handleEditarComentario(com._id)}
                         >
                           Guardar
-                        </button>
+                        </Button>
 
-                        <button
-                          type="button"
-                          className={styles.btnCancelar}
+                        <Button
+                          variant="cancelar"
                           onClick={() => {
                             setComentarioEditando(null);
                             setTextoEditado("");
@@ -585,7 +598,7 @@ export default function PostDetail() {
                           }}
                         >
                           Cancelar
-                        </button>
+                        </Button>
                       </div>
                     </div>
                   ) : (
