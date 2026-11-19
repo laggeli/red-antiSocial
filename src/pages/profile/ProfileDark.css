@@ -229,7 +229,7 @@
 
 .perfil-oscuro .zonaEliminarCuenta {
   margin-top: 40px;
-  padding: 24px;
+  padding: 15px;
   border: 1px solid #684044;
   border-radius: 12px;
   background-color: #292329;
@@ -242,32 +242,9 @@
 }
 
 .perfil-oscuro .textoEliminarCuenta p {
-  margin: 0;
+  margin: 0 0 16px;
   color: #b5b0c0;
   line-height: 1.5;
-}
-
-.perfil-oscuro .botonEliminarCuenta {
-  margin-top: 18px;
-  padding: 10px 18px;
-  border: 1px solid #d36a6a;
-  border-radius: 8px;
-  background: transparent;
-  color: #f08b8b;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.perfil-oscuro .botonEliminarCuenta:hover {
-  background: #a52e2e;
-  color: white;
-}
-
-.perfil-oscuro .botonEliminarCuenta:disabled {
-  opacity: 0.6;
-  cursor: wait;
 }
 
 .perfil-oscuro .errorEliminarCuenta {
@@ -281,10 +258,6 @@
     padding: 18px 14px;
   }
 
-  .perfil-claro .botonEliminarCuenta,
-  .perfil-oscuro .botonEliminarCuenta {
-    width: 100%;
-  }
 }
 
 /* Adaptación a pantallas pequeñas */
