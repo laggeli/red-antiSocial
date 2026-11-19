@@ -7,7 +7,7 @@
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  z-index: 1000;
+  z-index: 1100;
   animation: fadeIn 0.18s ease-out;
 }
 
