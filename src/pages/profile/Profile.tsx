@@ -6,6 +6,9 @@ import type { User, Post, PostProfile } from "../../types/PerfilTypes";
 import DataUser from "../../components/DataUser";
 import Posteo from "../../components/Posteo";
 import EditProfile from "../../components/editProfile/EditProfile";
+import { Trash3 } from "react-bootstrap-icons";
+import ButtonIcon from "../../components/botonGenerico/ButtonIcon";
+import ConfirmModal from "../../components/confirmModal/ConfirmModal";
 import { API_URL } from "../../config/api";
 import "./ProfileLight.css";
 import "./ProfileDark.css";
@@ -26,6 +29,7 @@ export default function Profile() {
   const [cargando, setCargando] = useState(true);
   const [cargandoSeguimiento, setCargandoSeguimiento] = useState(false);
   const [eliminandoPerfil, setEliminandoPerfil] = useState(false);
+  const [confirmarEliminarCuenta, setConfirmarEliminarCuenta] = useState(false);
   const [editando, setEditando] = useState(false);
   const [error, setError] = useState("");
   const [errorEliminarPerfil, setErrorEliminarPerfil] = useState("");
@@ -196,14 +200,6 @@ export default function Profile() {
   const handleEliminarPerfil = async () => {
     if (!usuario || !esMiPerfil || eliminandoPerfil) return;
 
-    const confirmar = window.confirm(
-      `¿Estás seguro/a de que querés eliminar tu cuenta (@${usuario.nickName})?\n\n` +
-      "Se eliminarán también tus publicaciones, comentarios y relaciones de seguidores.\n\n" +
-      "Esta acción no se puede deshacer."
-    );
-
-    if (!confirmar) return;
-
     try {
       setEliminandoPerfil(true);
       setErrorEliminarPerfil("");
@@ -223,9 +219,11 @@ export default function Profile() {
         );
       }
 
+      setConfirmarEliminarCuenta(false);
       logout();
       navigate("/login", { replace: true });
     } catch (err) {
+      setConfirmarEliminarCuenta(false);
       setErrorEliminarPerfil(
         err instanceof Error
           ? err.message
@@ -305,16 +303,32 @@ export default function Profile() {
             <p className="errorEliminarCuenta">{errorEliminarPerfil}</p>
           )}
 
-          <button
-            type="button"
-            className="botonEliminarCuenta"
-            onClick={handleEliminarPerfil}
+          <ButtonIcon
+            variant="peligro"
+            icon={<Trash3 size={16} />}
+            fullMobile
+            onClick={() => setConfirmarEliminarCuenta(true)}
             disabled={eliminandoPerfil}
           >
             {eliminandoPerfil ? "Eliminando cuenta..." : "Eliminar mi cuenta"}
-          </button>
+          </ButtonIcon>
+
         </section>
+
       )}
+
+      <ConfirmModal
+          abierto={confirmarEliminarCuenta}
+          titulo="¿Eliminar tu cuenta?"
+          mensaje={`Vas a eliminar de forma permanente la cuenta @${usuario.nickName}, junto con todas tus publicaciones, comentarios y seguidores. Esta acción no se puede deshacer.`}
+          textoConfirmar="Sí, eliminar mi cuenta"
+          textoCargando="Eliminando cuenta..."
+          textoCancelar="Cancelar"
+          varianteConfirmar="peligro"
+          cargando={eliminandoPerfil}
+          onCancelar={() => setConfirmarEliminarCuenta(false)}
+          onConfirmar={handleEliminarPerfil}
+      />
 
       {editando && esMiPerfil && (
         <EditProfile
