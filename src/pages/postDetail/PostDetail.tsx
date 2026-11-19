@@ -488,8 +488,8 @@ export default function PostDetail() {
 
                   {esMiPublicacion && editandoPost && img._id && (
                     <ButtonIcon
+                      variant="flotante"
                       icon={<XLg size={14} />}
-                      className={styles.btnEliminarImagenFlotante}
                       onClick={() => handleEliminarImagen(img._id!)}
                       title="Eliminar imagen"
                       aria-label="Eliminar imagen"

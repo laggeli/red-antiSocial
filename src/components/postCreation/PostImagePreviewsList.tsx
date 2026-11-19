@@ -1,3 +1,5 @@
+import { XLg } from "react-bootstrap-icons";
+import ButtonIcon from "../botonGenerico/ButtonIcon";
 import styles from "./Posts.module.css";
 import errorImageIcon from "../../img/image-notFound.jpg";
 import type { PostImagePreviewsListProps } from "../../types/PostTypes";
@@ -24,14 +26,14 @@ export const PostImagePreviewsList = ({
             onError={() => onImageError(url)}
           />
 
-          <button
-            type="button"
-            className={styles.btnQuitarImg}
+          <ButtonIcon
+            variant="flotante"
+            icon={<XLg size={13} />}
             onClick={() => onEliminarUrl(index)}
+            title="Quitar imagen"
             aria-label="Eliminar imagen"
-          >
-            ×
-          </button>
+          />
+
         </div>
       ))}
 
@@ -43,14 +45,14 @@ export const PostImagePreviewsList = ({
             className={styles.previewImg}
           />
 
-          <button
-            type="button"
-            className={styles.btnQuitarImg}
+          <ButtonIcon
+            variant="flotante"
+            icon={<XLg size={13} />}
             onClick={() => onEliminarArchivo(index)}
+            title="Quitar imagen"
             aria-label="Eliminar imagen"
-          >
-            ×
-          </button>
+          />
+
         </div>
       ))}
     </div>

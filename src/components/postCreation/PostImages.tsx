@@ -23,7 +23,9 @@ export const PostImages = ({
   const [urlsRotas, setUrlsRotas] = useState<Record<string, boolean>>({});
   const [previews, setPreviews] = useState<string[]>([]);
 
-  const cantidadImagenes = imagenesUrls.length + archivos.length;
+  const cantidadUrlsRotas = Object.values(urlsRotas).filter(Boolean).length;
+  const cantidadUrlsValidas = Math.max(0, imagenesUrls.length - cantidadUrlsRotas);
+  const cantidadImagenes = cantidadUrlsValidas + archivos.length;
   const disponibles = Math.max(0, maxImagenes - cantidadImagenes);
 
   useEffect(() => {
@@ -111,6 +113,11 @@ export const PostImages = ({
     setUrlsRotas((prev) => {
       const copia = { ...prev };
       delete copia[urlEliminada];
+
+      onUrlsInvalidasChange?.(
+        Object.keys(copia).filter((item) => copia[item])
+      );
+
       return copia;
     });
 

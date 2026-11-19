@@ -116,6 +116,31 @@
   border-radius: 50%;
 }
 
+/* Variante 5: Botón circular flotante sobre imágenes */
+.btnFlotante {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(28, 27, 34, 0.72);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+
+.btnFlotante:hover:not(:disabled) {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: #ffffff;
+  transform: translateY(-2px);
+  filter: none;
+}
+
 /* Responsive para pantallas chicas */
 @media (max-width: 51.25em) {
   .btnFullMobile {

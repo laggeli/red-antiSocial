@@ -1,16 +1,17 @@
-import { Button } from "../botonGenerico/Button";
+import { Folder2Open } from "react-bootstrap-icons";
+import { ButtonIcon } from "../../components/botonGenerico/ButtonIcon";
 import type { AddImageButtonProps } from "../../types/PostTypes";
 
 export const AddSelectImageButton = ({ onClick, disabled }: AddImageButtonProps) => {
   return (
-    <Button
-      type="button"
-      variant="secundario"
-      onClick={onClick}
+    <ButtonIcon 
+      variant="secundario" 
+      icon={<Folder2Open size={16} />} 
+      onClick={onClick} 
       disabled={disabled}
     >
-      <span>📁</span> Seleccionar desde la computadora
-    </Button>
+      Seleccionar desde la computadora
+    </ButtonIcon>
   );
 };
 

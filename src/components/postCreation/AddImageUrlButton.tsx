@@ -1,4 +1,5 @@
-import { Button } from "../../components/botonGenerico/Button";
+import { PlusLg } from "react-bootstrap-icons";
+import { ButtonIcon } from "../../components/botonGenerico/ButtonIcon";
 
 interface AddImageUrlButtonProps {
   onClick: () => void;
@@ -7,9 +8,13 @@ interface AddImageUrlButtonProps {
 
 export const AddImageUrlButton = ({ onClick, disabled }: AddImageUrlButtonProps) => {
   return (
-    <Button variant="secundario" onClick={onClick} disabled={disabled}>
-      + Agregar URL
-    </Button>
+    <ButtonIcon 
+      variant="secundario" 
+      icon={<PlusLg size={15} />} 
+      onClick={onClick} 
+      disabled={disabled}>
+        Agregar URL
+    </ButtonIcon>
   );
 };
 

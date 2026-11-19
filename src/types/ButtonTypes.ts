@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-export type ButtonVariant = "primario" | "secundario" | "cancelar" | "peligro";
+export type ButtonVariant = "primario" | "secundario" | "cancelar" | "peligro" | "flotante";
 
 export type IconPosition = "left" | "right";
 

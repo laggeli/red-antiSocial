@@ -17,6 +17,7 @@ export const Button = ({
     secundario: stylesBtn.btnSecundario,
     cancelar: stylesBtn.btnCancelar,
     peligro: stylesBtn.btnPeligro,
+    flotante: stylesBtn.btnFlotante,
   }[variant];
 
   const combinedClasses = [
