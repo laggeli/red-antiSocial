@@ -584,6 +584,14 @@
   background-color: #33283f;
 }
 
+:global(#appShell[data-theme="dark"]) .dropzoneTexto {
+  color: #eeeef5;
+}
+
+:global(#appShell[data-theme="dark"]) .textoAyudaImagenes {
+  color: #b5b0c0;
+}
+
 
 @media (max-width: 1024px) {
   .container {
