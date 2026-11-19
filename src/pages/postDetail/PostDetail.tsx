@@ -41,6 +41,7 @@ export default function PostDetail() {
   const [nuevasImagenesUrls, setNuevasImagenesUrls] = useState<string[]>([]);
   const [urlsInvalidas, setUrlsInvalidas] = useState<string[]>([]);
   const [nuevosArchivos, setNuevosArchivos] = useState<File[]>([]);
+  const [imagenesAEliminar, setImagenesAEliminar] = useState<string[]>([]);
   const [guardandoPost, setGuardandoPost] = useState(false);
   const [errorEdicionPost, setErrorEdicionPost] = useState("");
 
@@ -211,6 +212,26 @@ export default function PostDetail() {
       setGuardandoPost(true);
       setErrorEdicionPost("");
 
+      // Elimina en el backend las imágenes marcadas con la X durante la edición
+      for (const imagenId of imagenesAEliminar) {
+        const resEliminarImg = await fetch(`${API_URL}/posts/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ eliminarImagenId: imagenId }),
+        });
+
+        const datosEliminarImg = await resEliminarImg.json().catch(() => ({}));
+
+        if (!resEliminarImg.ok) {
+          throw new Error(
+            datosEliminarImg.error ||
+              datosEliminarImg.message ||
+              "No se pudieron eliminar algunas imágenes."
+          );
+        }
+      }
+
+      // Guarda la descripción y las nuevas imagenes agregadas
       const imagenesValidas = nuevasImagenesUrls.filter(
       (url) => !urlsInvalidas.includes(url)
       );
@@ -243,6 +264,7 @@ export default function PostDetail() {
       setNuevasImagenesUrls([]);
       setUrlsInvalidas([]);
       setNuevosArchivos([]);
+      setImagenesAEliminar([]);
       setEditandoPost(false);
     } catch (err) {
       setErrorEdicionPost(
@@ -253,34 +275,9 @@ export default function PostDetail() {
     }
   };
 
-  // Eliminar imagen de la publicación
-  const handleEliminarImagen = async (imagenId: string) => {
-    if (!id) return;
-    if (!window.confirm("¿Querés eliminar esta imagen?")) return;
-
-    try {
-      setErrorEdicionPost("");
-
-      const respuesta = await fetch(`${API_URL}/posts/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eliminarImagenId: imagenId }),
-      });
-
-      const datos = await respuesta.json().catch(() => ({}));
-
-      if (!respuesta.ok) {
-        throw new Error(
-          datos.error || datos.message || "No se pudo eliminar la imagen."
-        );
-      }
-
-      setPost(datos.post);
-    } catch (err) {
-      setErrorEdicionPost(
-        err instanceof Error ? err.message : "Error al eliminar la imagen."
-      );
-    }
+  // Marcar la imagen a eliminar de la publicación al confirmar cambios (no se borra todavía)
+  const handleEliminarImagen = (imagenId: string) => {
+    setImagenesAEliminar((prev) => [...prev, imagenId]);
   };
 
   // Eliminar publicación
@@ -346,6 +343,9 @@ export default function PostDetail() {
   const nickName = autor?.nickName || "usuario";
   const inicial = nickName.replace(/^@/, "").charAt(0).toUpperCase();
   const imagenes = post.imagenes || [];
+  const imagenesVisibles = imagenes.filter(
+    (img) => !img._id || !imagenesAEliminar.includes(img._id)
+  );
   const etiquetas = post.tagIds || [];
 
   const esMiPublicacion =
@@ -392,6 +392,7 @@ export default function PostDetail() {
                 icon={<Pencil size={16} />}
                 onClick={() => {
                   setDescripcionEditada(post.descripcion);
+                  setImagenesAEliminar([]);
                   setErrorEdicionPost("");
                   setEditandoPost(true);
                 }}
@@ -434,7 +435,7 @@ export default function PostDetail() {
               archivos={nuevosArchivos}
               onChangeArchivos={setNuevosArchivos}
               onUrlsInvalidasChange={setUrlsInvalidas}
-              maxImagenes={Math.max(0, 5 - imagenes.length)}
+              maxImagenes={Math.max(0, 5 - imagenesVisibles.length)}
             />
 
             {errorEdicionPost && (
@@ -459,6 +460,7 @@ export default function PostDetail() {
                     setNuevasImagenesUrls([]);
                     setUrlsInvalidas([]);
                     setNuevosArchivos([]);
+                    setImagenesAEliminar([]);
                     setErrorEdicionPost("");
                   }}
                 >
@@ -470,9 +472,9 @@ export default function PostDetail() {
           <p className={styles.descripcionCompleta}>{post.descripcion}</p>
         )}
 
-        {imagenes.length > 0 && (
+        {imagenesVisibles.length > 0 && (
           <div className={styles.imagenesDetalle}>
-            {imagenes.map((img, index) => {
+            {imagenesVisibles.map((img, index) => {
               const url = obtenerUrlImagen(img.url);
 
               return (
