@@ -6,6 +6,7 @@ import styles from "../../components/postCreation/Posts.module.css";
 import type { TagItem } from "../../types/PostTypes";
 import { PageBanner } from "../../components/pageBanner/PageBanner";
 import { PostForm } from "../../components/postCreation/PostForm";
+import ConfirmModal from "../../components/confirmModal/ConfirmModal"
 import { API_URL } from "../../config/api";
 
 export const Posts = () => {
@@ -20,8 +21,10 @@ export const Posts = () => {
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [archivos, setArchivos] = useState<File[]>([]);
+  const [confirmarPublicar, setConfirmarPublicar] = useState(false);
 
-  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+  //Valida los campos y abre el modal
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!descripcion.trim()) {
@@ -34,9 +37,17 @@ export const Posts = () => {
       return;
     }
 
-    setEnviando(true);
     setError("");
     setErrorDescripcion("");
+    setConfirmarPublicar(true);
+  };
+
+  // Envía la publicación al backend al confirmar
+  const handleConfirmarPublicacion = async () => {
+    if (!user?._id) return;
+
+    setEnviando(true);
+    setError("");
 
     try {
       const formData = new FormData();
@@ -74,9 +85,11 @@ export const Posts = () => {
         );
       }
 
+      setConfirmarPublicar(false);
       navigate("/profile");
     } catch (err) {
       console.error(err);
+      setConfirmarPublicar(false);
       setError(
         err instanceof Error ? err.message : "Ocurrió un error al publicar."
       );
@@ -112,6 +125,19 @@ export const Posts = () => {
           onCancel={() => navigate(-1)}
         />
       </div>  
+
+      <ConfirmModal
+        abierto={confirmarPublicar}
+        titulo="¿Publicar ahora?"
+        mensaje="Tu publicación será visible para toda la comunidad."
+        textoConfirmar="Sí, publicar"
+        textoCargando="Publicando..."
+        textoCancelar="Seguir editando"
+        varianteConfirmar="primario"
+        cargando={enviando}
+        onCancelar={() => setConfirmarPublicar(false)}
+        onConfirmar={handleConfirmarPublicacion}
+      />
     </main>
   );
 };
