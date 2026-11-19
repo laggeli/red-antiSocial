@@ -52,8 +52,8 @@ function Posteo({ publicacion, perfilNickName }: PostProfileProps) {
       )}
 
       <div className="piePublicacion">
-        <span>
-          {cantidadComentarios}{" "}
+        <span className="contadorComentarios">
+          💬 {cantidadComentarios}{" "}
           {cantidadComentarios === 1 ? "comentario" : "comentarios"}
         </span>
 
