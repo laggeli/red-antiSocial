@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { Eye } from "react-bootstrap-icons";
+import ButtonIcon from "./botonGenerico/ButtonIcon";
 import type { PostProfile } from "../types/PerfilTypes";
 import { obtenerUrlImagen } from "../config/api";
 
@@ -54,12 +56,15 @@ function Posteo({ publicacion }: PostProfileProps) {
           {cantidadComentarios === 1 ? "comentario" : "comentarios"}
         </span>
 
-        <Link
+        <ButtonIcon
+          variant="primario"
+          icon={<Eye size={16} />}
           to={`/post/${publicacion._id}`}
           state={{ from: "/profile" }}
         >
           Ver más
-        </Link>
+        </ButtonIcon>
+
       </div>
     </article>
   );

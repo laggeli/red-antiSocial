@@ -211,20 +211,6 @@
   font-size: 16px;
 }
 
-.perfil-claro .piePublicacion a {
-  background-color: #62458a;
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-  padding: 9px 18px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-}
-
-.perfil-claro .piePublicacion a:hover {
-  background-color: #482d68;
-}
-
 .perfil-claro .mensajePerfil {
   color: #777080;
 }

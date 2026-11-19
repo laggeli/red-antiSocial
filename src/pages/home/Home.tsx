@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Eye } from "react-bootstrap-icons";
+import { ButtonIcon } from "../../components/botonGenerico/ButtonIcon";
 import { Link } from "react-router-dom";
 import type { PostDetailModel } from "../../types/PostDetailTypes";
 import { BannerWelcome } from "../../components/pageBanner/BannerWelcome";
@@ -159,13 +161,15 @@ export default function Home() {
                     {post.commentsCount === 1 ? "comentario" : "comentarios"}
                   </span>
 
-                  <Link
+                  <ButtonIcon
+                    variant="primario"
+                    icon={<Eye size={16} />}
                     to={`/post/${post._id}`}
                     state={{ from: "/" }}
-                    className={styles.btnVerMas}
                   >
                     Ver más
-                  </Link>
+                  </ButtonIcon>
+
                 </div>
               </article>
             );

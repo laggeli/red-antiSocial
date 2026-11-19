@@ -1,21 +1,13 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { NavLink } from "react-router-dom";
+import type { ButtonProps } from "../../types/ButtonTypes";
 import stylesBtn from "./Button.module.css";
-
-export type ButtonVariant = "primario" | "secundario" | "cancelar";
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-  variant?: ButtonVariant;
-  fullMobile?: boolean;
-  to?: string; // Si recibe 'to', se comporta como NavLink
-}
 
 export const Button = ({
   children,
   variant = "primario",
   fullMobile = false,
   to,
+  state,
   className = "",
   type = "button",
   ...props
@@ -36,7 +28,7 @@ export const Button = ({
 
   if (to) {
     return (
-      <NavLink to={to} className={combinedClasses}>
+      <NavLink to={to} state={state} className={combinedClasses}>
         {children}
       </NavLink>
     );

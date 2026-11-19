@@ -213,20 +213,6 @@
   font-size: 16px;
 }
 
-.perfil-oscuro .piePublicacion a {
-  background-color: #8055a8;
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-  padding: 9px 18px;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-}
-
-.perfil-oscuro .piePublicacion a:hover {
-  background-color: #68418e;
-}
-
 .perfil-oscuro .mensajePerfil {
   color: #b5b0c0;
 }
