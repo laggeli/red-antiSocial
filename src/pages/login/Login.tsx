@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import type { User } from "../../context/AuthContext";
 import styles from "./Login.module.css";
 import { API_URL } from "../../config/api";
+import Button from "../../components/botonGenerico/Button";
 import AnimatedContent from "../../components/animatedContent/AnimatedContent";
 
 interface FormData {
@@ -228,13 +229,15 @@ export default function Login() {
               )}
             </div>
 
-            <button
+            <Button
               type="submit"
-              className={styles.btnSubmit}
+              variant="primario"
               disabled={loading}
+              className={styles.btnSubmit}
             >
               {loading ? "Iniciando sesión..." : "Iniciar sesión"}
-            </button>
+            </Button>
+
           </AnimatedContent>
         </form>
 

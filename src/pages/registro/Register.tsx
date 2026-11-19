@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./Register.module.css";
 import { API_URL } from "../../config/api";
+import Button from "../../components/botonGenerico/Button";
 import AnimatedContent from "../../components/animatedContent/AnimatedContent";
 
 interface FormData {
@@ -306,13 +307,15 @@ export default function Registro() {
               )}
             </div>
 
-            <button
+            <Button
               type="submit"
-              className={styles.btnSubmit}
+              variant="primario"
               disabled={loading}
+              className={styles.btnSubmit}
             >
               {loading ? "Registrando..." : "Crear cuenta"}
-            </button>
+            </Button>
+
           </AnimatedContent>
         </form>
 

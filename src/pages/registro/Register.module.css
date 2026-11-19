@@ -94,26 +94,8 @@
 }
 
 .btnSubmit {
-  background-color: #5b3a82;
-  color: white;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
   margin-top: 0.5rem;
   width: 100%;
-}
-
-.btnSubmit:hover {
-  background-color: #482d68;
-}
-
-.btnSubmit:disabled {
-  background-color: #a493be;
-  cursor: not-allowed;
 }
 
 .errorAlert {
