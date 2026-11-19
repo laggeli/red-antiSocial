@@ -52,10 +52,16 @@ function Posteo({ publicacion, perfilNickName }: PostProfileProps) {
       )}
 
       <div className="piePublicacion">
-        <span className="contadorComentarios">
-          💬 {cantidadComentarios}{" "}
-          {cantidadComentarios === 1 ? "comentario" : "comentarios"}
-        </span>
+        <Link
+          to={`/post/${publicacion._id}#comentarios`}
+          state={{ from: "/profile", perfilNickName }}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <span>
+            💬 {cantidadComentarios}{" "}
+            {cantidadComentarios === 1 ? "comentario" : "comentarios"}
+          </span>
+        </Link>
 
         <ButtonIcon
           variant="primario"
@@ -65,7 +71,6 @@ function Posteo({ publicacion, perfilNickName }: PostProfileProps) {
         >
           Ver más
         </ButtonIcon>
-
       </div>
     </article>
   );

@@ -120,6 +120,13 @@ export default function PostDetail() {
     cargarDetalle();
   }, [id]);
 
+  useEffect(() => {
+    if (!loading && location.hash === "#comentarios") {
+      const elemento = document.getElementById("comentarios");
+      elemento?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [loading, location.hash]);
+
   // Crear comentario
   const handleEnviarComentario = async (texto: string) => {
     if (!id || !user?._id) {
@@ -555,7 +562,7 @@ export default function PostDetail() {
         )}
       </article>
 
-      <section className={styles.seccionComentarios}>
+      <section id="comentarios" className={styles.seccionComentarios}>
         <h3 className={styles.tituloSeccion}>
           {comments.length === 1
             ? "Comentario (1)"
