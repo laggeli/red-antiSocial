@@ -156,20 +156,23 @@ export default function Home() {
                 )}
                 
                 <div className={styles.piePublicacion}>
-                  <span className={styles.contadorComentarios}>
+                  <Link
+                    to={`/post/${post._id}#comentarios`}
+                    state={{ from: "/" }}
+                    className={styles.contadorComentarios}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
                     💬 {post.commentsCount}{" "}
                     {post.commentsCount === 1 ? "comentario" : "comentarios"}
-                  </span>
+                  </Link>
 
-                  <ButtonIcon
-                    variant="primario"
-                    icon={<Eye size={16} />}
+                  <Link
                     to={`/post/${post._id}`}
                     state={{ from: "/" }}
+                    className={styles.btnVerMas}
                   >
                     Ver más
-                  </ButtonIcon>
-
+                  </Link>
                 </div>
               </article>
             );
