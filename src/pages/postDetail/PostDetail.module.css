@@ -12,25 +12,10 @@
   font-family: Arial, sans-serif;
 }
 
-.btnVolver {
+.btnVolverWrapper {
   align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 18px;
-  border: none;
-  border-radius: 8px;
-  background-color: #62458a;
-  color: white;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
 }
 
-.btnVolver:hover {
-  background-color: #482d68;
-}
 
 /* Tarjeta de publicación */
 
@@ -90,38 +75,6 @@
   align-items: center;
   gap: 10px;
   margin-left: auto;
-}
-
-.btnEditar,
-.btnEliminar {
-  padding: 9px 14px;
-  border: 1px solid #d8c8eb;
-  border-radius: 8px;
-  background-color: #eee6f7;
-  color: #62458a;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.btnEditar:hover {
-  background-color: #e1d3f1;
-}
-
-.btnEliminar {
-  background-color: #fff0f0;
-  border-color: #f0cccc;
-  color: #b42318;
-}
-
-.btnEliminar:hover {
-  background-color: #ffe0e0;
-}
-
-.btnEliminar:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .descripcionCompleta {
@@ -189,40 +142,6 @@
   margin-top: 5px;
 }
 
-.btnGuardar,
-.btnCancelar {
-  padding: 9px 16px;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.btnGuardar {
-  background-color: #62458a;
-  color: white;
-}
-
-.btnGuardar:hover {
-  background-color: #482d68;
-}
-
-.btnGuardar:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btnCancelar {
-  background-color: #e9e5ee;
-  color: #51465e;
-}
-
-.btnCancelar:hover {
-  background-color: #dcd5e5;
-}
-
 /* Imágenes */
 
 .imagenesDetalle {
@@ -233,6 +152,7 @@
 }
 
 .imagenEditable {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 9px;
@@ -254,20 +174,25 @@
   transform: scale(1.01);
 }
 
-.btnEliminarImagen {
-  align-self: flex-start;
-  padding: 7px 12px;
-  border: 1px solid #f0cccc;
-  border-radius: 7px;
-  background-color: #fff0f0;
-  color: #b42318;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
+.btnEliminarImagenFlotante {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 2rem;
+  height: 2rem;
+  background: rgba(28, 27, 34, 0.72);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  z-index: 2;
 }
 
-.btnEliminarImagen:hover {
-  background-color: #ffe0e0;
+.btnEliminarImagenFlotante:hover:not(:disabled) {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: #ffffff;
+  filter: none;
 }
 
 /* Etiquetas */
@@ -355,30 +280,9 @@
   margin-left: auto;
 }
 
-.btnAccionComentario,
-.btnAccionEliminar {
-  padding: 6px 11px;
-  border: 1px solid #d8c8eb;
-  border-radius: 7px;
-  background-color: #eee6f7;
-  color: #62458a;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btnAccionComentario:hover {
-  background-color: #e1d3f1;
-}
-
-.btnAccionEliminar {
-  border-color: #f0cccc;
-  background-color: #fff0f0;
-  color: #b42318;
-}
-
-.btnAccionEliminar:hover {
-  background-color: #ffe0e0;
+.btnComentarioIcono {
+  width: 2rem;
+  height: 2rem;
 }
 
 .textoComentario {
@@ -470,16 +374,6 @@
     align-items: flex-start;
   }
 
-  .accionesPost {
-    width: 100%;
-    margin-left: 0;
-  }
-
-  .btnEditar,
-  .btnEliminar {
-    flex: 1;
-  }
-
   .imagenEditable {
     max-width: 100%;
     width: 100%;
@@ -493,11 +387,6 @@
     padding: 13px;
   }
 
-  .accionesComentario {
-    width: 100%;
-    margin-left: 53px;
-  }
-
   .textoComentario,
   .edicionComentario {
     margin-left: 0;
@@ -509,13 +398,9 @@
 
   .botonesEdicion,
   .botonesEdicionComentario {
-    justify-content: stretch;
+    justify-content: center;
   }
 
-  .botonesEdicion button,
-  .botonesEdicionComentario button {
-    flex: 1;
-  }
 }
 
 .autorComentario {
@@ -583,11 +468,6 @@
   color: #eeeeF5;
 }
 
-:global(#appShell[data-theme="dark"]) .btnCancelar {
-  background-color: #45414f;
-  color: #eeeeF5;
-}
-
 :global(#appShell[data-theme="dark"]) .etiquetasPublicacion span {
   background-color: #49365f;
   color: #e0c8ff;
@@ -596,7 +476,6 @@
 :global(#appShell[data-theme="dark"]) .bloqueNuevoComentario {
   border-color: #45414f;
 }
-
 
 @media (max-width: 1024px) {
   .detailContainer {
@@ -619,10 +498,6 @@
     gap: 13px;
   }
 
-  .btnVolver {
-    padding: 8px 13px;
-    font-size: 0.85rem;
-  }
 
   .tarjetaDetalle,
   .seccionComentarios {
@@ -661,12 +536,6 @@
     gap: 7px;
   }
 
-  .btnEditar,
-  .btnEliminar {
-    padding: 8px 10px;
-    font-size: 0.8rem;
-  }
-
   .descripcionCompleta {
     font-size: 0.98rem;
     line-height: 1.55;
@@ -694,11 +563,6 @@
     max-height: none;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-  }
-
-  .btnEliminarImagen {
-    font-size: 0.72rem;
-    padding: 6px 8px;
   }
 
   .tituloSeccion {
@@ -756,11 +620,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 7px;
-  }
-
-  .botonesEdicion button,
-  .botonesEdicionComentario button {
-    flex: 1;
+    justify-content: center;
   }
 }
 

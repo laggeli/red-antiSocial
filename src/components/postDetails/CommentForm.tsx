@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { SyntheticEvent } from "react";
+import Button from "../botonGenerico/Button";
 import styles from "./CommentForm.module.css"; 
 
 interface CommentFormProps {
@@ -43,9 +44,15 @@ export const CommentForm = ({ onEnviarComentario, submitting }: CommentFormProps
           onChange={(e) => setTexto(e.target.value)}
           disabled={submitting}
         />
-        <button type="submit" className={styles.btnPublicar} disabled={submitting}>
-          {submitting ? "Enviando..." : "Publicar comentario"}
-        </button>
+        <Button
+            type="submit"
+            variant="primario"
+            fullMobile
+            disabled={submitting}
+            className={styles.btnPublicarWrapper}
+          >
+            {submitting ? "Enviando..." : "Publicar comentario"}
+        </Button>
       </form>
     </>
   );

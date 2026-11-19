@@ -1,7 +1,8 @@
 /* Estilos compartidos para todos los botones */
 .btnPrimario,
 .btnSecundario,
-.btnCancelar {
+.btnCancelar,
+.btnPeligro {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -29,13 +30,15 @@
 
 .btnPrimario:active,
 .btnSecundario:active,
-.btnCancelar:active {
+.btnCancelar:active,
+.btnPeligro:active {
   transform: translateY(0);
 }
 
 .btnPrimario:disabled,
 .btnSecundario:disabled,
-.btnCancelar:disabled {
+.btnCancelar:disabled,
+.btnPeligro:disabled {
   opacity: 0.55;
   cursor: not-allowed;
   transform: none;
@@ -90,6 +93,29 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+/* Variante 4: Peligro / Eliminar (Rojo) */
+.btnPeligro {
+  background-color: #fff0f0;
+  color: #dc3545;
+  border: 1.5px solid #f5c2c7;
+}
+
+.btnPeligro:hover:not(:disabled) {
+  background-color: #dc3545;
+  color: #ffffff;
+  border-color: #dc3545;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(220, 53, 69, 0.25);
+}
+
+/* Forma circular cuando ButtonIcon no recibe texto (solo ícono) */
+.btnSoloIcono {
+  padding: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+}
+
 /* Responsive para pantallas chicas */
 @media (max-width: 51.25em) {
   .btnFullMobile {
@@ -108,4 +134,28 @@
   background-color: #8055a8;
   color: white;
   border-color: #8055a8;
+}
+
+:global(#appShell[data-theme="dark"]) .btnPeligro {
+  background-color: #3b2328;
+  color: #f58c96;
+  border-color: #6e353f;
+}
+
+:global(#appShell[data-theme="dark"]) .btnPeligro:hover:not(:disabled) {
+  background-color: #dc3545;
+  color: #ffffff;
+  border-color: #dc3545;
+}
+
+:global(#appShell[data-theme="dark"]) .btnCancelar {
+  background-color: #363240;
+  color: #e4e0ec;
+  border-color: #4f495c;
+}
+
+:global(#appShell[data-theme="dark"]) .btnCancelar:hover:not(:disabled) {
+  background-color: #474254;
+  color: #ffffff;
+  border-color: #675f78;
 }
