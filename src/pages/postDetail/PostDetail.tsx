@@ -9,6 +9,7 @@ import { ImageModal } from "../../components/postDetails/ImageModal";
 import { PostImages } from "../../components/postCreation/PostImages";
 import Button from "../../components/botonGenerico/Button";
 import ButtonIcon from "../../components/botonGenerico/ButtonIcon";
+import ConfirmModal from "../../components/confirmModal/ConfirmModal";
 import styles from "./PostDetail.module.css";
 import { API_URL, obtenerUrlImagen } from "../../config/api";
 
@@ -44,7 +45,11 @@ export default function PostDetail() {
   const [imagenesAEliminar, setImagenesAEliminar] = useState<string[]>([]);
   const [guardandoPost, setGuardandoPost] = useState(false);
   const [errorEdicionPost, setErrorEdicionPost] = useState("");
-
+  const [confirmarEliminarPost, setConfirmarEliminarPost] = useState(false);
+  const [comentarioAEliminar, setComentarioAEliminar] = useState<string | null>(null);
+  const [eliminandoComentario, setEliminandoComentario] = useState(false);
+  const [confirmarGuardarPost, setConfirmarGuardarPost] = useState(false);
+  
   useEffect(() => {
     if (!id) return;
 
@@ -174,9 +179,8 @@ export default function PostDetail() {
 
   // Eliminar comentario
   const handleEliminarComentario = async (comentarioId: string) => {
-    if (!window.confirm("¿Querés eliminar este comentario?")) return;
-
     try {
+      setEliminandoComentario(true);
       setErrorComentario("");
 
       const respuesta = await fetch(`${API_URL}/comments/${comentarioId}`, {
@@ -196,6 +200,8 @@ export default function PostDetail() {
       setErrorComentario(
         err instanceof Error ? err.message : "Error al eliminar el comentario."
       );
+    } finally {
+      setEliminandoComentario(false);
     }
   };
 
@@ -283,12 +289,6 @@ export default function PostDetail() {
   // Eliminar publicación
   const handleEliminarPost = async () => {
     if (!id) return;
-
-    const confirmar = window.confirm(
-      "¿Estás seguro de que querés eliminar esta publicación? Esta acción no se puede deshacer."
-    );
-
-    if (!confirmar) return;
 
     setEliminando(true);
     setErrorEliminar("");
@@ -403,7 +403,7 @@ export default function PostDetail() {
               <ButtonIcon
                 variant="peligro"
                 icon={<Trash3 size={16} />}
-                onClick={handleEliminarPost}
+                onClick={() => setConfirmarEliminarPost(true)}
                 disabled={eliminando}
                 title={eliminando ? "Eliminando..." : "Eliminar publicación"}
                 aria-label="Eliminar publicación"
@@ -446,7 +446,14 @@ export default function PostDetail() {
                 <Button
                   variant="primario"
                   fullMobile
-                  onClick={handleGuardarPost}
+                  onClick={() => {
+                    if (!descripcionEditada.trim()){ 
+                      setErrorEdicionPost("La descripción no puede estar vacía.");
+                      return;
+                    }
+                    setErrorEdicionPost("");
+                    setConfirmarGuardarPost(true);
+                  }}
                   disabled={guardandoPost}
                 >
                   {guardandoPost ? "Guardando..." : "Guardar cambios"}
@@ -584,7 +591,7 @@ export default function PostDetail() {
                           variant="peligro"
                           icon={<Trash3 size={14} />}
                           className={styles.btnComentarioIcono}
-                          onClick={() => handleEliminarComentario(com._id)}
+                          onClick={() => setComentarioAEliminar(com._id)}
                           title="Eliminar comentario"
                           aria-label="Eliminar comentario"
                         />
@@ -670,6 +677,59 @@ export default function PostDetail() {
         imagenUrl={imagenSeleccionada}
         onCerrar={() => setImagenSeleccionada(null)}
       />
+
+      <ConfirmModal
+        abierto={confirmarEliminarPost}
+        titulo="¿Eliminar publicación?"
+        mensaje="¿Estás seguro de que querés eliminar esta publicación? Se borrarán también sus comentarios e imágenes. Esta acción no se puede deshacer."
+        textoConfirmar={eliminando ? "Eliminando..." : "Sí, eliminar"}
+        textoCancelar="Cancelar"
+        varianteConfirmar="peligro"
+        cargando={eliminando}
+        onCancelar={() => setConfirmarEliminarPost(false)}
+        onConfirmar={async () => {
+          await handleEliminarPost();
+          setConfirmarEliminarPost(false);
+        }}
+      />
+
+      <ConfirmModal
+        abierto={!!comentarioAEliminar}
+        titulo="¿Eliminar comentario?"
+        mensaje="¿Querés eliminar este comentario de forma permanente?"
+        textoConfirmar={eliminandoComentario ? "Eliminando..." : "Sí, eliminar"}
+        textoCancelar="Cancelar"
+        varianteConfirmar="peligro"
+        cargando={eliminandoComentario}
+        onCancelar={() => setComentarioAEliminar(null)}
+        onConfirmar={async () => {
+          if (!comentarioAEliminar) return;
+          await handleEliminarComentario(comentarioAEliminar);
+          setComentarioAEliminar(null);
+        }}
+      />
+
+      <ConfirmModal
+        abierto={confirmarGuardarPost}
+        titulo="¿Guardar cambios?"
+        mensaje={
+          imagenesAEliminar.length > 0
+            ? `Se actualizará la publicación y se eliminarán ${imagenesAEliminar.length} ${
+                imagenesAEliminar.length === 1 ? "imagen" : "imágenes"
+              } de forma permanente.`
+            : "¿Querés guardar los cambios realizados en esta publicación?"
+        }
+        textoConfirmar="Sí, guardar"
+        textoCancelar="Seguir editando"
+        varianteConfirmar="primario"
+        cargando={guardandoPost}
+        onCancelar={() => setConfirmarGuardarPost(false)}
+        onConfirmar={async () => {
+          await handleGuardarPost();
+          setConfirmarGuardarPost(false);
+        }}
+      />
+
     </main>
   );
 }
