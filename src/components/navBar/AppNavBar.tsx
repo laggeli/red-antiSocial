@@ -59,6 +59,7 @@ export const AppNavBar = ({ user, onLogout }: AppNavBarProps) => {
 
         <NavLink
           to="/profile"
+          end
           className={({ isActive }) =>
             `${styles.navItem} ${isActive ? styles.active : ""}`
           }
