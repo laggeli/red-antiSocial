@@ -134,6 +134,12 @@
   font-size: 1.1rem;
 }
 
+.fechaPublicacion {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0.25rem 0 0.75rem 0;
+}
+
 :global(#appShell[data-theme="dark"]) .homeContainer {
   background-color: #1c1b22;
   color: #eeeeF5;

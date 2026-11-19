@@ -5,7 +5,7 @@ export type PostImage = Image;
 export interface PostDetailModel {
   _id: string;
   descripcion: string;
-  publicadoEn: string;
+  publicadoEn?: string;
   userId: User | string;
   tagIds?: Tag[];
   imagenes?: Image[];

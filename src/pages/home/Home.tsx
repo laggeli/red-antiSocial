@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import { Eye } from "react-bootstrap-icons";
-import { ButtonIcon } from "../../components/botonGenerico/ButtonIcon";
 import { Link } from "react-router-dom";
 import type { PostDetailModel } from "../../types/PostDetailTypes";
 import { BannerWelcome } from "../../components/pageBanner/BannerWelcome";
@@ -10,6 +8,15 @@ import { API_URL, obtenerUrlImagen } from "../../config/api";
 interface PostFeed extends PostDetailModel {
   commentsCount: number;
 }
+
+const formatearFecha = (fechaIso?: string): string => {
+  if (!fechaIso) return "";
+  return new Date(fechaIso).toLocaleDateString("es-AR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
 
 export default function Home() {
   const [posts, setPosts] = useState<PostFeed[]>([]);
@@ -124,6 +131,12 @@ export default function Home() {
                     {autor?.nombre && <span>{autor.nombre}</span>}
                   </div>
                 </div>
+
+                {post.publicadoEn && (
+                  <p className={styles.fechaPublicacion}>
+                    Publicado el {formatearFecha(post.publicadoEn)}
+                  </p>
+                )}
 
                 <p className={styles.descripcionPublicacion}>
                   {post.descripcion}

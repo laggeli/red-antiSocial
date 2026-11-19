@@ -18,6 +18,15 @@ interface NavigationState {
   perfilNickName?: string;
 }
 
+const formatearFecha = (fechaIso?: string): string => {
+  if (!fechaIso) return "";
+  return new Date(fechaIso).toLocaleDateString("es-AR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  });
+};
+
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -448,6 +457,12 @@ export default function PostDetail() {
             </div>
           )}
         </div>
+
+        {post.publicadoEn && (
+          <p className={styles.fechaPublicacion}>
+            Publicado el {formatearFecha(post.publicadoEn)}
+          </p>
+        )}
 
         {errorEliminar && (
           <p className={styles.errorMensaje}>{errorEliminar}</p>
