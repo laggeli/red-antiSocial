@@ -8,10 +8,12 @@ El proyecto propone una pequeña red social donde las personas usuarias pueden r
 
 - **React** – Desarrollo de interfaces.
 - **TypeScript** – Tipado y organización del código.
+- **Vite** – Entorno de desarrollo y empaquetado.
 - **React Router DOM** – Navegación entre páginas.
 - **Context API** – Gestión global del usuario logueado.
 - **Fetch API** – Comunicación con el backend.
 - **CSS** – Estilos y diseño responsive.
+- **React Bootstrap Icons** – Iconografía consistente en toda la interfaz.
 - **Node.js + Express** – API REST diseñada por el grupo.
 - **MongoDB y Mongoose** – Base de datos NoSQL para la persistencia de la información.
 - **Docker y Docker Compose** – Contenedorización para ejecutar los servicios de base de datos de forma local.
@@ -23,7 +25,7 @@ El trabajo está dividido en dos repositorios independientes:
 
 | Repositorio | Descripción |
 |---|---|
-| FrontEnd | Interfaz de usuario desarrollada con React y TypeScript |
+| FrontEnd | Interfaz de usuario desarrollada con React, TypeScript y CSS Modules |
 | BackEnd | API REST desarrollada por el grupo cómo proyecto final de la materia EDP y modificada por la compañera Elisa Laginestra para sumar funcionalidades especificas pertinentes a la consigna. Encargada de la lógica de negocio, conexión con MongoDB y gestión de rutas |
 
 El frontend consume los endpoints del backend mediante peticiones HTTP (`fetch`). De esta manera, ambos proyectos se ejecutan por separado, pero se comunican a través de la API.
@@ -129,9 +131,14 @@ La aplicación contempla las siguientes funcionalidades:
 - Detalle de cada publicación.
 - Consulta y creación de comentarios.
 - Perfil de usuario con sus publicaciones.
-- Creación de nuevas publicaciones.
+- Creación, edición y eliminación de publicaciones propias (incluyendo subida de archivos locales o múltiples URLs con validación).
+- Creación, edición y eliminación de comentarios dentro del detalle de cada publicación.
+- Exploración y filtrado de publicaciones por etiquetas (`#tags`).
+- Sistema de seguimiento entre usuarios (seguir y dejar de seguir).
 - Asociación de imágenes y etiquetas.
 - Navegación entre las distintas secciones.
+- Modales de confirmación reutilizables para acciones críticas (publicar, guardar cambios, eliminar contenido o dar de baja la cuenta).
+- Modo claro y modo oscuro adaptable en todas las vistas.
 - Persistencia de la sesión mediante `localStorage`.
 
 ## ✧ Perfil de usuario
@@ -140,15 +147,13 @@ La sección de perfil permite visualizar la información del usuario que inició
 
 Entre los datos y elementos mostrados se encuentran:
 
-- NickName y nombre.
+- Foto de perfil (o avatar con inicial), NickName y nombre completo.
 - Cantidad de seguidores y seguidos.
-- Cantidad de publicaciones.
+- Cantidad de seguidores, seguidos y publicaciones.
 - Descripción de cada publicación.
-- Imágenes asociadas.
-- Etiquetas.
-- Cantidad de comentarios visibles.
-- Acceso al detalle de cada publicación.
-- Opción para cerrar sesión.
+- Botón para seguir/dejar de seguir en perfiles de terceros e indicador de seguimiento mutuo.
+- Listado de publicaciones del usuario con contador de comentarios y acceso al detalle.
+- Opción para cerrar sesión y sección para eliminar la cuenta de forma permanente.
 
 La información se obtiene mediante consultas a la API, utilizando el identificador del usuario para recuperar sus publicaciones.
 
