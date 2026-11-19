@@ -125,21 +125,16 @@ Ambos servidores deben permanecer ejecutándose mientras se utiliza la aplicaci�
 
 La aplicación contempla las siguientes funcionalidades:
 
-- Inicio de sesión simulado.
-- Registro de nuevos usuarios.
-- Visualización de publicaciones recientes.
-- Detalle de cada publicación.
-- Consulta y creación de comentarios.
-- Perfil de usuario con sus publicaciones.
-- Creación, edición y eliminación de publicaciones propias (incluyendo subida de archivos locales o múltiples URLs con validación).
-- Creación, edición y eliminación de comentarios dentro del detalle de cada publicación.
+- Registro e inicio de sesión de usuarios contra la API, manteniendo la sesión activa en el navegador mediante `localStorage`.
+- Visualización de publicaciones recientes y acceso al detalle de cada publicación.
+- Creación, edición y eliminación de publicaciones propias, con opción de agregar etiquetas y hasta 5 imágenes (mediante archivos locales o URLs validadas).
+- Consulta, creación, edición y eliminación de comentarios dentro del detalle de cada publicación.
 - Exploración y filtrado de publicaciones por etiquetas (`#tags`).
+- Perfil de usuario con sus publicaciones, edición de datos personales, foto de perfil y opción de baja de cuenta.
 - Sistema de seguimiento entre usuarios (seguir y dejar de seguir).
-- Asociación de imágenes y etiquetas.
-- Navegación entre las distintas secciones.
 - Modales de confirmación reutilizables para acciones críticas (publicar, guardar cambios, eliminar contenido o dar de baja la cuenta).
 - Modo claro y modo oscuro adaptable en todas las vistas.
-- Persistencia de la sesión mediante `localStorage`.
+- Navegación fluida entre las distintas secciones de la aplicación.
 
 ## ✧ Perfil de usuario
 
@@ -148,7 +143,6 @@ La sección de perfil permite visualizar la información del usuario que inició
 Entre los datos y elementos mostrados se encuentran:
 
 - Foto de perfil (o avatar con inicial), NickName y nombre completo.
-- Cantidad de seguidores y seguidos.
 - Cantidad de seguidores, seguidos y publicaciones.
 - Descripción de cada publicación.
 - Botón para seguir/dejar de seguir en perfiles de terceros e indicador de seguimiento mutuo.
