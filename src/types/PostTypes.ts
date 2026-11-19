@@ -32,6 +32,7 @@ export interface PostImagesProps {
   archivos: File[];
   onChangeArchivos: (nuevosArchivos: File[]) => void;
   onUrlsInvalidasChange?: (urlsInvalidas: string[]) => void;
+  maxImagenes?: number;
 }
 
 export interface PostImageDropzoneProps {
@@ -41,6 +42,7 @@ export interface PostImageDropzoneProps {
   onAgregarUrl: () => void;
   onSeleccionArchivos: (e: ChangeEvent<HTMLInputElement>) => void;
   disponibles: number;
+  maxImagenes?: number;
   urlInputRef: RefObject<HTMLInputElement | null>;
   archivoInputRef: RefObject<HTMLInputElement | null>;
   imagenesUrls: string[];

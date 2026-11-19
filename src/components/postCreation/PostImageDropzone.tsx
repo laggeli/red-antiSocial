@@ -12,6 +12,7 @@ export const PostImageDropzone = ({
   onAgregarUrl,
   onSeleccionArchivos,
   disponibles,
+  maxImagenes = 5,
   urlInputRef,
   archivoInputRef,
   imagenesUrls,
@@ -32,7 +33,10 @@ export const PostImageDropzone = ({
         />
 
         <p className={styles.dropzoneTexto}>
-          Agregá imágenes a tu publicación (máx. 5)
+          {maxImagenes > 0
+            ? `Agregá imágenes a tu publicación (máx. ${maxImagenes})`
+            : "Ya alcanzaste el máximo de 5 imágenes permitidas"
+          }
         </p>
 
         <PostImageUrlInput

@@ -6,6 +6,7 @@ import type { PostDetailModel } from "../../types/PostDetailTypes";
 import type { Comment } from "../../types/PerfilTypes";
 import { CommentForm } from "../../components/postDetails/CommentForm";
 import { ImageModal } from "../../components/postDetails/ImageModal";
+import { PostImages } from "../../components/postCreation/PostImages";
 import Button from "../../components/botonGenerico/Button";
 import ButtonIcon from "../../components/botonGenerico/ButtonIcon";
 import styles from "./PostDetail.module.css";
@@ -37,7 +38,9 @@ export default function PostDetail() {
 
   const [editandoPost, setEditandoPost] = useState(false);
   const [descripcionEditada, setDescripcionEditada] = useState("");
-  const [nuevaImagenUrl, setNuevaImagenUrl] = useState("");
+  const [nuevasImagenesUrls, setNuevasImagenesUrls] = useState<string[]>([]);
+  const [urlsInvalidas, setUrlsInvalidas] = useState<string[]>([]);
+  const [nuevosArchivos, setNuevosArchivos] = useState<File[]>([]);
   const [guardandoPost, setGuardandoPost] = useState(false);
   const [errorEdicionPost, setErrorEdicionPost] = useState("");
 
@@ -208,15 +211,24 @@ export default function PostDetail() {
       setGuardandoPost(true);
       setErrorEdicionPost("");
 
+      const imagenesValidas = nuevasImagenesUrls.filter(
+      (url) => !urlsInvalidas.includes(url)
+      );
+
+      const formData = new FormData();
+      formData.append("descripcion", descripcionEditada.trim());
+
+      imagenesValidas.forEach((url) => {
+        formData.append("imagenesUrls", url);
+      });
+
+      nuevosArchivos.forEach((archivo) => {
+        formData.append("imagenes", archivo);
+      });
+
       const respuesta = await fetch(`${API_URL}/posts/${id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          descripcion: descripcionEditada.trim(),
-          ...(nuevaImagenUrl.trim()
-            ? { nuevaImagenUrl: nuevaImagenUrl.trim() }
-            : {}),
-        }),
+        body: formData,
       });
 
       const datos = await respuesta.json().catch(() => ({}));
@@ -228,7 +240,9 @@ export default function PostDetail() {
       }
 
       setPost(datos.post);
-      setNuevaImagenUrl("");
+      setNuevasImagenesUrls([]);
+      setUrlsInvalidas([]);
+      setNuevosArchivos([]);
       setEditandoPost(false);
     } catch (err) {
       setErrorEdicionPost(
@@ -413,13 +427,14 @@ export default function PostDetail() {
               rows={4}
             />
 
-            <label htmlFor="nuevaImagenUrl">Agregar imagen mediante URL</label>
-            <input
-              id="nuevaImagenUrl"
-              type="text"
-              value={nuevaImagenUrl}
-              onChange={(e) => setNuevaImagenUrl(e.target.value)}
-              placeholder="https://..."
+            <label>Agregar nuevas imágenes</label>
+            <PostImages
+              imagenesUrls={nuevasImagenesUrls}
+              onChangeImagenes={setNuevasImagenesUrls}
+              archivos={nuevosArchivos}
+              onChangeArchivos={setNuevosArchivos}
+              onUrlsInvalidasChange={setUrlsInvalidas}
+              maxImagenes={Math.max(0, 5 - imagenes.length)}
             />
 
             {errorEdicionPost && (
@@ -441,7 +456,9 @@ export default function PostDetail() {
                   fullMobile
                   onClick={() => {
                     setEditandoPost(false);
-                    setNuevaImagenUrl("");
+                    setNuevasImagenesUrls([]);
+                    setUrlsInvalidas([]);
+                    setNuevosArchivos([]);
                     setErrorEdicionPost("");
                   }}
                 >
