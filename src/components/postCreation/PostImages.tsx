@@ -5,7 +5,6 @@ import styles from "./Posts.module.css";
 import type { PostImagesProps } from "../../types/PostTypes";
 import { PostImageDropzone } from "./PostImageDropzone";
 
-const MAX_IMAGENES = 5;
 const MAX_TAMANO = 5 * 1024 * 1024; // 5 MB
 
 export const PostImages = ({
@@ -14,6 +13,7 @@ export const PostImages = ({
   archivos,
   onChangeArchivos,
   onUrlsInvalidasChange,
+  maxImagenes = 5,
 }: PostImagesProps) => {
   const urlInputRef = useRef<HTMLInputElement | null>(null);
   const archivoInputRef = useRef<HTMLInputElement | null>(null);
@@ -24,7 +24,7 @@ export const PostImages = ({
   const [previews, setPreviews] = useState<string[]>([]);
 
   const cantidadImagenes = imagenesUrls.length + archivos.length;
-  const disponibles = MAX_IMAGENES - cantidadImagenes;
+  const disponibles = Math.max(0, maxImagenes - cantidadImagenes);
 
   useEffect(() => {
     const urls = archivos.map((archivo) => URL.createObjectURL(archivo));
@@ -44,8 +44,12 @@ export const PostImages = ({
       return;
     }
 
-    if (cantidadImagenes >= MAX_IMAGENES) {
-      setErrorImagenes("Solo puedes agregar un máximo de 5 imágenes.");
+    if (cantidadImagenes >= maxImagenes) {
+      setErrorImagenes(
+        maxImagenes === 0
+          ? "Ya alcanzaste el límite máximo de 5 imágenes en esta publicación."
+          : `Solo puedes agregar un máximo de ${maxImagenes} ${maxImagenes === 1 ? "imagen" : "imágenes"}.`
+      );
       return;
     }
 
@@ -88,7 +92,7 @@ export const PostImages = ({
     const nuevos = validos.slice(0, disponibles);
 
     if (nuevos.length < validos.length) {
-      setErrorImagenes("Solo puedes agregar un máximo de 5 imágenes.");
+      setErrorImagenes(`Solo puedes agregar un máximo de ${maxImagenes} imágenes.`);
     } else if (nuevos.length > 0) {
       setErrorImagenes("");
     }
@@ -147,6 +151,7 @@ export const PostImages = ({
         onAgregarUrl={agregarUrlImagen}
         onSeleccionArchivos={handleSeleccionArchivos}
         disponibles={disponibles}
+        maxImagenes={maxImagenes}
         urlInputRef={urlInputRef}
         archivoInputRef={archivoInputRef}
         imagenesUrls={imagenesUrls}
