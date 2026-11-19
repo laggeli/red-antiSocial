@@ -239,32 +239,9 @@
 }
 
 .perfil-claro .textoEliminarCuenta p {
-  margin: 0;
+  margin: 0 0 16px;
   color: #777080;
   line-height: 1.5;
-}
-
-.perfil-claro .botonEliminarCuenta {
-  margin-top: 18px;
-  padding: 10px 18px;
-  border: 1px solid #b83d3d;
-  border-radius: 8px;
-  background: transparent;
-  color: #a52e2e;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.perfil-claro .botonEliminarCuenta:hover {
-  background: #a52e2e;
-  color: white;
-}
-
-.perfil-claro .botonEliminarCuenta:disabled {
-  opacity: 0.6;
-  cursor: wait;
 }
 
 .perfil-claro .errorEliminarCuenta {

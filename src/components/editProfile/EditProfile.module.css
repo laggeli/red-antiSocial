@@ -40,15 +40,6 @@
   font-size: 14px;
 }
 
-.btnCerrar {
-  border: none;
-  background: transparent;
-  color: #777080;
-  font-size: 28px;
-  cursor: pointer;
-  line-height: 1;
-}
-
 .fotoSeccion {
   display: flex;
   flex-direction: column;
@@ -73,20 +64,6 @@
   color: #62458a;
   font-size: 38px;
   font-weight: bold;
-}
-
-.btnFoto {
-  background: #eee6f7;
-  color: #62458a;
-  padding: 8px 15px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btnFoto input {
-  display: none;
 }
 
 .ayuda {
@@ -137,35 +114,6 @@
   margin-top: 24px;
 }
 
-.btnCancelar,
-.btnGuardar {
-  border: none;
-  border-radius: 8px;
-  padding: 10px 16px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.btnCancelar {
-  color: #62458a;
-  background: #eee6f7;
-}
-
-.btnGuardar {
-  color: white;
-  background: #62458a;
-}
-
-.btnGuardar:hover {
-  background: #482d68;
-}
-
-.btnCancelar:disabled,
-.btnGuardar:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
 @media (max-width: 500px) {
   .modal {
     padding: 20px;
@@ -173,11 +121,9 @@
 
   .botones {
     flex-direction: column-reverse;
+    align-items: center;
   }
 
-  .botones button {
-    width: 100%;
-  }
 }
 
 :global(#appShell[data-theme="dark"]) .modal {
@@ -203,18 +149,6 @@
   border-color: #59466f;
   color: #eeeeF5;
 }
-
-:global(#appShell[data-theme="dark"]) .btnFoto,
-:global(#appShell[data-theme="dark"]) .btnCancelar {
-  background-color: #49365f;
-  color: #e0c8ff;
-}
-
-:global(#appShell[data-theme="dark"]) .btnGuardar {
-  background-color: #8055a8;
-  color: white;
-}
-
 
 @media (max-width: 600px) {
   .fondoModal {
@@ -254,12 +188,8 @@
 
   .botones {
     flex-direction: column-reverse;
+    align-items: center;
     gap: 8px;
   }
 
-  .btnCancelar,
-  .btnGuardar {
-    width: 100%;
-    padding: 12px;
-  }
 }
